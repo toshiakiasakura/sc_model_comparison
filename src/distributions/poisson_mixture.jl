@@ -19,6 +19,21 @@ Base.@kwdef struct PoissonLomax <: PoissonMixture
 	θ::Real # scale
 end
 
+@memoize function Distributions.ccdf(
+    d::PoissonMixture,
+    k::Int64;
+    k_max=10_000
+)
+    if k > k_max
+        error("Increase k_max")
+	elseif k == k_max
+		return pdf(d, k)
+	else
+		return ccdf(d, k+1) + pdf(d, k)
+    end
+end
+#Distributions.logccdf(d::PoissonMixture, k::Int64; k_max=10_000) = log(ccdf(d, k; k_max=k_max))
+
 ##### Negative Binomial distribution #####
 Distributions.mean(d::NegBin) = d.m
 Distributions.cov(d::NegBin) = sqrt(1/d.m + 1/d.m + 1/d.k)

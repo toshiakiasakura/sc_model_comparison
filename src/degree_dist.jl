@@ -3,11 +3,6 @@ Base.@kwdef mutable struct DegreeDist
 	y::Vector{Int64} # Corresponding count
 	include_zero::Bool = true
 end
-Base.length(dd::DegreeDist) = length(dd.x)
-Base.maximum(dd::DegreeDist) = maximum(dd.x)
-Base.iterate(p::DegreeDist) = (p, nothing)
-Base.iterate(p::DegreeDist, nothing) = nothing
-Distributions.rand(dd::DegreeDist, n::Int64) = sample(dd.x, Weights(dd.y), n)
 
 function DegreeDist(cnt::Vector{Int64}; include_zero = true)::DegreeDist
 	cnt = cnt |> countmap
@@ -15,7 +10,41 @@ function DegreeDist(cnt::Vector{Int64}; include_zero = true)::DegreeDist
 	ind = sortperm(x)
 	return DegreeDist(x[ind], y[ind], include_zero)
 end
+
+function DegreeDist(cnt::Vector{Int64}, n_part::Int64; include_zero = true)::DegreeDist
+	n_cnt1more = length(cnt)
+	dd = DegreeDist(cnt; include_zero = include_zero)
+	insert!(dd.x, 1, 0)
+	insert!(dd.y, 1, n_part - n_cnt1more)
+	return dd
+end
+
+dd_to_df(dd::DegreeDist)::DataFrame = DataFrame(x = dd.x, y = dd.y)
+function dd_to_df(dd::DegreeDist, strat::String)::DataFrame
+	df = dd_to_df(dd)
+	df[!, :strat] .= strat
+	return df
+end
+
+function DegreeDist(df::DataFrame)::DegreeDist
+	if "x" in names(df) && "y" in names(df)
+		if length(df[:, :x]) == length(unique(df[:, :x]))
+			return DegreeDist(df[:, :x], df[:, :y], true)
+		else
+			error("x values are not unique")
+		end
+	else
+		error("DataFrame does not have x and y columns")
+	end
+end
+
+Base.length(dd::DegreeDist) = length(dd.x)
+Base.maximum(dd::DegreeDist) = maximum(dd.x)
+Base.iterate(p::DegreeDist) = (p, nothing)
+Base.iterate(p::DegreeDist, nothing) = nothing
+Distributions.rand(dd::DegreeDist, n::Int64) = sample(dd.x, Weights(dd.y), n)
 Distributions.mean(dd::DegreeDist) = sum(dd.x .* dd.y) / sum(dd.y)
+Base.sum(dd::DegreeDist) = sum(dd.y)
 
 """Given, a vector of a probablity mass function,
 return a ccdf distribution.
@@ -54,9 +83,10 @@ function plot_ccdf(dd::DegreeDist; kwds...)::Plots.Plot
 end
 plot_ccdf(x::Vector{Int64}; kwds...)::Plots.Plot = plot_ccdf(DegreeDist(x); kwds...)
 
-function plot_pdf!(pl::Plots.Plot, dd::DegreeDist; kwds...)
+function plot_pdf!(pl::Plots.Plot, dd::DegreeDist; conv_log10 = true, kwds...)
 	y_pdf = dd.y / sum(dd.y)
-	plot!(pl, dd.x, log10.(y_pdf); marker = :circle, kwds...)
+	y_pdf = conv_log10 == true ? log10.(y_pdf) : y_pdf
+	plot!(pl, dd.x, y_pdf; marker = :circle, kwds...)
 end
 plot_pdf!(pl::Plots.Plot, x::Vector{Int64}; kwds...) = plot_pdf!(pl, DegreeDist(x); kwds...)
 
@@ -66,3 +96,60 @@ function plot_pdf(dd::DegreeDist; kwds...)
 	return pl
 end
 plot_pdf(x::Vector{Int64}; kwds...) = plot_pdf(DegreeDist(x); kwds...)
+
+"""
+Args:
+- df_dd: DegreeDist type of dataframe.
+"""
+function plot_single_survey(df_dd::DataFrame)
+	pl1 = plot_pdf_single_survey(df_dd)
+	pl2 = plot_ccdf_single_survey(df_dd)
+	plot(pl1, pl2; size=(800,400))
+end
+
+function plot_pdf_single_survey!(pl::Plots.Plot, df_dd::DataFrame)
+	for strat in ["all", "home", "non-home"]
+		dd = @subset(df_dd, :strat .== strat) |> DegreeDist
+		plot_pdf!(pl, dd, label=strat, markersize=2.5, markerstrokewidth = 0.0)
+	end
+	pl
+end
+
+function plot_pdf_single_survey(df_dd::DataFrame)
+	pl = plot(; xlim = [0, 50], ylim = [-4, 0])
+	plot_pdf_single_survey!(pl, df_dd)
+end
+
+function plot_ccdf_single_survey!(pl::Plots.Plot, df_dd::DataFrame)
+	for strat in ["all", "home", "non-home"]
+		dd = @subset(df_dd, :strat .== strat) |> DegreeDist
+		plot_ccdf!(pl, dd, label=strat, markersize=2.5, markerstrokewidth = 0.0)
+	end
+	pl
+end
+
+function plot_ccdf_single_survey(df_dd::DataFrame)
+	pl = plot(; xaxis = :log10, ylim = [-4, 0], xlim=[1, 10_000])
+	plot_ccdf_single_survey!(pl, df_dd)
+end
+
+function plot_pdf_across_survey(df_dd::DataFrame)
+	#pl = plot(; xlim = [0, 50], ylim = [0, 0.3])
+	pl = plot(; xlim = [0, 50], ylim = [-4, 0])
+	for gdf in groupby(df_dd, :key)
+		dd = DegreeDist(gdf |> DataFrame)
+		plot_pdf!(pl, dd, label=unique(gdf[:, :key])[1], markersize=2.5, markerstrokewidth = 0.0,
+			#conv_log10 = false
+		)
+	end
+	pl
+end
+
+function plot_ccdf_across_survey(df_dd::DataFrame)
+	pl = plot(; xaxis = :log10, ylim = [-4, 0], xlim=[1, 10_000])
+	for gdf in groupby(df_dd, :key)
+		dd = DegreeDist(gdf |> DataFrame)
+		plot_ccdf!(pl, dd, label=unique(gdf[:, :key])[1], markersize=2.5, markerstrokewidth = 0.0)
+	end
+	pl
+end

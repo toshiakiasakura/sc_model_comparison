@@ -1,4 +1,3 @@
-
 # Wrapper for the ZeroTruncPoissonMixture
 function ZeroTrunc(d::DataType, p1, p2)
 	if d == NegBin
@@ -23,4 +22,3 @@ function convert_ZeroInf_to_ZeroTrunc(d::ZeroInfDist)
 		error("Unsupported distribution type for convert_ZeroInf_to_ZeroTrunc")
 	end
 end
-

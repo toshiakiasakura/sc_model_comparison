@@ -48,7 +48,8 @@ function Distributions.ccdf(d::ZeroTruncPoissonMixture, k::Int64)
 	end
 	# NOTE: Avoid computation error for very small value.
 	#       This only relates to visualisation purpose.
-	p = (1 - cdf(d.d, k - 1)) / (1-d.p0)
+	#p = (1 - cdf(d.d, k - 1)) / (1-d.p0)
+	p = ccdf(d.d, k) / (1-d.p0)
 	return p < 0 ? NaN : p
 end
 Distributions.mean(d::ZeroTruncPoissonMixture) = mean(d.d) / (1 - d.p0)

@@ -9,6 +9,7 @@ using Glob
 using GLM
 using JLD2
 using LinearAlgebra
+using LogExpFunctions
 using Memoization
 using Parameters
 using Plots
