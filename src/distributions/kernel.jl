@@ -17,7 +17,7 @@ InterpKDEDistribution(k::KernelDensity.UnivariateKDE) = InterpKDEDistribution(Ke
 Distributions.minimum(d::InterpKDEDistribution) = first(only(Interpolations.bounds(d.kde.itp.itp)))
 Distributions.maximum(d::InterpKDEDistribution) = last(only(Interpolations.bounds(d.kde.itp.itp)))
 Distributions.pdf(d::InterpKDEDistribution, x::Real) = pdf(d.kde, x)
-Distributions.logpdf(d::InterpKDEDistribution, x::Real) = NaNMath.log(pdf(d, x))
+Distributions.logpdf(d::InterpKDEDistribution, x::Real) = log(pdf(d, x))
 
 function Random.rand(rng::Random.AbstractRNG, d::InterpKDEDistribution)
 	(; kde) = d

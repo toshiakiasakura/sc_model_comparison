@@ -104,3 +104,58 @@ function calculate_fmnl_probs(x::AbstractMatrix, β1::AbstractVector, β2::Abstr
 	αs = hcat(log_α1, log_α2, log_α3) .|> exp
     return αs
 end
+
+"""
+Args:
+- df_ana: DataFrame after `prepare_ana_for_fmnl`
+"""
+function one_hot_encoding_multi_vars(df_ana::DataFrame)
+	df_ana[:, :y_dummy] .= 1
+	f = @formula(y_dummy ~  1 + log10(n_sample) + group_c + mode_cate + cutoff_less90)
+	f = apply_schema(f, schema(f, df_ana))
+	f |> display
+	resp, pred = modelcols(f, df_ana)
+	_, x_names = coefnames(f);
+	Y = df_ana[:, model_names] |> Matrix{Float64};
+	return (pred, Y, x_names)
+end
+
+function get_β_med(chn::Chains, n_x::Int)
+	chn_res = extract_chain_info(chn)
+	β1_med = chn_res[1:n_x, :median]
+	β2_med = chn_res[(n_x+1):(2*n_x), :median]
+	return (β1_med, β2_med)
+end
+
+# TODO: df_obs is needed
+function pred_fmnl_multi_vars(chn::Chains, pred::Matrix)
+	n_x = size(pred, 2)
+	β1_med, β2_med = get_β_med(chn, n_x)
+	pred_waic = calculate_fmnl_probs(pred, β1_med, β2_med)
+	df_pred = DataFrame(pred_waic, model_names)
+	df_pred_cum = create_tab_cum(df_pred, model_names);
+	df_pred_cum[:, :key] = df_ana[:, :key];
+	df_all_obs = @subset(df_obs, :strat .== "all")
+	df_pred_cum = @pipe leftjoin(df_pred_cum, df_all_obs, on = :key) |>
+						sort(_, :n_answer; rev = false);
+	return df_pred_cum
+end
+
+##########################################
+##### Extreme value index estimation #####
+##########################################
+
+@model function model_GeneralizedPareto(x::Vector{Float64})
+	σ ~ Gamma(1, 1)
+	ξ ~ Normal(0, 5)
+	GP = GeneralizedPareto(σ, ξ)
+	for i in eachindex(x)
+		x[i] ~ GP
+	end
+end
+
+function fit_model_GP(x::Vector{Float64}, model::Function;
+	n_samples = 1000, progress = false)::Chains
+	return sample(model(x), NUTS(max_depth = 10), n_samples;
+		progress = progress)
+end

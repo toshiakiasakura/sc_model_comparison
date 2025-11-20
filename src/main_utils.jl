@@ -8,6 +8,7 @@ using Distributions
 using Glob
 using GLM
 using JLD2
+using LaTeXStrings
 using LinearAlgebra
 using LogExpFunctions
 using Memoization
@@ -36,3 +37,4 @@ include("utils.jl")
 include("degree_dist.jl")
 include("turing_utils.jl")
 include("turing_models.jl")
+include("fit_utils.jl")

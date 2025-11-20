@@ -259,6 +259,7 @@ end
 #########################
 ##### Zhang_2019    #####
 #########################
+
 """
 Args:
 - fil_survey_mode: takes false (all), "S" (Self-reporting), "T" (Telephone interview)
@@ -302,6 +303,7 @@ end
 #########################
 ##### Leon 2013     #####
 #########################
+
 function read_Leon_2013_dds()
 	df, df_part = read_leon_2013_contact(; fil_adult = true);
 	df_tmp = leon_degree_dist_for_all_hm_nhm(df, df_part)
@@ -413,6 +415,7 @@ end
 #########################
 ##### CoMix UK data #####
 #########################
+
 function read_comix_uk_dds()
 	df_comix, df_part = read_comix_uk_contact_adult_2021Jul_2022Mar();
 	return get_df_dd_single(df_comix, df_part, "CoMix_uk_internal")
@@ -507,3 +510,159 @@ function read_comix2_stratified_dds()
 	return (df_dd_mer, df_part_mer)
 end
 
+################################
+##### Descriptive analysis #####
+################################
+
+function stacked_bar_cate(df_dds)
+	tab = @pipe groupby(df_dds, [:key, :strat]) |> combine(_, :y => sum => :n_part)
+	rem_lis = ["Leon_2013", "Leung_2017",  #"CoMix2",
+		"CoMix2_at", "CoMix2_be", "CoMix2_dk",
+		"CoMix2_ee", "CoMix2_gr", "CoMix2_hr",
+		"CoMix2_it", "CoMix2_pl", "CoMix2_pt",
+	]
+	tab = @subset(tab, @byrow (:key in rem_lis) == false) ;
+	tab = @subset(tab, :strat .== "all");
+	# meta data
+	df_master = read_survey_master_data();
+	add_vis_cols_to_master!(df_master)
+	df_mas = @select(df_master, :key, :group_c, :mode, :cutoff_less90);
+
+	tab = leftjoin(tab, df_mas, on = :key);
+	# Arrang dataframes
+	tab = @transform(tab,
+		@byrow :n_part_cate = :n_part < 1000 ? "0-1000" :
+			:n_part <= 5000 ? "1000-5000" :
+			:n_part <= 10000 ? "5001-10000" :
+			:n_part > 10000 ? "10000+" : "NaN"
+	)
+	tab = @transform(tab, @byrow :group_c_pri = (:group_c == "G-Yes") ? "+ group" : "")
+	tab = @transform(tab,
+		@byrow :mode_pri = :mode == "P" ? "Paper or Interview" :
+			:mode == "O" ? "Online" :
+			:mode == "PI" ? "Paper or Interview" :
+			:mode == "I" ? "Paper or Interview" : "NaN"
+	)
+	tab = @transform(tab, :cate = string.(:mode_pri, :group_c_pri))
+	sort(tab, :n_part_cate);
+
+	tab_plot = @pipe groupby(tab, [:n_part_cate, :cate]) |> combine(_, nrow => :n_cnt)
+	tab_plot = vcat(tab_plot,
+		DataFrame(n_part_cate = "5001-10000", cate="Online", n_cnt=0)
+	)
+	n_part_level = ["0-1000", "1000-5000", "5001-10000", "10000+"]
+	tab_plot[!, :n_part_cate_level] = categorical(
+		tab_plot[:, :n_part_cate],levels=n_part_level, ordered=true)
+
+	pl = @df tab_plot groupedbar(:n_part_cate_level, :n_cnt,
+		group=:cate, bar_position=:stack,
+		xticks=([1,2,3,4], n_part_level)
+	)
+	plot!(pl, xlabel="Number of answers", ylabel= "Number of survey")
+end
+
+function plot_all_deg_and_separate_subplots(df_dds)
+    keys = ["CoMix UK", "CoMix2", "Leon 2013 (paper)", "Willem 2012", "Grijalva 2015"]
+    df_dds_tmp = @subset(df_dds, in.(:key, Ref(keys)), :strat .== "non-home")
+
+    xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
+    pl = plot(; xaxis = :log10, ylim = [-5, 0], xlim=[1, 10_000], xticks = xtk)
+    for k in keys
+        dd = @subset(df_dds_tmp, :key .== k) |> DegreeDist
+        plot_ccdf!(pl, dd; label=k, markersize=2.5, markerstrokewidth = 0.0)
+    end
+    #pl = plot_ccdf_across_survey(df_dds_tmp; xtick = xtk)
+    pl1 = plot_all_hm_nhm(df_dds, "CoMix UK")
+    pl2 = plot_all_hm_nhm(df_dds, "CoMix2")
+    pl3 = plot_all_hm_nhm(df_dds, "Grijalva 2015")
+    pl4 = plot_all_hm_nhm(df_dds, "Willem 2012")
+    pl5 = plot_all_hm_nhm(df_dds, "Leon 2013 (paper)")
+
+    xlabel = "Number of contacts per day"
+    plot!(pl, ylabel = "CCDF")
+    plot!(pl3, ylabel = "CCDF", xlabel = xlabel)
+    plot!(pl4, xlabel = xlabel)
+    plot!(pl5, xlabel = xlabel)
+
+    pls = [pl, pl1, pl2, pl3, pl4, pl5]
+    h = []
+    layout = @layout [a{0.66w, 0.66h} [b; c]; [d e] f]
+    plot(pls..., layout = layout,
+        size = (800, 800), right_margin = 5Plots.mm,
+        dpi=200)
+end
+
+function plot_all_deg_and_separate_subplots(df_dds)
+    keys = ["CoMix UK", "CoMix2", "Leon 2013 (paper)", "Willem 2012", "Grijalva 2015"]
+    df_dds_tmp = @subset(df_dds, in.(:key, Ref(keys)), :strat .== "non-home")
+
+    xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
+    pl = plot(; xaxis = :log10, ylim = [-5, 0], xlim=[1, 10_000], xticks = xtk)
+    for k in keys
+        dd = @subset(df_dds_tmp, :key .== k) |> DegreeDist
+        plot_ccdf!(pl, dd; label=k, markersize=2.5, markerstrokewidth = 0.0)
+    end
+    #pl = plot_ccdf_across_survey(df_dds_tmp; xtick = xtk)
+    pl1 = plot_all_hm_nhm(df_dds, "CoMix UK")
+    pl2 = plot_all_hm_nhm(df_dds, "CoMix2")
+    pl3 = plot_all_hm_nhm(df_dds, "Grijalva 2015")
+    pl4 = plot_all_hm_nhm(df_dds, "Willem 2012")
+    pl5 = plot_all_hm_nhm(df_dds, "Leon 2013 (paper)")
+
+    xlabel = "Number of contacts per day"
+    plot!(pl, ylabel = "CCDF")
+    plot!(pl3, ylabel = "CCDF", xlabel = xlabel)
+    plot!(pl4, xlabel = xlabel)
+    plot!(pl5, xlabel = xlabel)
+
+    pls = [pl, pl1, pl2, pl3, pl4, pl5]
+    h = []
+    layout = @layout [a{0.66w, 0.66h} [b; c]; [d e] f]
+    plot(pls..., layout = layout,
+        size = (800, 800), right_margin = 5Plots.mm,
+        dpi=200)
+end
+
+function plot_all_hm_nhm(df_dds::DataFrame, key::String; color = 1, kwds...)
+	df_tmp = @subset(df_dds, :key .== key)
+	dd_all = @subset(df_tmp, :strat .== "all") |> DegreeDist
+	dd_hm = @subset(df_tmp, :strat .== "home") |> DegreeDist
+	dd_nhm = @subset(df_tmp, :strat .== "non-home") |> DegreeDist;
+
+	pl = plot(;
+		xaxis = :log10, size = (500, 500),
+		xlim = [1, 100], ylim = [-1.5, 0.1],
+		legend = (0.1, 0.2),
+		xticks = ([1, 10, 100], [L"1", L"10", L"10^{2}"]),
+	)
+	kwds1 = (markersize = 2.5, markerstrokewidth = 0, lw = 1.5, ytk_digit=2)
+	kwds2 = (markersize = 2.5, markerstrokewidth = 0, ytk_digit=2)
+	plot_ccdf!(pl, dd_all; color = 14, ls = :solid, label = "All", kwds1...)
+	plot_ccdf!(pl, dd_hm; color = 9, ls = :solid, label = "Home", kwds2...)
+	plot_ccdf!(pl, dd_nhm; color = 16, ls = :solid, label = "Non-Home", kwds2...)
+	annotate!(pl, (0.8, 0.9), text(key, :black, 10, "Helvetica"))
+	plot!(pl; kwds...)
+	pl
+end
+
+function clean_key_names!(df_dds::DataFrame)
+	@transform!(df_dds, :key = replace.(:key,
+		"CoMix_uk_internal" => "CoMix UK",
+		"post" => "(paper)",
+		"paper" => "(paper)",
+		"online" => "(online)",
+		"_" => " "
+	));
+	@transform!(df_dds, :key = transform_comix2.(:key));
+	nothing
+end
+
+function transform_comix2(s::String)
+    if startswith(s, "CoMix2 ") && length(s) == 9
+        prefix = s[1:7]
+        suffix = uppercase(s[8:9])
+        return prefix * suffix
+    else
+        return s
+    end
+end

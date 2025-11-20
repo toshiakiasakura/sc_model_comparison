@@ -26,42 +26,48 @@ function plot_zero_pct(df_dds::DataFrame)
 		ylabel = "Percentage of zero answers", ylim = [0, 100])
 end
 
+function summarise_res_one_strat(res::Dict, strat, key)
+	model_names = get_model_names()
+	df_tmp = DataFrame()
+	for model_name in model_names
+		dd = res["dds"][strat]
+		chn = res["chns_$strat"][model_name]
+		dist = get_ZeroInfDist(chn, model_name)
+		dists = get_vec_ZeroInfDist_from_chn(chn, model_name)
+		n_sample = sum(dd.y)
+		mean_raw = mean(dd)
+		mean_ = mean(dist)
+		mean_set = mean.(dists)
+		cond = isnan.(mean_set)
+		if any(cond) == true
+			println("NaN presence: $key, strat: $strat, model: $model_name")
+			mean_l, mean_u = quantile(mean_set[.!cond], [0.025, 0.975])
+		else
+			mean_l, mean_u = quantile(mean_set, [0.025, 0.975])
+		end
+		waic_ = calc_waic(dists, dd)
+		r = DataFrame(key = key, strat = strat, model = model_name,
+			n_sample = n_sample,
+			mean_raw = mean_raw, mean = mean_, mean_l = mean_l, mean_u = mean_u,
+			waic = waic_,
+		)
+
+		df_tmp= vcat(df_tmp, r)
+	end
+	return df_tmp
+end
+
 function create_summary_stat_one_data(key)
 	path = "../dt_intermediate/$(key)_chns.jld2"
 	if isfile(path) == false
 		return DataFrame()
 	end
 	res = load(path)["result"];
-	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
-		model_ZeroInfPoissonLomax]
-	model_names = get_dist_name_from_model.(models);
 
 	df_sum = DataFrame()
 	for strat in ["home", "non-home"]
-		for model_name in model_names
-			dd = res["dds"][strat]
-			chn = res["chns_$strat"][model_name]
-			dist = get_ZeroInfDist(chn, model_name)
-			dists = get_vec_ZeroInfDist_from_chn(chn, model_name)
-			n_sample = sum(dd.y)
-			mean_raw = mean(dd)
-			mean_ = mean(dist)
-			mean_set = mean.(dists)
-			cond = isnan.(mean_set)
-			if any(cond) == true
-				println("NaN presence: $key, strat: $strat, model: $model_name")
-				mean_l, mean_u = quantile(mean_set[.!cond], [0.025, 0.975])
-			else
-				mean_l, mean_u = quantile(mean_set, [0.025, 0.975])
-			end
-			waic_ = calc_waic(dists, dd)
-			r = DataFrame(key = key, strat = strat, model = model_name,
-				n_sample = n_sample,
-				mean_raw = mean_raw, mean = mean_, mean_l = mean_l, mean_u = mean_u,
-				waic = waic_,
-			)
-			df_sum = vcat(df_sum, r)
-		end
+		df_tmp = summarise_res_one_strat(res, strat, key)
+		df_sum = vcat(df_sum, df_tmp)
 	end
 	return df_sum
 end
@@ -152,6 +158,76 @@ function read_EVI_summary(df_n_obs)
 	return df_EVI
 end
 
+function plot_mean_excess_function(x_raw::Vector{Int64})
+	qs = [(0.95:0.001:0.999)...]
+	qs_v = quantile.(Ref(x_raw), qs)
+	mef = [mean(x_raw[x_raw .> q] .- q) for q in qs_v]
+	plot(qs, mef)
+end
+
+function obtain_peak_over_threshold_values(x_raw::Vector{Int64}, q::Float64)
+	q_v = quantile(x_raw, q)
+	x_thres = x_raw[x_raw .> q_v]
+	x = x_thres .- q_v
+	return x
+end
+
+function fit_GP_to_q(dd::DegreeDist, q::Float64)::DataFrameRow
+	x = dd_to_line_vec(dd)
+	q_v = quantile(x, q)
+	x = obtain_peak_over_threshold_values(x, q)
+	chn = fit_model_GP(x, model_GeneralizedPareto; n_samples = 1000)
+	res = extract_chain_info(chn)
+	m, l, h = res[2, [:mean, :lower, :upper]]
+	return DataFrame(q = q, q_v = q_v, mean = m, lower = l, upper = h)[1, :]
+end
+
+function EVI_estimate_for_qs(dd::DegreeDist;
+	qs = [0.95, 0.97, 0.99, 0.995, 0.999])::DataFrame
+	res = DataFrame()
+	for q in qs
+		r = fit_GP_to_q(dd, q)
+		push!(res, r)
+	end
+	return res
+end
+
+function collect_estimates_across_studies(df_dd::DataFrame, keys_;
+	strat = "non-home", kwds...)
+	res_sum = DataFrame()
+	for k in keys_
+		dd = @subset(df_dd, :key .== k, :strat .== strat) |> DegreeDist
+		res = EVI_estimate_for_qs(dd; kwds...)
+		res[!, :key] .= k
+		res_sum = vcat(res_sum, res)
+	end
+	res_sum
+end
+
+function plot_EVI_across_surveys(df_EVI; col_ytick = :key, title="Non-home contacts")
+	ylim = [0.5, length(df_EVI.key |> unique) + 0.5]
+	pl = plot(ylim = ylim,
+		title = title,
+		ytickfontsize = 8,
+	)
+	yticks = (1:nrow(df_EVI), df_EVI[:, col_ytick])
+	scatter!(pl, df_EVI[:, :mean], 1:nrow(df_EVI), xerr = (df_EVI[:, :m_l], df_EVI[:, :m_u]),
+		xlabel = "Extreme value index", yticks = yticks,
+		label = "", color=:black, markerstrokewidth=0.5)
+	vline!(pl, [0], colour = :black, linestyle = :dash, label = "")
+	return pl
+end
+
+boldstring(s::AbstractString) = map(c -> 'a' ≤ c ≤ 'z' ? c + ('𝐚'-'a') : 'A' ≤ c ≤ 'Z' ? c + ('𝐀'-'A') : c, s)
+function table_styl_annotate!(
+    pl::Plots.Plot, labels::AbstractVector, title::String, x_pos::Real; dy::Real = 1.2)
+
+    y_pos = length(labels) + dy
+    annotate!(pl, x_pos, y_pos, text(boldstring(title), :black, :left, :centre, :bold, 8, "Helvetica"))
+    for (i, lbl) in enumerate(labels)
+        annotate!(pl, x_pos, i, text(lbl, :black, :left, :centre, 8, "Helvetica"))
+    end
+end
 
 #############################################
 ##### Meta-regression-related functions #####
@@ -219,6 +295,7 @@ Args:
 - df_ana: long-format of dataframe containing `key`, `model` nad `weight_waic`.
 """
 function create_stacked_bar_weights(df_ana::DataFrame, models, df_n_obs::DataFrame)
+
 	df_tab = unstack(df_ana, :key, :model, :weight_waic)
 	df_tab_cum = create_tab_cum(df_tab, models)
 	df_tab_cum = @pipe leftjoin(df_tab_cum, df_n_obs, on = :key) |>
@@ -226,7 +303,43 @@ function create_stacked_bar_weights(df_ana::DataFrame, models, df_n_obs::DataFra
 	df_tab_cum
 end
 
+function plot_bar_waic_pretty(df_obs::DataFrame, df_res::DataFrame, df_EVI::DataFrame)
+	df_ana = prep_fmnl_vars(df_res)
+	sort!(df_ana, :n_sample)
+
+	ytk = ["" for _ in 1:nrow(df_ana)];  #df_ana[:, :key];
+	pls = plot_bar_waic(df_obs, df_res, ytk = ytk, df_EVI=df_EVI)
+	annotate!(pls[1], (1.0, 1.04), text("Non-home contacts", :black, :left, :center, 12, "Helvetica"))
+	annotate!(pls[3], (1.0, 1.04), text("Home contacts", :black, :left, :center, 12, "Helvetica"))
+
+	x_base = -37.0
+	dx = -36
+	dy = 1.5
+	cutoff = replace.(df_ana[:, :cutoff_less90], "c-Yes" => "≤90", "c-No" => "90~")
+	table_styl_annotate!(pls[1], cutoff, "Limit to\nanswers", x_base; dy = dy )
+	s_mode = replace.(df_ana[:, :mode], "P" => "Paper", "I" => "Interview", "O" => "Online")
+	table_styl_annotate!(pls[1], s_mode, "Survey\nmode", x_base + dx; dy = dy )
+	grp_cate = replace.(df_ana[:, :group_c], "G-No" => "No", "G-Yes" => "Yes")
+	table_styl_annotate!(pls[1], grp_cate, "Group\ncontacts", x_base + 2*dx; dy = dy )
+	table_styl_annotate!(pls[1], df_ana[:, :n_sample], "Sample\nsize", x_base + 3*dx; dy=dy)
+	df_tmp = copy(df_ana)
+	clean_key_names!(df_tmp)
+	table_styl_annotate!(pls[1], df_tmp[:, :key], "Study", x_base + 4*dx - 33)
+	plot!(pls[1], left_margin=80Plots.mm)
+
+
+	layout = @layout [a b c d]
+	return plot(pls..., layout = layout,
+		right_margin = 5.0Plots.mm,
+		top_margin = 7.0Plots.mm,
+		size = (1000, 600),
+		dpi = 200, fig = :png,
+	)
+end
+
 function plot_bar_waic(df_obs, df_res; ytk = nothing, df_EVI = nothing)
+	model_names = get_model_names()
+
 	tab_n_obs = unstack(df_obs, :key, :strat, :n_answer);
 	df_res = @transform(df_res, :key = replace.(:key, "CoMix_uk_internal" => "CoMix_uk"));
 
@@ -240,35 +353,45 @@ function plot_bar_waic(df_obs, df_res; ytk = nothing, df_EVI = nothing)
 	ytk = isnothing(ytk) ? df_tab_cum_nhm[:, :key] : ytk
 	labels = ["ZInf-NB", "ZInf-PLN", "ZInf-PLomax"]
 	pl1 = plot_stacked_bar(df_tab_cum_hm, model_names;
-		labels = nothing,
-		title = "Home contacts",
+		title = "", #"Home contacts",
 		right_margin = 0Plots.mm,
 		yticks = (1:length(ytk), ytk),
+		labels = labels,
+		legend_columns = 3,
+		legend = (-0.8, -0.15), #-0.22),
 	)
 
 	pl2 = plot_stacked_bar(df_tab_cum_nhm, model_names;
 		col_ytick = "key_empty",
-		labels = labels,
 		right_margin = -5.0Plots.mm,
 		left_margin = -7.0Plots.mm,
 		bottom_margin = 15Plots.mm,
-		title = "Non-home contacts",
-		legend_columns = 3,
-		legend = (-0.8, -0.15), #-0.22),
+		title = "", # "Non-home contacts",
+		labels = nothing,
 	)
 	if isnothing(df_EVI)
 		layout = @layout [a b]
 		return plot(pl1, pl2, layout = layout, right_margin = 10Plots.mm, size = (800, 600))
 	else
-		df_obs_all = @subset(df_obs, :strat .== "all")
 		df_EVI[:, :empty] .= ""
-		pl3 = plot_EVI_across_surveys(df_EVI; col_ytick = "empty")
-		plot!(pl3, left_margin = -7.0Plots.mm)
-		layout = @layout [a b c{0.33w}]
-		return plot(pl1, pl2, pl3, layout = layout,
-			right_margin = 10Plots.mm, size = (1000, 600),
-			dpi = 200, fig = :png,
-		)
+		df_EVI_hm = @subset(df_EVI, :strat .== "home")
+		df_EVI_nhm = @subset(df_EVI, :strat .== "non-home")
+
+		pl3 = plot_EVI_across_surveys(df_EVI_hm; col_ytick = "empty", title="") #"Home contacts")
+		pl4 = plot_EVI_across_surveys(df_EVI_nhm; col_ytick = "empty", title="") #"Non-home contacts")
+
+		adj_m = -9.0Plots.mm
+		plot!(pl1, left_margin = adj_m)
+		plot!(pl3, left_margin = adj_m)
+		plot!(pl4, left_margin = adj_m)
+
+
+		return [pl2, pl4, pl1, pl3]
+		# layout = @layout [a b c d]
+		#return plot(pl1, pl3, pl2, pl4, layout = layout,
+		#	right_margin = 10Plots.mm, size = (1000, 600),
+		#	dpi = 200, fig = :png,
+		#)
 	end
 end
 
@@ -315,20 +438,6 @@ function plot_stacked_bar(tab::DataFrame, stacked_cols::Vector;
 	return pl
 end
 
-function plot_EVI_across_surveys(df_EVI; col_ytick = :key)
-	ylim = [0.5, length(df_EVI.key |> unique) + 0.5]
-	pl = plot(ylim = ylim,
-		title = "Non-home contacts",
-		ytickfontsize = 8,
-	)
-	yticks = (1:nrow(df_EVI), df_EVI[:, col_ytick])
-	@with df_EVI scatter!(pl, :mean, 1:nrow(df_EVI), xerr = (:m_l, :m_u),
-		xlabel = "Extreme value index", yticks = yticks,
-		label = "")
-	vline!(pl, [0], colour = :black, linestyle = :dash, label = "")
-	return pl
-end
-
 """
 Args:
 - chn_res: DataFrame from `extract_chain_info`, removing constant terms.
@@ -354,7 +463,8 @@ function forestplot_fmnl_multi_vars(chn_res::DataFrame, x_names::Vector)
 		label = "ZInf-PLN over ZInf-PLomax",
 	)
 	vline!(pl, [0], color = :black, ls = :dash, label = false, z_order = 1, alpha = 0.5)
-	plot!(pl, size = (400, 300), ylim = [0.5, n_β .+ 0.5], legend = (0.0, -0.3), bottom_margin = 15Plots.mm)
+	plot!(pl, size = (400, 300), ylim = [0.5, n_β .+ 0.5],
+		legend = (0.2, -0.3), bottom_margin = 15Plots.mm)
 end
 
 function repeated_univariate_fmnl_reg(df_ana::DataFrame)
@@ -386,11 +496,12 @@ function plot_meta_reg(chn_res, chn_res_multi)
 	n_x = length(x_names)
 	pl1 = forestplot_fmnl_multi_vars(chn_res, x_names[2:end])
 	pl2 = forestplot_fmnl_multi_vars(chn_res_multi[Not([1, n_x+1]), :], x_names[2:end])
-	xlim = [-8.0, 6.5]
+
 	xtk = [-6.0, -3.0, 0.0, 3.0, 6.0]
 	xtk = (xtk, xtk)
-	plot!(pl1, title = "Univariate", xlim = xlim, xticks = xtk, legend_columns = 3)
-	plot!(pl2, legend = false, yticks = false, title = "Multivariate", xlim = xlim, xticks = xtk)
+	kwds = (xlim = [-8.0, 6.5], xticks = xtk, titlefontsize=12)
+	plot!(pl1; title = "Univariate", legend_columns = 3, kwds...)
+	plot!(pl2; title = "Multivariate",legend = false, yticks=false, kwds...)
 	plot(pl1, pl2, layout = (1, 2), size = (500, 300))
 end
 
@@ -455,8 +566,9 @@ end
 
 function plot_pdf_validate(key, strat)
 	res = load("../dt_intermediate/$(key)_chns.jld2")["result"];
+	model_names = get_model_names()
 
-	pl = plot(; xlim = [0, 50], ylim = [-4, 0])
+	pl = plot(; xlim = [0, 50], ylim = [-5, 0])
 	dd = res["dds"][strat]
 	plot_pdf!(pl, dd, label="Observed", markersize=2.5, markerstrokewidth = 0.0,)
 	for m in model_names
@@ -468,8 +580,9 @@ end
 
 function plot_ccdf_validate(key, strat)
 	res = load("../dt_intermediate/$(key)_chns.jld2")["result"];
+	model_names = get_model_names()
 
-	pl = plot(; xaxis = :log10, ylim = [-4, 0], xlim=[1, 10_000])
+	pl = plot(; xaxis = :log10, ylim = [-5, 0], xlim=[1, 10_000])
 	dd = res["dds"][strat]
 	plot_ccdf!(pl, dd, label="Observed", markersize=2.5, markerstrokewidth = 0.0,)
 	for m in model_names
