@@ -1,0 +1,4860 @@
+cont_id,contact_relationship,contact_setting,contact_city
+1,Other relative,Another house,Digaale
+2,Other relative,Another house,Digaale
+3,Other relative,Another house,Digaale
+4,Other relative,Shop,Digaale
+5,Friend,Another house,Digaale
+6,Other relative,Another house,Digaale
+7,Other relative,Another house,Digaale
+8,Friend,Another house; Home,Digaale
+9,Friend,Another house,Digaale
+10,Other relative,Another house,Digaale
+11,Other relative,Another house,Digaale
+12,Other relative,Another house,Digaale
+13,Other relative,Shop,Digaale
+14,Other relative,Shop,Digaale
+15,Other relative,Shop,Digaale
+16,Other relative,Another house,Digaale
+17,Other relative,Home,Digaale
+18,Other relative,Home,Digaale
+19,Other relative,Another house,Digaale
+20,Household member,Home,Digaale
+21,Household member,Home,Digaale
+22,Other relative,Home,Digaale
+23,Other relative,Home,Digaale
+24,Other relative,Home,Digaale
+25,Other relative,Home,Digaale
+26,Friend,Another house; Home,Digaale
+27,Friend,Home,Digaale
+28,Friend,Another house,Digaale
+29,Other relative,Home,Digaale
+30,Friend,Another house,Digaale
+31,Household member,Home,Digaale
+32,Other relative,Another house,Digaale
+33,Other relative,Another house,Digaale
+34,Other relative,Another house,Digaale
+35,Other relative,Another house,Digaale
+36,Household member,Home,Digaale
+37,Household member,Home,Digaale
+38,Household member,Home,Digaale
+39,Friend,Another house,Digaale
+40,Friend,Another house,Digaale
+41,Household member,Home,Digaale
+42,Coworker or schoolmate,School,Digaale
+43,Other,Home,Digaale
+44,Household member,Home,Digaale
+45,Household member,Home,Digaale
+46,Household member,Home,Digaale
+47,Friend,Home; Another house,Digaale
+48,Other,Home,Digaale
+49,Other,Market,Digaale
+50,Other relative,Home,Digaale
+51,Other relative,Home,Digaale
+52,Other relative,Home,Digaale
+53,Friend,Market,Digaale
+54,Other relative,Another house,Digaale
+55,Other,Another house,Digaale
+56,Household member,Home,Digaale
+57,Household member,Home,Digaale
+58,Household member,Home,Digaale
+59,Other,Market,Digaale
+60,Friend,Another house,Digaale
+61,Friend,Another house,Digaale
+62,Friend,Another house,Digaale
+63,Other relative,Another house,Digaale
+64,Friend,Another house,Digaale
+65,Friend,Another house,Digaale
+66,Coworker or schoolmate,Another house,Digaale
+67,Other relative,Another house,Digaale
+68,Other relative,Another house,Digaale
+69,Other relative,Another house,Digaale
+70,Other relative,Another house,Digaale
+71,Household member,Home,Digaale
+72,Other relative,Another house,Digaale
+73,Household member,Home,Digaale
+74,Household member,Home,Digaale
+75,Household member,Home,Digaale
+76,Friend,Home,Digaale
+77,Other relative,Home,Digaale
+78,Other relative,Home,Digaale
+79,Other relative,Another house,Digaale
+80,Friend,Another house,Digaale
+81,Friend,Another house,Digaale
+82,Friend,Home,Digaale
+83,Friend,Another house,Digaale
+84,Other relative,Home,Digaale
+85,Other relative,Another house,Digaale
+86,Household member,Home,Digaale
+87,Household member,Home,Digaale
+88,Household member,Home,Digaale
+89,Household member,Home,Digaale
+90,Household member,Home,Digaale
+91,Friend,School,Hargeisa
+92,Friend,School,Digaale
+93,Friend,School,Hargeisa
+94,Household member,Home,Digaale
+95,Other,Shop,Digaale
+96,Other,School,Hargeisa
+97,Household member,Home,Digaale
+98,Friend,School; Another house,Digaale
+99,Friend,School,Digaale
+100,Friend,School,Digaale
+101,Friend,School; Another house,Digaale
+102,Friend,Another house; School,Digaale
+103,Friend,Another house; School,Digaale
+104,Friend,Another house; School,Digaale
+105,Other relative,School,Digaale
+106,Other relative,Another house,Digaale
+107,Other relative,Another house,Digaale
+108,Other relative,Another house,Digaale
+109,Friend,Another house,Digaale
+110,Other relative,Another house,Digaale
+111,Coworker or schoolmate,Another house,Digaale
+112,Other relative,Another house,Digaale
+113,Household member,Home,Digaale
+114,Other relative,Another house,Digaale
+115,Other relative,Another house,Digaale
+116,Other relative,Another house,Digaale
+117,Other relative,Another house,Digaale
+118,Household member,Home,Digaale
+119,Friend,Home,Digaale
+120,Friend,Home,Digaale
+121,Friend,Home,Digaale
+122,Friend,Home,Digaale
+123,Friend,Home,Digaale
+124,Friend,Market,Digaale
+125,Friend,Market,Digaale
+126,Friend,Market,Digaale
+127,Friend,Home,Digaale
+128,Friend,Market,Digaale
+129,Friend,Market,Digaale
+130,Household member,Home,Digaale
+131,Household member,Home,Digaale
+132,Household member,Another house,Digaale
+133,Household member,Home,Digaale
+134,Household member,Home,Digaale
+135,Other relative,Another house,Digaale
+136,Household member,Another house,Digaale
+137,Friend,Another house,Digaale
+138,Household member,Another house,Digaale
+139,Household member,Another house,Digaale
+140,Household member,Another house,Digaale
+141,Household member,Another house,Digaale
+142,Household member,Home,Digaale
+143,Household member,Another house,Digaale
+144,Household member,Another house,Digaale
+145,Household member,Home,Digaale
+146,Household member,Home,Digaale
+147,Household member,Another house,Digaale
+148,Household member,Home,Digaale
+149,Household member,Home,Digaale
+150,Household member,Home,Digaale
+151,Friend,Home,Digaale
+152,Friend,Market,Digaale
+153,Friend,Shop,Digaale
+154,Friend,Home,Digaale
+155,Household member,Home,Digaale
+156,Other relative,Shop,Digaale
+157,Other relative,Another house,Digaale
+158,Household member,Water source; Home,Digaale
+159,Household member,Shop,Digaale
+160,Household member,Shop,Digaale
+161,Other relative,Home,Digaale
+162,Other relative,Another house,Digaale
+163,Friend,Another house,Digaale
+164,Household member,Home,Digaale
+165,Household member,Home,Digaale
+166,Household member,Home,Digaale
+167,Household member,Home,Digaale
+168,Household member,Home,Digaale
+169,Friend,Shop; School; Home; Another house,Digaale
+170,Friend,Home; Another house; Shop,Digaale
+171,Friend,School,Digaale
+172,Friend,School,Digaale
+173,Friend,Shop; School,Digaale
+174,Friend,Shop; School; Home,Digaale
+175,Friend,School,Digaale
+176,Friend,School; Home,Digaale
+177,Friend,School,Digaale
+178,Friend,Home; Another house; School,Digaale
+179,Household member,Home,Digaale
+180,Household member,Home,Digaale
+181,Other relative,Another house,Digaale
+182,Friend,Another house,Digaale
+183,Other relative,Shop,Digaale
+184,Other relative,Another house,Digaale
+185,Other relative,Home,Digaale
+186,Household member,Home,Digaale
+187,Household member,Home,Digaale
+188,Household member,Home,Digaale
+189,Household member,Home,Digaale
+190,Household member,Home,Digaale
+191,Household member,Home,Digaale
+192,Household member,Home,Digaale
+193,Household member,Home,Digaale
+194,Friend,Another house,Digaale
+195,Friend,Another house,Digaale
+196,Friend,School,Digaale
+197,Friend,School,Digaale
+198,Friend,School,Digaale
+199,Friend,School,Digaale
+200,Household member,Home,Digaale
+201,Household member,Home,Digaale
+202,Household member,Home,Digaale
+203,Household member,Home,Digaale
+204,Household member,Home,Digaale
+205,Household member,Home,Digaale
+206,Household member,Another house,Hargeisa
+207,Other relative,Another house,Hargeisa
+208,Other relative,Home,Digaale
+209,Other relative,Another house,Digaale
+210,Friend,School,Digaale
+211,Friend,Another house,Digaale
+212,Friend,School,Digaale
+213,Other,Another house,Digaale
+214,Friend,School,Digaale
+215,Friend,School,Digaale
+216,Friend,School,Digaale
+217,Household member,Home,Digaale
+218,Other relative,Home,Digaale
+219,Other relative,Home; Another house,Digaale
+220,Household member,Home,Digaale
+221,Household member,Home,Digaale
+222,Other relative,Home,Digaale
+223,Other relative,Home,Digaale
+224,Other relative,Home,Digaale
+225,Other relative,Another house,Digaale
+226,Other relative,Another house,Digaale
+227,Other relative,Another house,Digaale
+228,Household member,Home,Digaale
+229,Friend,Market,Digaale
+230,Other relative,Another house,Digaale
+231,Other relative,Market,Digaale
+232,Other,Market,Digaale
+233,Other,Another house,Digaale
+234,Other,Shop,Digaale
+235,Other,Home,Digaale
+236,Coworker or schoolmate,Home,Digaale
+237,Other relative,Another house,Digaale
+238,Household member,Home,Digaale
+239,Household member,Home,Digaale
+240,Household member,Home,Digaale
+241,Household member,Home,Digaale
+242,Friend,School,Hargeisa
+243,Household member,Market,Hargeisa
+244,Friend,School,Hargeisa
+245,Friend,School,Hargeisa
+246,Friend,School,Hargeisa
+247,Friend,Market,Hargeisa
+248,Household member,Market,Hargeisa
+249,Household member,Market,Digaale
+250,Other relative,Market,Digaale
+251,Other relative,Market,Digaale
+252,Household member,Home,Digaale
+253,Household member,Home,Digaale
+254,Other relative,Another house,Digaale
+255,Other relative,Another house,Digaale
+256,Other relative,Another house,Digaale
+257,Other relative,Market,Digaale
+258,Other relative,Market,Digaale
+259,Other relative,Another house,Digaale
+260,Other relative,Market,Digaale
+261,Household member,Home,Digaale
+262,Other relative,Another house; Home,Digaale
+263,Household member,Home,Digaale
+264,Other relative,Home,Digaale
+265,Friend,Home,Digaale
+266,Friend,Home; Another house,Digaale
+267,Friend,Home; Another house,Digaale
+268,Household member,Home,Digaale
+269,Friend,Home; Another house,Digaale
+270,Friend,Home; Another house,Digaale
+271,Friend,Home,Digaale
+272,Friend,Home; Another house,Digaale
+273,Friend,Home; Shop,Digaale
+274,Friend,Another house,Digaale
+275,Household member,Home,Digaale
+276,Other,Shop,Digaale
+277,Other,Home,Digaale
+278,Other relative,Home,Digaale
+279,Other relative,Home,Digaale
+280,Other relative,Home,Digaale
+281,Other relative,Home,Digaale
+282,Household member,Home,Digaale
+283,Household member,Home,Digaale
+284,Household member,Home,Digaale
+285,Household member,Home,Digaale
+286,Household member,Home,Digaale
+287,Household member,Home,Digaale
+288,Household member,Home,Digaale
+289,Household member,Home,Digaale
+290,Other relative,Another house,Digaale
+291,Other relative,Market,Digaale
+292,Other relative,Home,Digaale
+293,Friend,School,Hargeisa
+294,Other relative,Home,Digaale
+295,Other relative,Home,Digaale
+296,Other,Work; Another house,Digaale
+297,Household member,Home,Digaale
+298,Friend,Another house,Digaale
+299,Other,Home; Market,Digaale
+300,Other,Other,Digaale
+301,Other relative,Home,Digaale
+302,Other,Shop,Digaale
+303,Household member,Home,Digaale
+304,Household member,Home,Digaale
+305,Household member,Home,Digaale
+306,Household member,Home,Digaale
+307,Other relative,Another house,Digaale
+308,Other relative,Another house,Digaale
+309,Other relative,Another house,Digaale
+310,Other relative,Another house,Digaale
+311,Other relative,Another house,Digaale
+312,Other relative,Another house,Digaale
+313,Other,Another house,Digaale
+314,Other,Other,Digaale
+315,Other,Another house,Digaale
+316,Other,Another house,Digaale
+317,Friend,Another house,Digaale
+318,Other,Home,Digaale
+319,Other,Another house,Digaale
+320,Friend,Another house,Digaale
+321,Other,Market,Digaale
+322,Other,Another house; Home,Digaale
+323,Coworker or schoolmate,School,Digaale
+324,Other,Home,Digaale
+325,Other,Another house,Digaale
+326,Other,Another house,Digaale
+327,Other,Market,Digaale
+328,Other,Home,Digaale
+329,Other,Home,Digaale
+330,Other relative,Home,Digaale
+331,Household member,Home,Digaale
+332,Household member,Home,Digaale
+333,Household member,Home,Digaale
+334,Household member,Home,Digaale
+335,Household member,Home,Digaale
+336,Household member,Another house,Digaale
+337,Other relative,Home,Digaale
+338,Other relative,Home,Digaale
+339,Other relative,Home,Digaale
+340,Other,Market,Digaale
+341,Friend,Market,Digaale
+342,Other,Market,Digaale
+343,Other,Market,Digaale
+344,Other,Market,Digaale
+345,Other,Market,Digaale
+346,Friend,Shop,Digaale
+347,Other,Market,Digaale
+348,Other,Market,Digaale
+349,Friend,Shop,Digaale
+350,Household member,Home,Digaale
+351,Household member,Home,Digaale
+352,Household member,Home,Digaale
+353,Household member,Home,Digaale
+354,Household member,Home,Digaale
+355,Other relative,Another house,Digaale
+356,Other relative,Another house,Digaale
+357,Other relative,Another house,Digaale
+358,Other relative,Another house,Digaale
+359,Other relative,Home,Digaale
+360,Other relative,Another house,Digaale
+361,Other relative,Another house,Digaale
+362,Other relative,Home,Digaale
+363,Friend,School,Digaale
+364,Friend,School,Digaale
+365,Friend,Market,Digaale
+366,Friend,School,Digaale
+367,Friend,School,Digaale
+368,Friend,Market,Digaale
+369,Friend,School,Digaale
+370,Household member,Home,Digaale
+371,Friend,Home; Market,Digaale
+372,Household member,Home,Digaale
+373,Household member,Home,Digaale
+374,Household member,Home,Digaale
+375,Household member,Home,Digaale
+376,Household member,Home; Other,Digaale
+377,Household member,Home,Digaale
+378,Household member,Home,Digaale
+379,Household member,Home,Digaale
+380,Household member,Home,Digaale
+381,Other relative,Another house,Digaale
+382,Other relative,Another house,Digaale
+383,Household member,Another house,Digaale
+384,Other relative,Another house,Digaale
+385,Other relative,Home,Digaale
+386,Other relative,Another house,Digaale
+387,Other relative,Another house,Digaale
+388,Household member,Home,Digaale
+389,Household member,Home,Digaale
+390,Household member,Home,Digaale
+391,Household member,Home,Digaale
+392,Household member,Home,Digaale
+393,Household member,Home,Digaale
+394,Household member,Home,Digaale
+395,Friend,Home; Another house,Digaale
+396,Friend,Another house; Home,Digaale
+397,Friend,Home; Another house,Digaale
+398,Household member,Home,Digaale
+399,Household member,Home,Digaale
+400,Other relative,Another house,Digaale
+401,Other relative,Another house,Digaale
+402,Other relative,Another house,Digaale
+403,Other relative,Another house,Digaale
+404,Other relative,Another house,Digaale
+405,Other relative,Another house,Digaale
+406,Other relative,Another house,Digaale
+407,Other relative,Another house,Digaale
+408,Other relative,Another house,Digaale
+409,Other relative,Another house,Digaale
+410,Household member,Home,Digaale
+411,Household member,Home,Digaale
+412,Household member,Home,Digaale
+413,Household member,Home,Digaale
+414,Household member,Home,Digaale
+415,Household member,Home,Digaale
+416,Household member,Home,Digaale
+417,Household member,Home,Digaale
+418,Friend,Home; Another house,Digaale
+419,Friend,Home,Digaale
+420,Household member,Home,Digaale
+421,Household member,Home,Digaale
+422,Household member,Home,Digaale
+423,Household member,Home,Digaale
+424,Household member,Home,Digaale
+425,Household member,Home,Digaale
+426,Friend,Market,Digaale
+427,Other relative,Another house,Digaale
+428,Other relative,Another house,Digaale
+429,Other,Another house,Digaale
+430,Other,Another house,Digaale
+431,Friend,Another house,Digaale
+432,Friend,Another house,Digaale
+433,Household member,Home,Digaale
+434,Household member,Home,Digaale
+435,Household member,Home,Digaale
+436,Household member,Home,Digaale
+437,Household member,Home,Digaale
+438,Household member,Home,Digaale
+439,Household member,Home,Digaale
+440,Household member,Home,Digaale
+441,Household member,Home,Digaale
+442,Other relative,Another house,Digaale
+443,Other relative,Home,Digaale
+444,Household member,Home,Digaale
+445,Other relative,Home,Digaale
+446,Other relative,Home,Digaale
+447,Other relative,Home,Digaale
+448,Other relative,Home,Digaale
+449,Household member,Home,Digaale
+450,Other relative,Home,Digaale
+451,Other relative,Home,Digaale
+452,Household member,Home,Digaale
+453,Household member,Home,Digaale
+454,Household member,Home,Digaale
+455,Household member,Home,Digaale
+456,Household member,Home,Digaale
+457,Household member,Home,Digaale
+458,Other relative,Another house,Digaale
+459,Household member,Another house,Digaale
+460,Household member,Another house,Digaale
+461,Household member,Another house,Digaale
+462,Household member,Another house,Digaale
+463,Other relative,Home,Digaale
+464,Other relative,Another house,Digaale
+465,Other relative,Another house,Digaale
+466,Household member,Home,Digaale
+467,Household member,Home,Digaale
+468,Household member,Home,Digaale
+469,Household member,Home,Digaale
+470,Other relative,Home,Digaale
+471,Other relative,Home,Digaale
+472,Other relative,Another house,Digaale
+473,Other relative,Another house,Digaale
+474,Other relative,Another house,Digaale
+475,Coworker or schoolmate,School,Digaale
+476,Other relative,Another house,Digaale
+477,Household member,Another house,Digaale
+478,Other relative,Another house,Digaale
+479,Other relative,Another house,Digaale
+480,Friend,Another house,Digaale
+481,Other relative,Another house,Digaale
+482,Household member,Another house,Digaale
+483,Other relative,Market,Digaale
+484,Other relative,Shop,Digaale
+485,Other relative,Another house,Digaale
+486,Other relative,Another house,Digaale
+487,Other relative,Another house,Digaale
+488,Friend,Market,Digaale
+489,Household member,Home,Digaale
+490,Household member,Home,Digaale
+491,Household member,Home,Digaale
+492,Household member,Home,Digaale
+493,Household member,Home,Digaale
+494,Household member,Home,Digaale
+495,Household member,Home,Digaale
+496,Household member,Home,Digaale
+497,Household member,Home,Digaale
+498,Household member,Home,Digaale
+499,Household member,Home,Digaale
+500,Other relative,Another house; Home,Digaale
+501,Friend,Home; Another house,Digaale
+502,Friend,Home,Digaale
+503,Friend,Home; Another house,Digaale
+504,Friend,Home; Another house,Digaale
+505,Friend,Home; Another house,Digaale
+506,Friend,Home; Another house,Digaale
+507,Friend,Home; Another house,Digaale
+508,Other,Home,Digaale
+509,Friend,Home,Digaale
+510,Other,Home,Digaale
+511,refuse to answer,Home,Digaale
+512,Other,Home,Digaale
+513,Household member,Home,Digaale
+514,Household member,Home,Digaale
+515,Household member,Home,Digaale
+516,Household member,Home,Digaale
+517,Household member,Home,Digaale
+518,Friend,Another house,Digaale
+519,Friend,Another house,Digaale
+520,Friend,Another house,Digaale
+521,Other relative,Another house,Digaale
+522,Friend,Another house,Digaale
+523,Household member,Home,Digaale
+524,Household member,Home,Digaale
+525,Household member,Home,Digaale
+526,Household member,Home,Digaale
+527,Household member,Home,Digaale
+528,Household member,Home,Digaale
+529,Household member,Home,Digaale
+530,Other relative,Another house,Digaale
+531,Household member,Another house,Digaale
+532,Other relative,Another house,Digaale
+533,Other relative,Another house,Digaale
+534,Other relative,Another house,Digaale
+535,Other relative,Another house,Digaale
+536,Other relative,Another house,Digaale
+537,Other relative,Another house,Digaale
+538,Other relative,Another house,Digaale
+539,Other relative,Another house,Digaale
+540,Other relative,Another house,Digaale
+541,Other relative,Another house,Digaale
+542,Household member,Home,Digaale
+543,Household member,Another house,Digaale
+544,Household member,Another house,Digaale
+545,Household member,Home,Digaale
+546,Other relative,Another house,Digaale
+547,Household member,Another house,Digaale
+548,Other relative,Another house,Digaale
+549,Household member,Home,Digaale
+550,Household member,Home,Digaale
+551,Household member,Home,Digaale
+552,Household member,Home,Digaale
+553,Household member,Home,Digaale
+554,Household member,Home,Digaale
+555,Household member,Home,Digaale
+556,Household member,Home,Digaale
+557,Household member,Home,Digaale
+558,Household member,Home,Digaale
+559,Friend,Home,Digaale
+560,Household member,Home; Another house,Digaale
+561,Friend,Home; Another house,Digaale
+562,Friend,Home; Another house,Digaale
+563,Household member,Home,Digaale
+564,Friend,Home; Another house,Digaale
+565,Friend,Home; Another house,Digaale
+566,Household member,Home; Another house,Digaale
+567,Household member,Home; Another house,Digaale
+568,Friend,Home; Another house,Digaale
+569,Household member,Home; Another house,Digaale
+570,Other relative,Another house,Digaale
+571,Household member,Home,Digaale
+572,Other relative,Another house,Digaale
+573,Friend,Another house,Digaale
+574,Household member,Home,Digaale
+575,Household member,Home,Digaale
+576,Household member,Home,Digaale
+577,Other relative,Another house,Digaale
+578,Other relative,Another house,Digaale
+579,Other relative,Another house,Digaale
+580,Friend,Another house,Digaale
+581,Friend,Another house,Digaale
+582,Other relative,Another house,Digaale
+583,Friend,Another house,Digaale
+584,Household member,Another house,Digaale
+585,Household member,Home,Digaale
+586,Other relative,Another house,Digaale
+587,Household member,Another house,Digaale
+588,Household member,Home,Digaale
+589,Household member,Home,Digaale
+590,Household member,Home,Digaale
+591,Household member,Home,Digaale
+592,Other relative,Home,Digaale
+593,Other relative,Shop,Digaale
+594,Other relative,Another house,Digaale
+595,Friend,Shop,Digaale
+596,Friend,Another house,Digaale
+597,Friend,Another house,Digaale
+598,Friend,Another house,Digaale
+599,Friend,Another house,Digaale
+600,Friend,Another house,Digaale
+601,Friend,Another house,Digaale
+602,Friend,Home,Digaale
+603,Household member,Home,Digaale
+604,Household member,Home,Digaale
+605,Other relative,Home,Digaale
+606,Household member,Home,Digaale
+607,Household member,Home,Digaale
+608,Household member,Home,Digaale
+609,Household member,Home,Digaale
+610,Other relative,Another house,Digaale
+611,Friend,Home,Digaale
+612,Friend,Another house,Digaale
+613,Friend,Home,Digaale
+614,Friend,Home,Digaale
+615,Friend,Home; Another house,Digaale
+616,Friend,Another house,Digaale
+617,Friend,Home; Another house,Digaale
+618,Friend,Home,Digaale
+619,Friend,Home; Another house,Digaale
+620,Friend,Home,Digaale
+621,Friend,Another house,Digaale
+622,Household member,Home,Digaale
+623,Household member,Home,Digaale
+624,Household member,Home,Digaale
+625,Household member,Home,Digaale
+626,Household member,Home,Digaale
+627,Household member,Home,Digaale
+628,Friend,Another house,Digaale
+629,Friend,Another house,Digaale
+630,Other relative,Another house,Digaale
+631,Friend,Another house,Digaale
+632,Household member,Home,Digaale
+633,Household member,Home,Digaale
+634,Household member,Home,Digaale
+635,Other relative,Another house,Digaale
+636,Other relative,Another house,Digaale
+637,Other relative,Another house,Digaale
+638,Other relative,Another house,Digaale
+639,Friend,Another house,Digaale
+640,Household member,Home,Digaale
+641,Household member,Home,Digaale
+642,Household member,Home,Digaale
+643,Household member,Home,Digaale
+644,Household member,Home,Digaale
+645,Friend,Shop,Digaale
+646,Friend,Shop,Digaale
+647,Friend,Another house,Digaale
+648,Friend,Another house,Digaale
+649,Friend,Another house,Digaale
+650,Friend,Another house,Digaale
+651,Friend,Home,Digaale
+652,Other,Another house,Digaale
+653,Friend,Home,Digaale
+654,Other,Market,Digaale
+655,Other,Another house,Digaale
+656,Friend,Home,Digaale
+657,Other relative,Home,Digaale
+658,Other,Home,Digaale
+659,Friend,Home,Digaale
+660,Friend,Another house,Digaale
+661,Friend,Home,Digaale
+662,Friend,Home,Digaale
+663,Other relative,Home,Digaale
+664,Friend,Another house,Digaale
+665,Friend,Another house,Digaale
+666,Other relative,Another house,Digaale
+667,Friend,Another house,Digaale
+668,Friend,Another house,Digaale
+669,Other,Home; Another house,Digaale
+670,Other,Another house,Digaale
+671,Other relative,Another house; Home,Digaale
+672,Friend,Another house; Market,Digaale
+673,Other,Home,Digaale
+674,Household member,Home,Digaale
+675,Other,Shop,Digaale
+676,Friend,Home; Shop,Digaale
+677,Other,Home; Another house,Digaale
+678,Other,Home,Digaale
+679,Friend,Another house; Home,Digaale
+680,Other,Another house; Market,Digaale
+681,Other relative,Home,Digaale
+682,Household member,Home,Digaale
+683,Other,Another house,Digaale
+684,Other,Another house,Digaale
+685,Other,Home,Digaale
+686,Other,Home,Digaale
+687,Other,Home,Digaale
+688,Other,Home,Digaale
+689,Other,Market,Digaale
+690,Friend,Another house,Digaale
+691,Friend,Another house,Digaale
+692,Other relative,Another house,Digaale
+693,Other relative,Another house,Digaale
+694,Other relative,Another house,Digaale
+695,Household member,Home,Digaale
+696,Household member,Home,Digaale
+697,Other relative,Another house,Digaale
+698,Other,Other,Digaale
+699,Friend,Market,Digaale
+700,Other relative,Another house,Digaale
+701,Household member,Another house,Digaale
+702,Household member,Another house,Digaale
+703,Household member,Another house,Digaale
+704,Household member,Another house,Digaale
+705,Other relative,Another house,Digaale
+706,Other relative,Another house,Digaale
+707,Friend,Shop,Digaale
+708,Other relative,Another house,Digaale
+709,Other relative,Another house,Digaale
+710,Friend,Shop,Digaale
+711,Other,Another house,Digaale
+712,Other relative,Another house,Digaale
+713,Household member,Home,Digaale
+714,Household member,Home,Digaale
+715,Other relative,Another house,Digaale
+716,Household member,Home,Digaale
+717,Friend,Another house,Digaale
+718,Other relative,Another house,Digaale
+719,Friend,Home,Digaale
+720,Friend,Home,Digaale
+721,Friend,Another house,Digaale
+722,Household member,Home,Digaale
+723,Household member,Home,Digaale
+724,Household member,Home,Digaale
+725,Household member,Home,Digaale
+726,Household member,Home,Digaale
+727,Household member,Home,Digaale
+728,Household member,Home,Digaale
+729,Other relative,Home,Digaale
+730,Other relative,Home,Digaale
+731,Other relative,Home,Digaale
+732,Friend,Home,Digaale
+733,Friend,Another house,Digaale
+734,Friend,Home,Digaale
+735,Household member,Home,Digaale
+736,Household member,Home,Digaale
+737,Household member,Home,Digaale
+738,Household member,Home,Digaale
+739,Household member,Home,Digaale
+740,Household member,Home,Digaale
+741,Household member,Home,Digaale
+742,Other relative,Another house,Digaale
+743,Friend,Another house,Digaale
+744,Other relative,Another house,Digaale
+745,Other relative,Another house,Digaale
+746,Other relative,Another house,Digaale
+747,Household member,Another house,Digaale
+748,Other relative,Home,Digaale
+749,Household member,Home,Digaale
+750,Household member,Home,Digaale
+751,Household member,Home,Digaale
+752,Household member,Home,Digaale
+753,Household member,Home,Digaale
+754,Household member,Home,Digaale
+755,Other relative,Home,Digaale
+756,Other relative,Home,Digaale
+757,Other relative,Home,Digaale
+758,Other relative,Home,Digaale
+759,Other relative,Home,Digaale
+760,Household member,Home,Digaale
+761,Household member,Another house,Digaale
+762,Other relative,Another house,Digaale
+763,Household member,Home,Digaale
+764,Household member,Home,Digaale
+765,Household member,Home,Digaale
+766,Household member,Home,Digaale
+767,Household member,Home,Digaale
+768,Household member,Another house,Digaale
+769,Household member,Home,Digaale
+770,Friend,Another house,Digaale
+771,Friend,Another house,Digaale
+772,Friend,Another house,Digaale
+773,Friend,Another house,Digaale
+774,Friend,Another house,Digaale
+775,Friend,Another house,Digaale
+776,Friend,Another house,Digaale
+777,Friend,Another house,Digaale
+778,Friend,Another house,Digaale
+779,Friend,Another house,Digaale
+780,Friend,Another house,Digaale
+781,Friend,Another house,Digaale
+782,Friend,Another house,Digaale
+783,Friend,Another house,Digaale
+784,Household member,Home,Digaale
+785,Household member,Home,Digaale
+786,Other relative,Home,Digaale
+787,Other relative,Home,Digaale
+788,Other,Another house,Digaale
+789,Other,Home,Digaale
+790,Other,Home,Digaale
+791,Household member,Home,Digaale
+792,Household member,Home,Digaale
+793,Household member,Home,Digaale
+794,Household member,Home,Digaale
+795,Household member,Home,Digaale
+796,Household member,Home,Digaale
+797,Household member,Home,Digaale
+798,Household member,Home,Digaale
+799,Friend,Market,Digaale
+800,Other relative,Market,Digaale
+801,Other relative,Market,Digaale
+802,Household member,Market,Digaale
+803,Friend,Another house,Digaale
+804,Other relative,Another house,Digaale
+805,Friend,Another house,Digaale
+806,Other relative,Another house,Digaale
+807,Household member,Another house,Digaale
+808,Other relative,Another house,Digaale
+809,Household member,Home,Digaale
+810,Household member,Home,Digaale
+811,Household member,Home,Digaale
+812,Household member,Home,Digaale
+813,Friend,Another house,Digaale
+814,Friend,Another house,Digaale
+815,Friend,Another house,Digaale
+816,Friend,Another house,Digaale
+817,Friend,Another house,Digaale
+818,Friend,Another house,Digaale
+819,Friend,Another house,Digaale
+820,Friend,Another house,Digaale
+821,Friend,Another house,Digaale
+822,Friend,Another house,Digaale
+823,Friend,Another house,Digaale
+824,Household member,Home,Digaale
+825,Other relative,Home,Digaale
+826,Household member,Home,Digaale
+827,Household member,Home,Digaale
+828,Household member,Home,Digaale
+829,Household member,Home,Digaale
+830,Household member,Home,Digaale
+831,Household member,Home,Digaale
+832,Household member,Home,Digaale
+833,Household member,Home,Digaale
+834,Other relative,Home,Digaale
+835,Household member,Home,Digaale
+836,Household member,Home,Digaale
+837,Household member,Home,Digaale
+838,Household member,Home,Digaale
+839,Household member,Home,Digaale
+840,Household member,Home,Digaale
+841,Household member,Home,Digaale
+842,Household member,Home,Digaale
+843,Household member,Another house; Home,Digaale
+844,Household member,Home,Digaale
+845,Other relative,Home,Digaale
+846,Other relative,Home,Digaale
+847,Other relative,Another house,Digaale
+848,Household member,Home,Digaale
+849,Household member,Home,Digaale
+850,Household member,Home,Digaale
+851,Household member,Home,Digaale
+852,Household member,Home,Digaale
+853,Household member,Home,Digaale
+854,Household member,Home,Digaale
+855,Household member,Home,Digaale
+856,Other relative,Home,Digaale
+857,Other relative,Another house,Digaale
+858,Other,Home,Digaale
+859,Coworker or schoolmate,Work,Digaale
+860,Friend,Another house,Digaale
+861,Friend,Home,Digaale
+862,Other,Home,Digaale
+863,Coworker or schoolmate,Work,Digaale
+864,Friend,Another house,Digaale
+865,Friend,Home,Digaale
+866,Friend,Another house,Digaale
+867,Other,Shop,Digaale
+868,Friend,Market,Digaale
+869,Household member,Home,Digaale
+870,Household member,Home,Digaale
+871,Household member,Home,Digaale
+872,Household member,Home,Digaale
+873,Household member,Home,Digaale
+874,Other relative,Home,Digaale
+875,Household member,Home,Digaale
+876,Household member,Home,Digaale
+877,Household member,Home,Digaale
+878,Household member,Home,Digaale
+879,Other relative,Home,Digaale
+880,Other relative,Home,Digaale
+881,Other relative,Home,Digaale
+882,Other relative,Home,Digaale
+883,Other relative,Home,Digaale
+884,Other relative,Home,Digaale
+885,Other,Shop,Digaale
+886,Friend,Shop,Digaale
+887,Other relative,Another house,Digaale
+888,Household member,Home,Digaale
+889,Household member,Home,Digaale
+890,Household member,Home,Digaale
+891,Household member,Home,Digaale
+892,Household member,Home,Digaale
+893,Household member,Home,Digaale
+894,Household member,Home,Digaale
+895,Friend,Home; Another house,Digaale
+896,Friend,Home; Another house,Digaale
+897,Other relative,Home,Digaale
+898,Friend,Home; Another house,Digaale
+899,Friend,Another house; Home,Digaale
+900,Other relative,Home; Another house,Digaale
+901,Household member,Another house,Digaale
+902,Household member,Another house,Digaale
+903,Household member,Another house,Digaale
+904,Other relative,Another house,Digaale
+905,Household member,Another house,Digaale
+906,Household member,Home,Digaale
+907,Household member,Home,Digaale
+908,Household member,Home,Digaale
+909,Household member,Home,Digaale
+910,Friend,Another house,Digaale
+911,Friend,Shop,Digaale
+912,Friend,Shop,Digaale
+913,Friend,Market,Digaale
+914,Friend,Home,Digaale
+915,Friend,Home,Digaale
+916,Friend,Another house,Digaale
+917,Other relative,Home,Digaale
+918,Other relative,Home,Digaale
+919,Other relative,Home,Digaale
+920,Other relative,Home,Digaale
+921,Other relative,Home,Digaale
+922,Other relative,Another house,Digaale
+923,Friend,Another house,Digaale
+924,Friend,Another house,Digaale
+925,Friend,Another house,Digaale
+926,Friend,Another house,Digaale
+927,Friend,Another house,Digaale
+928,Friend,Home,Digaale
+929,Household member,Home,Digaale
+930,Household member,Home,Digaale
+931,Household member,Home,Digaale
+932,Household member,Home,Digaale
+933,Household member,Home,Digaale
+934,Other relative,Another house,Digaale
+935,Other relative,Home,Digaale
+936,Other,Home,Digaale
+937,Other,Another house,Digaale
+938,Other,Market,Digaale
+939,Other,Home,Digaale
+940,Friend,Market,Digaale
+941,Other relative,Home,Digaale
+942,Other,Home,Digaale
+943,Other,Another house,Digaale
+944,Other,Home,Digaale
+945,Other,Home,Digaale
+946,Friend,Home,Digaale
+947,Friend,Home,Digaale
+948,Friend,Home,Digaale
+949,Friend,Home,Digaale
+950,Other,Another house; Home,Digaale
+951,Other,Home,Digaale
+952,Household member,Another house; Home,Digaale
+953,Other,Another house,Digaale
+954,Other,Shop,Digaale
+955,Other,Another house; Home,Digaale
+956,Other,Another house; Home,Digaale
+957,Friend,Home,Digaale
+958,Friend,Another house; Home,Digaale
+959,Household member,Home,Digaale
+960,Household member,Home,Digaale
+961,Friend,Home,Digaale
+962,Household member,Home,Digaale
+963,Household member,Home,Digaale
+964,Household member,Home,Digaale
+965,Other relative,Another house,Digaale
+966,Other relative,Another house,Digaale
+967,Household member,Home,Digaale
+968,Household member,Home,Digaale
+969,refuse to answer,Home,Digaale
+970,Household member,Home,Digaale
+971,Household member,Home,Digaale
+972,Household member,Home,Digaale
+973,Household member,Home,Digaale
+974,refuse to answer,Home,Digaale
+975,Household member,Home,Digaale
+976,Household member,Home,Digaale
+977,Household member,Home,Digaale
+978,Household member,Home,Digaale
+979,Household member,Home,Digaale
+980,Household member,Home,Digaale
+981,Household member,Home,Digaale
+982,Household member,Home,Digaale
+983,Household member,Home,Digaale
+984,Household member,Home,Digaale
+985,Household member,Home,Digaale
+986,Household member,Home,Digaale
+987,Household member,Home,Digaale
+988,Household member,Home,Digaale
+989,Household member,Home,Digaale
+990,Household member,Home,Digaale
+991,Household member,Home,Digaale
+992,Household member,Home,Digaale
+993,Household member,Home,Digaale
+994,Household member,Home,Digaale
+995,Household member,Home,Digaale
+996,Household member,Home,Digaale
+997,Household member,Home,Digaale
+998,Household member,Home,Digaale
+999,Household member,Home,Digaale
+1000,Household member,Home,Digaale
+1001,Household member,Home,Digaale
+1002,Household member,Home,Digaale
+1003,Household member,Home,Digaale
+1004,Household member,Home,Digaale
+1005,Household member,Home,Digaale
+1006,Household member,Home,Digaale
+1007,Household member,Home,Digaale
+1008,Household member,Home,Digaale
+1009,Household member,Home,Digaale
+1010,Household member,Home,Digaale
+1011,Friend,Home,Digaale
+1012,Household member,Home,Digaale
+1013,Other relative,Home,Digaale
+1014,Household member,Home,Digaale
+1015,Household member,Home,Digaale
+1016,Household member,Home,Digaale
+1017,Household member,Home,Digaale
+1018,Household member,Home,Digaale
+1019,refuse to answer,Market,Digaale
+1020,Household member,Home,Digaale
+1021,Household member,Home,Digaale
+1022,Friend,Other,Digaale
+1023,Friend,Other,Digaale
+1024,Other,Another house,Digaale
+1025,Friend,Another house,Digaale
+1026,Other relative,Another house,Digaale
+1027,Household member,Home,Digaale
+1028,Household member,Home,Digaale
+1029,Household member,Home,Digaale
+1030,Household member,Home,Digaale
+1031,Other,Home,Digaale
+1032,Friend,Home,Digaale
+1033,Other,Another house; Home,Digaale
+1034,Friend,Home,Digaale
+1035,Other,Home,Digaale
+1036,Other,Market,Digaale
+1037,Other,Market,Digaale
+1038,Household member,Home,Digaale
+1039,Friend,Home,Digaale
+1040,Other,Another house,Digaale
+1041,Other,Home,Digaale
+1042,Other,Market,Digaale
+1043,Other relative,Home,Digaale
+1044,Other relative,Another house,Digaale
+1045,Household member,Home,Digaale
+1046,Friend,Another house,Digaale
+1047,Friend,Market,Digaale
+1048,Friend,Market,Digaale
+1049,Household member,Another house,Digaale
+1050,Friend,Home,Digaale
+1051,Friend,Home,Digaale
+1052,Friend,Another house,Digaale
+1053,Friend,Another house,Digaale
+1054,Friend,Home,Digaale
+1055,Other relative,Home,Digaale
+1056,Other relative,Another house,Digaale
+1057,Friend,Another house,Digaale
+1058,Friend,Another house,Digaale
+1059,Other relative,Another house,Digaale
+1060,Friend,Another house,Digaale
+1061,Friend,Home,Digaale
+1062,Friend,Another house,Digaale
+1063,Friend,Work,Digaale
+1064,Friend,Another house,Digaale
+1065,Household member,Home,Digaale
+1066,Household member,Home,Digaale
+1067,Household member,Home,Digaale
+1068,Household member,Home,Digaale
+1069,Household member,Home,Digaale
+1070,Other relative,Home,Digaale
+1071,Other relative,Home,Digaale
+1072,Other,Transport,Digaale
+1073,Other,Home; Another house,Digaale
+1074,Other,Another house; Home; Market,Digaale
+1075,Friend,Market,Digaale
+1076,Other,Home,Digaale
+1077,Other,Transport,Digaale
+1078,Other,Home; Another house,Digaale
+1079,Friend,Home,Digaale
+1080,Friend,Shop; Market,Digaale
+1081,Friend,Another house,Digaale
+1082,Friend,Another house; Home,Digaale
+1083,Friend,Another house; Home,Digaale
+1084,Other,Another house,Digaale
+1085,Friend,Another house; Market,Digaale
+1086,Other relative,Another house,Digaale
+1087,Household member,Home,Digaale
+1088,Other relative,Another house,Digaale
+1089,Other relative,Another house,Digaale
+1090,Other relative,Another house,Digaale
+1091,Other relative,Another house,Digaale
+1092,Other relative,Another house,Digaale
+1093,Other relative,Another house,Digaale
+1094,Other relative,Another house,Digaale
+1095,Other,Another house,Digaale
+1096,Other,Another house,Digaale
+1097,Other,Home,Digaale
+1098,Household member,Home,Digaale
+1099,Other relative,Home,Digaale
+1100,Other relative,Home,Digaale
+1101,Other,Home,Digaale
+1102,Other relative,Home,Digaale
+1103,Other relative,Home,Digaale
+1104,Other relative,Home,Digaale
+1105,Household member,Home,Digaale
+1106,Other relative,Another house,Digaale
+1107,Other relative,Another house,Digaale
+1108,Other relative,Another house,Digaale
+1109,Other relative,Another house,Digaale
+1110,Friend,Another house; Home,Digaale
+1111,Friend,Another house,Digaale
+1112,Friend,Another house; Home,Digaale
+1113,Other relative,Another house; Home,Digaale
+1114,Friend,Home; Another house,Digaale
+1115,Friend,Home,Digaale
+1116,Friend,Home; Another house,Digaale
+1117,Friend,Home; Another house,Digaale
+1118,Friend,Home,Digaale
+1119,Friend,Home; Another house,Digaale
+1120,Friend,Home,Digaale
+1121,Other relative,Home,Digaale
+1122,Other relative,Home,Digaale
+1123,Friend,Home,Digaale
+1124,Friend,Home; Another house,Digaale
+1125,Household member,Home,Digaale
+1126,Household member,Home,Digaale
+1127,Household member,Home,Digaale
+1128,Friend,Home,Digaale
+1129,Household member,Home,Digaale
+1130,Household member,Home,Digaale
+1131,Household member,Home,Digaale
+1132,Household member,Home,Digaale
+1133,Household member,Home,Digaale
+1134,Household member,Home,Digaale
+1135,Household member,Home,Digaale
+1136,Friend,Home,Digaale
+1137,Friend,Home,Digaale
+1138,Friend,Home,Digaale
+1139,Friend,Another house,Digaale
+1140,Other,Another house,Digaale
+1141,Friend,Home,Digaale
+1142,Friend,Home,Digaale
+1143,Household member,Home,Digaale
+1144,Other relative,Home,Digaale
+1145,Household member,Home,Digaale
+1146,Friend,Home,Digaale
+1147,Other,Market,Digaale
+1148,Friend,Home,Digaale
+1149,Household member,Home,Digaale
+1150,Household member,Home,Digaale
+1151,Household member,Home,Digaale
+1152,Household member,Home,Digaale
+1153,Household member,Home,Digaale
+1154,Friend,Market,Digaale
+1155,Friend,Market,Digaale
+1156,Friend,Market,Digaale
+1157,Friend,Market,Digaale
+1158,Friend,Another house,Digaale
+1159,Friend,Another house,Digaale
+1160,Friend,Another house,Digaale
+1161,Household member,Home,Digaale
+1162,Household member,Home,Digaale
+1163,Household member,Home,Digaale
+1164,Household member,Home,Digaale
+1165,Household member,Home,Digaale
+1166,Household member,Home,Digaale
+1167,Household member,Home,Digaale
+1168,Other relative,Home,Digaale
+1169,Other relative,Home,Digaale
+1170,Other relative,Home,Digaale
+1171,Other relative,Home,Digaale
+1172,Other relative,Home,Digaale
+1173,Other relative,Home,Digaale
+1174,Other relative,Home,Digaale
+1175,Other relative,Home,Digaale
+1176,Other relative,Home,Digaale
+1177,Household member,Home,Digaale
+1178,Household member,Home,Digaale
+1179,Household member,Home,Digaale
+1180,Household member,Home,Digaale
+1181,Household member,Home,Digaale
+1182,Household member,Home,Digaale
+1183,Friend,Another house,Digaale
+1184,Other,Home,Digaale
+1185,Other,Another house,Digaale
+1186,Other,Another house; Home,Digaale
+1187,Friend,Market,Digaale
+1188,Friend,Another house,Digaale
+1189,Friend,Home,Digaale
+1190,Friend,Another house; Home,Digaale
+1191,Other relative,Home,Digaale
+1192,Household member,Home,Digaale
+1193,Household member,Home,Digaale
+1194,Household member,Another house,Hargeisa
+1195,Household member,Another house,Hargeisa
+1196,Household member,Another house,Hargeisa
+1197,Household member,Home,Digaale
+1198,Household member,Another house,Hargeisa
+1199,Household member,Another house,Hargeisa
+1200,Household member,Another house,Hargeisa
+1201,Other relative,Another house,Hargeisa
+1202,Household member,Another house,Hargeisa
+1203,Household member,Home,Digaale
+1204,Household member,Home,Digaale
+1205,Household member,Home,Digaale
+1206,Household member,Home,Digaale
+1207,Household member,Home,Digaale
+1208,Household member,Home,Digaale
+1209,Other relative,Another house,Digaale
+1210,Other relative,Another house,Digaale
+1211,Other relative,Another house,Digaale
+1212,Other relative,Another house,Digaale
+1213,Household member,Another house,Digaale
+1214,Other relative,Another house,Digaale
+1215,Other relative,Another house,Digaale
+1216,Other relative,Another house,Digaale
+1217,Other relative,Another house,Digaale
+1218,Other relative,Another house,Digaale
+1219,Household member,Home,Digaale
+1220,Household member,Home,Digaale
+1221,Household member,Home,Digaale
+1222,Household member,Home,Digaale
+1223,Household member,Home,Digaale
+1224,Household member,Home,Digaale
+1225,Household member,Home,Digaale
+1226,Household member,Home,Digaale
+1227,Household member,Home,Digaale
+1228,Other relative,Home,Digaale
+1229,Other relative,Another house,Digaale
+1230,Other relative,Another house,Digaale
+1231,Other relative,Another house,Digaale
+1232,Other relative,Another house,Digaale
+1233,Other relative,Home,Digaale
+1234,Household member,Home,Digaale
+1235,Other relative,Another house,Digaale
+1236,Other relative,Another house,Digaale
+1237,Other relative,Another house,Digaale
+1238,Other,Home,Digaale
+1239,Other,Home,Digaale
+1240,Other relative,Another house,Digaale
+1241,Other relative,Home,Digaale
+1242,Other relative,Another house,Digaale
+1243,Other,Other,Digaale
+1244,Other,Shop,Digaale
+1245,Friend,Shop,Digaale
+1246,Friend,Shop,Digaale
+1247,Friend,Shop,Digaale
+1248,Friend,Shop,Digaale
+1249,Friend,Shop,Digaale
+1250,Friend,Shop,Digaale
+1251,Friend,Shop,Digaale
+1252,Friend,Market,Digaale
+1253,Friend,Market,Digaale
+1254,Household member,Home,Digaale
+1255,Household member,Home,Digaale
+1256,Household member,Home,Digaale
+1257,Household member,Home,Digaale
+1258,Household member,Home,Digaale
+1259,Other relative,Home,Digaale
+1260,Friend,Another house,Digaale
+1261,Friend,Shop,Digaale
+1262,Household member,Home,Digaale
+1263,Household member,Another house,Digaale
+1264,Household member,Another house,Digaale
+1265,Other,Shop,Digaale
+1266,Other,Shop,Digaale
+1267,Other,Shop,Digaale
+1268,Other,Shop,Digaale
+1269,Friend,Another house,Digaale
+1270,Friend,Market,Digaale
+1271,Household member,Home,Digaale
+1272,Household member,Home,Digaale
+1273,Household member,Home,Digaale
+1274,Other relative,Another house,Digaale
+1275,Other relative,Another house,Digaale
+1276,Other relative,Another house,Digaale
+1277,Other relative,Another house,Digaale
+1278,Other relative,Another house,Digaale
+1279,Other relative,Another house,Digaale
+1280,Other relative,Another house,Digaale
+1281,Other relative,Another house,Digaale
+1282,Other,Market,Digaale
+1283,Other,Market,Digaale
+1284,Other,Market,Digaale
+1285,Other,Market,Digaale
+1286,Other,Market,Digaale
+1287,Other,Market,Digaale
+1288,Other,Market,Digaale
+1289,Other,Market,Digaale
+1290,Other,Market,Digaale
+1291,Other,Market,Digaale
+1292,Other,Market,Digaale
+1293,Other relative,Work,Digaale
+1294,Other relative,Another house,Digaale
+1295,Friend,Another house,Digaale
+1296,Friend,Another house,Digaale
+1297,Friend,Another house,Digaale
+1298,Friend,Another house,Digaale
+1299,Other relative,Home,Digaale
+1300,Friend,Home,Digaale
+1301,Other relative,Another house,Digaale
+1302,Household member,Home,Digaale
+1303,Other relative,Home,Digaale
+1304,Other relative,Home,Digaale
+1305,Other relative,Home,Digaale
+1306,Friend,Another house,Digaale
+1307,Friend,Another house,Digaale
+1308,Other relative,Another house,Digaale
+1309,Other relative,Another house,Digaale
+1310,Friend,Another house,Digaale
+1311,Other relative,Home,Digaale
+1312,Other relative,Another house,Digaale
+1313,Other relative,Another house,Digaale
+1314,Other relative,Home,Digaale
+1315,Other,Market,Digaale
+1316,Other,Market,Digaale
+1317,Other,Market,Digaale
+1318,Other,Market,Digaale
+1319,Other,Market,Digaale
+1320,Other,Market,Digaale
+1321,Other,Market,Digaale
+1322,Other,Market,Digaale
+1323,Other,Market,Digaale
+1324,Other,Market,Digaale
+1325,Household member,Home,Digaale
+1326,Household member,Home,Digaale
+1327,Household member,Home,Digaale
+1328,Household member,Home,Digaale
+1329,Household member,Home,Digaale
+1330,Household member,Home,Digaale
+1331,Other relative,Home,Digaale
+1332,Friend,Home,Digaale
+1333,Friend,Home,Digaale
+1334,Household member,Home,Digaale
+1335,Other relative,Work,Digaale
+1336,Household member,Home,Digaale
+1337,Household member,Home,Digaale
+1338,Household member,Home,Digaale
+1339,Household member,Home,Digaale
+1340,Household member,Home,Digaale
+1341,Household member,Home,Digaale
+1342,Household member,Home,Digaale
+1343,Household member,Home,Digaale
+1344,Household member,Home,Digaale
+1345,Other relative,Another house,Digaale
+1346,Other relative,Another house,Digaale
+1347,Other relative,Another house,Digaale
+1348,Other relative,Another house,Digaale
+1349,Other relative,Another house,Digaale
+1350,Household member,Home,Digaale
+1351,Household member,Home,Digaale
+1352,Household member,Home,Digaale
+1353,Household member,Home,Digaale
+1354,Household member,Home,Digaale
+1355,Household member,Home,Digaale
+1356,Household member,Home,Digaale
+1357,Household member,Home,Digaale
+1358,Household member,Home,Digaale
+1359,Household member,Home,Digaale
+1360,Household member,Home,Digaale
+1361,Household member,Home,Digaale
+1362,Household member,Home,Digaale
+1363,Household member,Home,Digaale
+1364,Other relative,Another house,Digaale
+1365,Household member,Another house,Digaale
+1366,Other relative,Another house,Digaale
+1367,Other relative,Another house,Digaale
+1368,Other relative,Another house,Digaale
+1369,Other relative,Another house,Digaale
+1370,Other relative,Another house,Digaale
+1371,Other relative,Another house,Digaale
+1372,Other relative,Another house,Digaale
+1373,Other relative,Another house,Digaale
+1374,Other relative,Another house,Digaale
+1375,Household member,Home,Digaale
+1376,Household member,Home,Digaale
+1377,Household member,Home,Digaale
+1378,Household member,Home,Digaale
+1379,Household member,Home,Digaale
+1380,Other relative,Home,Digaale
+1381,Other relative,Another house,Digaale
+1382,Friend,Shop,Digaale
+1383,Friend,Another house,Digaale
+1384,Other relative,Home,Digaale
+1385,Friend,Shop,Digaale
+1386,Other relative,Another house,Digaale
+1387,Friend,Another house,Digaale
+1388,Other relative,Another house,Digaale
+1389,Other relative,Another house,Digaale
+1390,Friend,Another house,Digaale
+1391,Other relative,Another house,Digaale
+1392,Other relative,Another house,Digaale
+1393,Household member,Home,Digaale
+1394,Friend,Home,Digaale
+1395,Friend,Home,Digaale
+1396,Friend,Home,Digaale
+1397,Friend,Home,Digaale
+1398,Friend,Shop,Digaale
+1399,Friend,Another house,Digaale
+1400,Friend,Home,Digaale
+1401,Other relative,Home,Digaale
+1402,Other relative,Work,Digaale
+1403,Other relative,Work,Digaale
+1404,Household member,Another house,Digaale
+1405,Other relative,Another house,Digaale
+1406,Other relative,Another house,Digaale
+1407,Other relative,Another house,Digaale
+1408,Other relative,Another house,Digaale
+1409,Other relative,Work,Digaale
+1410,Other relative,Work,Digaale
+1411,Other relative,Work,Digaale
+1412,Household member,Home,Digaale
+1413,Household member,Home,Digaale
+1414,Household member,Home,Digaale
+1415,Household member,Home,Digaale
+1416,Household member,Home,Digaale
+1417,Other relative,Home,Digaale
+1418,Other relative,Another house,Digaale
+1419,Other relative,Another house,Digaale
+1420,Other relative,Another house,Digaale
+1421,Other relative,Another house,Digaale
+1422,Household member,Home,Digaale
+1423,Household member,Home,Digaale
+1424,Household member,Home,Digaale
+1425,Other relative,Home,Digaale
+1426,Other relative,Home,Digaale
+1427,Friend,Market,Digaale
+1428,Other relative,Another house,Digaale
+1429,Other relative,Another house,Digaale
+1430,Other relative,Another house,Digaale
+1431,Other relative,Another house,Digaale
+1432,Other,Home,Digaale
+1433,Other,Home,Digaale
+1434,Other,Home,Digaale
+1435,Other,Home,Digaale
+1436,Friend,Home,Digaale
+1437,Friend,School,Hargeisa
+1438,Friend,School,Hargeisa
+1439,Coworker or schoolmate,School,Hargeisa
+1440,Other,Another house; Home,Digaale
+1441,Other,Another house; Home,Digaale
+1442,Friend,Another house,Digaale
+1443,Friend,Another house; Home,Digaale
+1444,Other,Home; Another house,Digaale
+1445,Household member,Home,Digaale
+1446,Other,Home,Digaale
+1447,Other,Home; Another house; Market,Digaale
+1448,Other,Another house; Home,Digaale
+1449,,,
+1450,Household member,Home,Digaale
+1451,Household member,Home,Digaale
+1452,Household member,Home,Digaale
+1453,Household member,Home,Digaale
+1454,Friend,Home; Another house,Digaale
+1455,Friend,Home,Digaale
+1456,Friend,Home; Another house,Digaale
+1457,Friend,Home; Another house,Digaale
+1458,Friend,Home; Another house; Shop; Water source,Digaale
+1459,Friend,Home; Another house,Digaale
+1460,Friend,Home,Digaale
+1461,Household member,Home,Digaale
+1462,Other relative,Home; Another house,Digaale
+1463,Friend,Home; Another house,Digaale
+1464,Other relative,Another house; Home,Digaale
+1465,Friend,Shop,Digaale
+1466,Friend,Shop,Digaale
+1467,Friend,Shop,Digaale
+1468,Friend,Shop,Digaale
+1469,Friend,Shop,Digaale
+1470,Friend,Shop,Digaale
+1471,Friend,Shop,Digaale
+1472,Friend,Shop,Digaale
+1473,Friend,Shop,Digaale
+1474,Friend,Shop,Digaale
+1475,Friend,Shop,Digaale
+1476,Friend,Shop,Digaale
+1477,Friend,Shop,Digaale
+1478,Friend,Market,Digaale
+1479,Friend,Market,Digaale
+1480,Friend,Shop,Digaale
+1481,Friend,Another house,Digaale
+1482,Friend,Another house,Digaale
+1483,Friend,Work,Digaale
+1484,Friend,Work,Digaale
+1485,Friend,Home,Digaale
+1486,Other,Another house; Home,Digaale
+1487,Friend,Home,Digaale
+1488,Other relative,Home,Digaale
+1489,Friend,Another house,Digaale
+1490,Friend,Another house,Digaale
+1491,Friend,Market,Digaale
+1492,Other,Home,Digaale
+1493,Other,Another house,Digaale
+1494,Other,Home,Digaale
+1495,Other relative,Another house,Digaale
+1496,Household member,Home,Digaale
+1497,Other relative,Home,Digaale
+1498,Friend,Another house,Digaale
+1499,Household member,Home,Digaale
+1500,Other,Home,Digaale
+1501,Other,Another house,Digaale
+1502,Other relative,Another house,Digaale
+1503,Friend,Another house,Digaale
+1504,Friend,Another house,Digaale
+1505,Other,Market,Digaale
+1506,Other,Home,Digaale
+1507,Other,Home,Digaale
+1508,Other,Home,Digaale
+1509,Household member,Home,Digaale
+1510,Household member,Home,Digaale
+1511,Household member,Home,Digaale
+1512,Household member,Home,Digaale
+1513,Household member,Home,Digaale
+1514,Household member,Home,Digaale
+1515,Household member,Home,Digaale
+1516,Friend,Home; Another house,Digaale
+1517,Friend,Home; Another house,Digaale
+1518,Friend,Home; Another house,Digaale
+1519,Friend,Home; Another house,Digaale
+1520,Friend,Home; Another house,Digaale
+1521,Friend,Home; Another house,Digaale
+1522,Friend,Home; Another house,Digaale
+1523,Friend,Home; Shop,Digaale
+1524,Other relative,Home,Digaale
+1525,Other relative,Another house,Digaale
+1526,Other relative,Home; Another house,Digaale
+1527,Household member,Home,Digaale
+1528,Friend,Home; Another house,Digaale
+1529,Friend,Home; Another house,Digaale
+1530,,,
+1531,Household member,Home,Digaale
+1532,Household member,Home,Digaale
+1533,Household member,Home,Digaale
+1534,Household member,Home,Digaale
+1535,Household member,Home,Digaale
+1536,Household member,Home,Digaale
+1537,Household member,Home,Digaale
+1538,Household member,Home,Digaale
+1539,Friend,Market,Digaale
+1540,Friend,Market,Digaale
+1541,Friend,Another house,Digaale
+1542,Friend,Home,Digaale
+1543,Other relative,Home,Digaale
+1544,Household member,Home,Digaale
+1545,Friend,Home; Another house,Digaale
+1546,Friend,Another house; Home,Digaale
+1547,Friend,Home; Another house,Digaale
+1548,Friend,Home; Another house,Digaale
+1549,Other,Other,Digaale
+1550,Other,Home,Digaale
+1551,Other,Home,Digaale
+1552,Other,Home,Digaale
+1553,Other,Other,Digaale
+1554,Household member,Home,Digaale
+1555,Household member,Home,Digaale
+1556,Household member,Home,Digaale
+1557,Household member,Home,Digaale
+1558,Household member,Home,Digaale
+1559,Household member,Home,Digaale
+1560,Household member,Home,Digaale
+1561,Friend,Home,Digaale
+1562,Other relative,Another house,Digaale
+1563,Household member,Home,Digaale
+1564,Household member,Home,Digaale
+1565,Household member,Home,Digaale
+1566,Other relative,Home,Digaale
+1567,Household member,Home,Digaale
+1568,Household member,Home,Digaale
+1569,Household member,Home,Digaale
+1570,Household member,Home,Digaale
+1571,Friend,Home; Another house,Digaale
+1572,Other relative,Home; Another house,Digaale
+1573,Household member,Home,Digaale
+1574,Friend,Another house,Digaale
+1575,Household member,Home,Digaale
+1576,Friend,Another house,Digaale
+1577,Friend,Work,Digaale
+1578,Other,Another house,Digaale
+1579,Friend,Home,Digaale
+1580,Friend,Home,Digaale
+1581,Friend,Home,Digaale
+1582,Other relative,Home,Digaale
+1583,Friend,Another house,Digaale
+1584,Household member,Home,Digaale
+1585,Household member,Home,Digaale
+1586,Household member,Home,Digaale
+1587,Household member,Home,Digaale
+1588,Household member,Home,Digaale
+1589,Household member,Home,Digaale
+1590,Household member,Home,Digaale
+1591,Other relative,Another house,Digaale
+1592,Other relative,Another house,Digaale
+1593,Other relative,Another house,Digaale
+1594,Other relative,Work,Digaale
+1595,Other relative,Another house,Digaale
+1596,Other relative,Another house,Digaale
+1597,Other,Home,Digaale
+1598,Other,Another house,Digaale
+1599,Other,Market,Digaale
+1600,Other,Home,Digaale
+1601,Friend,Home,Digaale
+1602,Other,Another house,Digaale
+1603,Other,Home,Digaale
+1604,Other relative,Another house,Digaale
+1605,Other relative,Home,Digaale
+1606,Other relative,Another house,Digaale
+1607,Friend,Another house,Digaale
+1608,Other relative,Shop,Digaale
+1609,Other relative,Home,Digaale
+1610,Other relative,Home,Digaale
+1611,Household member,Home,Digaale
+1612,Household member,Home,Digaale
+1613,Other relative,Another house,Digaale
+1614,Other relative,Another house,Digaale
+1615,Other relative,Another house,Digaale
+1616,Other relative,Another house,Digaale
+1617,Other relative,Another house,Digaale
+1618,Other relative,Another house,Digaale
+1619,Other relative,Another house,Digaale
+1620,Other relative,Home,Digaale
+1621,Other relative,Home,Digaale
+1622,Other relative,Home,Digaale
+1623,Other relative,Home,Digaale
+1624,Other,Another house,Digaale
+1625,Friend,Home,Digaale
+1626,Other,Market,Digaale
+1627,Friend,Another house,Digaale
+1628,Other,Another house,Digaale
+1629,Other,Shop,Digaale
+1630,Other,Home,Digaale
+1631,Other,Another house,Digaale
+1632,Other relative,Work,Digaale
+1633,Other relative,Work,Digaale
+1634,Other relative,Work,Digaale
+1635,Household member,Home,Digaale
+1636,Other relative,Work,Digaale
+1637,Other relative,Work,Digaale
+1638,Other relative,Work,Digaale
+1639,Other relative,Work,Digaale
+1640,Other relative,Work,Digaale
+1641,Other relative,Work,Digaale
+1642,Other relative,Work,Digaale
+1643,Other relative,Work,Digaale
+1644,Household member,Home,Digaale
+1645,Household member,Home,Digaale
+1646,Friend,Home; Another house,Digaale
+1647,Household member,Home,Digaale
+1648,Household member,Home,Digaale
+1649,Household member,Home,Digaale
+1650,Household member,Home,Digaale
+1651,Household member,Home,Digaale
+1652,Household member,Home,Digaale
+1653,Household member,Home,Digaale
+1654,Household member,Home,Digaale
+1655,Household member,Home,Digaale
+1656,Household member,Home,Digaale
+1657,Other relative,Home; Another house,Digaale
+1658,Household member,Home,Digaale
+1659,Other,Home,Digaale
+1660,Other,Home,Digaale
+1661,Friend,Work,Digaale
+1662,Other,Home,Digaale
+1663,Friend,Work,Digaale
+1664,Other,Another house,Digaale
+1665,Other,Market,Digaale
+1666,Household member,Home,Digaale
+1667,Household member,Home,Digaale
+1668,Household member,Home,Digaale
+1669,Household member,Home,Digaale
+1670,Friend,Another house,Digaale
+1671,Friend,Another house,Digaale
+1672,Friend,Another house,Digaale
+1673,Friend,Another house,Digaale
+1674,Other relative,Another house,Digaale
+1675,Household member,Another house,Digaale
+1676,Other relative,Another house,Digaale
+1677,Other relative,Another house,Digaale
+1678,Other relative,Another house,Digaale
+1679,Other relative,Another house,Digaale
+1680,Friend,Another house,Digaale
+1681,Other relative,Another house,Digaale
+1682,Other relative,Another house,Digaale
+1683,Other relative,Another house,Digaale
+1684,Friend,Market,Digaale
+1685,Other relative,Another house,Digaale
+1686,Other relative,Home,Digaale
+1687,Other relative,Home,Digaale
+1688,Other,Market,Digaale
+1689,Other,Home,Digaale
+1690,Other,Home,Digaale
+1691,Other relative,Home,Digaale
+1692,Other relative,Market,Digaale
+1693,Other relative,Market,Digaale
+1694,Friend,Market,Digaale
+1695,Friend,Home,Digaale
+1696,Household member,Home,Digaale
+1697,Other,Another house,Digaale
+1698,Friend,Another house,Digaale
+1699,Other,Shop,Digaale
+1700,Other,Another house,Digaale
+1701,Other,Another house,Digaale
+1702,Other,Shop,Digaale
+1703,Other,Shop,Digaale
+1704,Other relative,Another house,Digaale
+1705,Other relative,Another house,Digaale
+1706,Other relative,Another house,Digaale
+1707,Household member,Home,Digaale
+1708,Household member,Home,Digaale
+1709,Household member,Home,Digaale
+1710,Other relative,Another house,Digaale
+1711,Other relative,Work,Digaale
+1712,Other relative,Work,Digaale
+1713,Other relative,Another house,Digaale
+1714,Other relative,Another house,Digaale
+1715,Other relative,Another house,Digaale
+1716,Other relative,Home; Another house,Digaale
+1717,Other relative,Home; Another house,Digaale
+1718,Other relative,Home; Another house,Digaale
+1719,Friend,Home; Another house,Digaale
+1720,Friend,Market,Digaale
+1721,Friend,Market,Digaale
+1722,Friend,Another house,Digaale
+1723,Friend,Another house; Home,Digaale
+1724,Friend,Another house; Home,Digaale
+1725,Other,Home,Digaale
+1726,Other,Home,Digaale
+1727,Friend,Another house,Digaale
+1728,Other relative,Another house,Digaale
+1729,Friend,Another house; Home,Digaale
+1730,Other,Market,Digaale
+1731,Household member,Home,Digaale
+1732,Household member,Home,Digaale
+1733,don’t know,Market,Digaale
+1734,Household member,Home,Digaale
+1735,Household member,Home,Digaale
+1736,Household member,Home,Digaale
+1737,Other relative,Market,Digaale
+1738,Other relative,Shop,Digaale
+1739,Other relative,Shop,Digaale
+1740,Household member,Another house,Digaale
+1741,Friend,Home,Digaale
+1742,Other relative,Home,Digaale
+1743,Friend,Shop,Digaale
+1744,Friend,Shop,Digaale
+1745,Friend,Another house,Digaale
+1746,Other relative,Another house,Digaale
+1747,Friend,Another house,Digaale
+1748,Other relative,Another house,Digaale
+1749,Friend,Another house,Digaale
+1750,Other relative,Another house,Digaale
+1751,Other relative,Shop,Digaale
+1752,Friend,Another house,Digaale
+1753,Other relative,Another house,Digaale
+1754,Friend,Another house,Digaale
+1755,Friend,Work,Digaale
+1756,Household member,Home,Digaale
+1757,Household member,Home,Digaale
+1758,Household member,Home,Digaale
+1759,Friend,Another house,Digaale
+1760,Other relative,Home,Digaale
+1761,Household member,Home,Digaale
+1762,Household member,Home,Digaale
+1763,Friend,Another house,Digaale
+1764,Friend,Another house,Digaale
+1765,Friend,Another house,Digaale
+1766,Friend,Another house,Digaale
+1767,Friend,Another house,Digaale
+1768,Friend,Shop,Digaale
+1769,Friend,Market,Digaale
+1770,Friend,Market,Digaale
+1771,Friend,Shop,Digaale
+1772,Friend,Shop,Digaale
+1773,Friend,Market,Digaale
+1774,Other relative,Another house,Digaale
+1775,Other relative,Another house,Digaale
+1776,Other relative,Another house,Digaale
+1777,Other relative,Another house,Digaale
+1778,Household member,Another house,Digaale
+1779,Household member,Another house,Digaale
+1780,Other relative,Another house,Digaale
+1781,Household member,Home,Digaale
+1782,Household member,Home,Digaale
+1783,Friend,Market,Digaale
+1784,Other relative,Another house,Digaale
+1785,Household member,Another house,Digaale
+1786,Other,Home,Digaale
+1787,Household member,Home,Digaale
+1788,Friend,Market,Digaale
+1789,Other relative,Another house,Digaale
+1790,Coworker or schoolmate,Another house,Digaale
+1791,Household member,Another house,Digaale
+1792,Other relative,Another house,Digaale
+1793,Friend,Another house,Digaale
+1794,Other relative,Another house,Digaale
+1795,Other relative,Another house,Digaale
+1796,Friend,Work,Digaale
+1797,Friend,Another house,Digaale
+1798,Other relative,Home,Digaale
+1799,Other relative,Home,Digaale
+1800,Other relative,Another house,Digaale
+1801,Other relative,Home,Digaale
+1802,Other relative,Home,Digaale
+1803,Other relative,Another house,Digaale
+1804,Other relative,Home,Digaale
+1805,Other relative,Home,Digaale
+1806,Other relative,Home,Digaale
+1807,Household member,Home,Digaale
+1808,Household member,Home,Digaale
+1809,Household member,Home,Digaale
+1810,Other relative,Home,Digaale
+1811,Friend,Home,Digaale
+1812,Friend,Home,Digaale
+1813,Other relative,Home,Digaale
+1814,Other relative,Home,Digaale
+1815,Other relative,Home,Digaale
+1816,Household member,Home,Digaale
+1817,Other relative,Home,Digaale
+1818,Other relative,Home,Digaale
+1819,Household member,Home,Digaale
+1820,Other relative,Home,Digaale
+1821,don’t know,Home,Digaale
+1822,Other relative,Home; Another house,Digaale
+1823,Other relative,Home; Another house,Digaale
+1824,Other relative,Another house,Digaale
+1825,Friend,Home; Another house,Digaale
+1826,Friend,Home; Another house,Digaale
+1827,Other relative,Home; Another house,Digaale
+1828,Other relative,Home; Another house,Digaale
+1829,Other relative,Home; Another house,Digaale
+1830,Other relative,Home; Another house,Digaale
+1831,Friend,Home; Another house,Digaale
+1832,Friend,Home; Another house,Digaale
+1833,Other relative,Market,Digaale
+1834,Other relative,Home; Another house,Digaale
+1835,Other relative,Home; Another house,Digaale
+1836,Other relative,Home; Another house,Digaale
+1837,Other relative,Home; Another house; Shop,Digaale
+1838,Other relative,Home; Another house,Digaale
+1839,Other relative,Home; Another house,Digaale
+1840,Other relative,Home; Another house,Digaale
+1841,Household member,Home,Digaale
+1842,Friend,Another house,Digaale
+1843,Household member,Home,Digaale
+1844,Other relative,Another house,Digaale
+1845,Other relative,Home,Digaale
+1846,Other relative,Another house,Digaale
+1847,Friend,Another house,Digaale
+1848,Other relative,Another house,Digaale
+1849,Other relative,Another house,Digaale
+1850,Friend,Home,Digaale
+1851,Friend,Home; Shop,Digaale
+1852,Friend,Shop,Digaale
+1853,Friend,Shop,Digaale
+1854,Friend,Shop,Digaale
+1855,Friend,Shop,Digaale
+1856,Other relative,Home,Digaale
+1857,Household member,Home,Digaale
+1858,Other relative,Home; Another house,Digaale
+1859,Other relative,Home,Digaale
+1860,Household member,Home,Digaale
+1861,Other relative,Home,Digaale
+1862,Household member,Home,Digaale
+1863,Household member,Home,Digaale
+1864,Friend,Market,Digaale
+1865,Friend,Another house,Digaale
+1866,Friend,Another house,Digaale
+1867,Friend,Shop,Digaale
+1868,Friend,Shop,Digaale
+1869,Friend,Other,Digaale
+1870,Other relative,Another house,Digaale
+1871,Other relative,Another house,Digaale
+1872,Other relative,Another house,Digaale
+1873,Other relative,Another house,Digaale
+1874,Friend,Another house,Digaale
+1875,Other relative,Another house,Digaale
+1876,Other relative,Another house,Digaale
+1877,Household member,Another house,Digaale
+1878,Other relative,Another house,Digaale
+1879,Other relative,Another house,Digaale
+1880,Other relative,Another house,Digaale
+1881,Other relative,Another house,Digaale
+1882,Household member,Home,Digaale
+1883,Other relative,Home,Digaale
+1884,Friend,Shop,Digaale
+1885,Household member,Home,Digaale
+1886,Household member,Home,Digaale
+1887,Other,Shop,Digaale
+1888,Other,Shop,Digaale
+1889,Other,Shop,Digaale
+1890,Other,Another house,Digaale
+1891,Household member,Home,Digaale
+1892,Household member,Home,Digaale
+1893,Household member,Home,Digaale
+1894,Household member,Home,Digaale
+1895,Other relative,Another house,Digaale
+1896,Other relative,Home,Digaale
+1897,refuse to answer,Home,Digaale
+1898,Other relative,Another house,Digaale
+1899,Other relative,Home,Digaale
+1900,Other relative,Home,Digaale
+1901,Other,Shop,Digaale
+1902,Other,Home,Digaale
+1903,Friend,Another house,Digaale
+1904,Other,Market,Digaale
+1905,Friend,Another house,Digaale
+1906,Friend,Other,Digaale
+1907,Other,Home,Digaale
+1908,Friend,Home,Digaale
+1909,Friend,Home,Digaale
+1910,Friend,Home; Mosque,Digaale
+1911,Other,Home,Digaale
+1912,Friend,Mosque,Digaale
+1913,Other relative,Market,Digaale
+1914,Other relative,Market,Digaale
+1915,Other relative,Market,Digaale
+1916,Other relative,Market,Digaale
+1917,Other relative,Market,Digaale
+1918,Other relative,Market,Digaale
+1919,Other relative,Market,Digaale
+1920,Other relative,Market,Digaale
+1921,Other relative,Market,Digaale
+1922,Other relative,Market,Digaale
+1923,Other relative,Market,Digaale
+1924,Other relative,Market,Digaale
+1925,Other relative,Market,Digaale
+1926,Other relative,Home,Digaale
+1927,Other relative,Home,Digaale
+1928,Other relative,Home,Digaale
+1929,Other relative,Home,Digaale
+1930,Other relative,Home,Digaale
+1931,Other relative,Home,Digaale
+1932,Other relative,Home,Digaale
+1933,Other relative,Home,Digaale
+1934,Household member,Home,Digaale
+1935,Household member,Home,Digaale
+1936,Household member,Home,Digaale
+1937,Household member,Home,Digaale
+1938,Other relative,Home,Digaale
+1939,Friend,Home,Digaale
+1940,Other relative,Home; Another house,Digaale
+1941,Household member,Home; Another house,Digaale
+1942,Friend,Home; Another house,Digaale
+1943,Household member,Home,Digaale
+1944,Other relative,Another house,Digaale
+1945,Other relative,Home,Digaale
+1946,Other relative,Another house,Digaale
+1947,Household member,Home,Digaale
+1948,Household member,Another house,Digaale
+1949,Other,Other,Digaale
+1950,Other,Other,Digaale
+1951,Friend,Another house,Digaale
+1952,Friend,Other,Digaale
+1953,Friend,Another house,Digaale
+1954,Friend,Shop,Digaale
+1955,Friend,Market,Digaale
+1956,Friend,Other,Digaale
+1957,Friend,Home,Digaale
+1958,Friend,Another house,Digaale
+1959,Friend,Home,Digaale
+1960,Friend,Another house,Digaale
+1961,Friend,Home,Digaale
+1962,Household member,Home,Digaale
+1963,Household member,Home,Digaale
+1964,Household member,Home,Digaale
+1965,Household member,Home,Digaale
+1966,Friend,Another house,Digaale
+1967,Other relative,Home,Digaale
+1968,Other relative,Home,Digaale
+1969,Other,Home,Digaale
+1970,Friend,Home,Digaale
+1971,Other,Home,Digaale
+1972,Household member,Home,Digaale
+1973,Other,Home,Digaale
+1974,Other,Home,Digaale
+1975,Household member,Home,Digaale
+1976,Household member,Home,Digaale
+1977,Household member,Home,Digaale
+1978,Household member,Home,Digaale
+1979,Friend,Another house,Digaale
+1980,Friend,Another house,Digaale
+1981,Friend,Shop,Digaale
+1982,Household member,Home,Digaale
+1983,Household member,Home,Digaale
+1984,Household member,Home,Digaale
+1985,Friend,Another house,Digaale
+1986,Other relative,Another house,Digaale
+1987,Other relative,Another house,Digaale
+1988,Other relative,Market,Digaale
+1989,Other relative,Another house,Digaale
+1990,Other relative,Another house,Digaale
+1991,Other relative,Another house,Digaale
+1992,Other relative,Another house,Digaale
+1993,Other relative,Another house,Digaale
+1994,Other relative,Another house,Digaale
+1995,Other relative,Another house,Digaale
+1996,Other relative,Another house,Digaale
+1997,Other relative,Another house,Digaale
+1998,Other relative,Another house,Digaale
+1999,Other relative,Another house,Digaale
+2000,Other relative,Another house,Digaale
+2001,Other relative,Another house,Digaale
+2002,Other relative,Home,Digaale
+2003,Other relative,Another house,Digaale
+2004,Other relative,Another house,Digaale
+2005,Other relative,Home,Digaale
+2006,Other relative,Home,Digaale
+2007,Household member,Home,Digaale
+2008,Other relative,Home,Digaale
+2009,Other relative,Another house,Digaale
+2010,Other relative,Another house,Digaale
+2011,Other relative,Another house,Digaale
+2012,Household member,Home,Digaale
+2013,Other relative,Another house,Digaale
+2014,Other relative,Another house,Digaale
+2015,Other relative,Another house,Digaale
+2016,Household member,Home,Digaale
+2017,Friend,Another house,Digaale
+2018,Other relative,Home,Digaale
+2019,Friend,Home,Digaale
+2020,Friend,Home,Digaale
+2021,Friend,Another house,Digaale
+2022,Other relative,Work,Digaale
+2023,Friend,Another house,Digaale
+2024,Friend,Another house,Digaale
+2025,Friend,Another house,Digaale
+2026,Friend,Home,Digaale
+2027,Friend,Shop,Digaale
+2028,Friend,Home,Digaale
+2029,Friend,Another house,Digaale
+2030,Other,Home,Digaale
+2031,Household member,Home,Digaale
+2032,Other,Home,Digaale
+2033,Other,Shop,Digaale
+2034,Friend,Home,Digaale
+2035,Friend,Another house,Digaale
+2036,Friend,Home,Digaale
+2037,Other relative,Another house,Digaale
+2038,Other relative,Home,Digaale
+2039,Other,Home,Digaale
+2040,Other,Home,Digaale
+2041,Other,Home,Digaale
+2042,Friend,Home,Digaale
+2043,Household member,Home,Digaale
+2044,Household member,Home,Digaale
+2045,Household member,Home,Digaale
+2046,Other relative,Another house,Digaale
+2047,Other relative,Another house,Digaale
+2048,Other relative,Another house,Digaale
+2049,Household member,Home,Digaale
+2050,Other relative,Another house,Digaale
+2051,Other relative,Another house,Digaale
+2052,Other relative,Shop,Digaale
+2053,Other relative,Another house,Digaale
+2054,Friend,Another house,Digaale
+2055,Friend,Market,Digaale
+2056,Other relative,Home,Digaale
+2057,Other relative,Market,Digaale
+2058,Other relative,Market,Digaale
+2059,Other relative,Market,Digaale
+2060,Friend,Market,Digaale
+2061,Friend,Market,Digaale
+2062,Household member,Home,Digaale
+2063,Other relative,Another house,Digaale
+2064,Friend,Another house,Digaale
+2065,Friend,Another house,Digaale
+2066,Friend,Another house,Digaale
+2067,Friend,Another house,Digaale
+2068,Other relative,Another house,Digaale
+2069,Other relative,Another house,Digaale
+2070,Other relative,Another house,Digaale
+2071,Other relative,Another house,Digaale
+2072,Other relative,Another house,Digaale
+2073,Other relative,Market,Digaale
+2074,Other relative,Market,Digaale
+2075,Other,Market,Digaale
+2076,Other,Market,Digaale
+2077,Other relative,Market,Digaale
+2078,Friend,Market,Digaale
+2079,Other,Market,Digaale
+2080,Friend,Home,Digaale
+2081,Other relative,Another house,Digaale
+2082,Other relative,Another house,Digaale
+2083,Other relative,Another house,Digaale
+2084,Other relative,Another house,Digaale
+2085,Other relative,Another house,Digaale
+2086,Other,Home,Digaale
+2087,Other relative,Home,Digaale
+2088,Other relative,Home,Digaale
+2089,Other relative,Home,Digaale
+2090,Other relative,Home,Digaale
+2091,Other relative,Home,Digaale
+2092,Friend,Market,Digaale
+2093,Household member,Home; Shop,Digaale
+2094,Other,Shop,Digaale
+2095,Other,Another house,Digaale
+2096,Friend,Home,Digaale
+2097,Other relative,Home,Digaale
+2098,Friend,Another house,Digaale
+2099,Other,Home,Digaale
+2100,Other,Another house,Digaale
+2101,Other,Home,Digaale
+2102,Household member,Home,Digaale
+2103,Household member,Home,Digaale
+2104,Friend,Another house,Digaale
+2105,Other relative,Another house,Digaale
+2106,Household member,Home,Digaale
+2107,Household member,Home,Digaale
+2108,Other relative,Another house,Digaale
+2109,Friend,Home,Digaale
+2110,Friend,Home,Digaale
+2111,Friend,Another house,Digaale
+2112,Friend,Home,Digaale
+2113,Other relative,Home,Digaale
+2114,Other relative,Shop,Digaale
+2115,Other relative,Shop,Digaale
+2116,Household member,Another house,Digaale
+2117,Friend,Another house,Digaale
+2118,Household member,Home,Digaale
+2119,Other relative,Another house,Digaale
+2120,Other relative,Another house,Digaale
+2121,Friend,Market,Digaale
+2122,Other,Home,Digaale
+2123,Friend,Another house,Digaale
+2124,Other,Another house,Digaale
+2125,Other,Home,Digaale
+2126,Other,Home,Digaale
+2127,Other relative,Another house; Home,Digaale
+2128,Other relative,Home; Another house,Digaale
+2129,Other relative,Home; Another house,Digaale
+2130,Other relative,Home; Another house,Digaale
+2131,Other relative,Home; Another house,Digaale
+2132,Other relative,Home; Another house,Digaale
+2133,Household member,Home,Digaale
+2134,Other relative,Another house; Home,Digaale
+2135,Friend,Market,Digaale
+2136,Friend,Market,Digaale
+2137,Other,Home,Digaale
+2138,Other,Home,Digaale
+2139,Friend,Home,Digaale
+2140,Other,Home,Digaale
+2141,Other,Home,Digaale
+2142,Other,Home,Digaale
+2143,Other,Home,Digaale
+2144,Other,Home,Digaale
+2145,Friend,Market,Digaale
+2146,Friend,Market,Digaale
+2147,Other,Home,Digaale
+2148,Other,Another house,Digaale
+2149,Other,Another house,Digaale
+2150,Household member,Home,Digaale
+2151,Other,Home,Digaale
+2152,Other,Home,Digaale
+2153,Other relative,Market,Hargeisa
+2154,Other,Home,Digaale
+2155,Friend,Another house,Hargeisa
+2156,Other,Home,Digaale
+2157,Other relative,Another house,Hargeisa
+2158,Other,Home,Digaale
+2159,Other relative,Home,Digaale
+2160,Household member,Home,Digaale
+2161,Other relative,Another house,Digaale
+2162,Other relative,Another house,Digaale
+2163,Other relative,Another house,Digaale
+2164,Other relative,Another house,Digaale
+2165,Other relative,Another house,Digaale
+2166,Coworker or schoolmate,Another house,Digaale
+2167,Coworker or schoolmate,School,Digaale
+2168,Other relative,Another house,Digaale
+2169,Other relative,Another house,Digaale
+2170,Other relative,Another house,Digaale
+2171,Friend,Another house,Digaale
+2172,Other relative,Another house,Digaale
+2173,Other relative,Another house,Digaale
+2174,Friend,School,Digaale
+2175,Other,Shop,Digaale
+2176,Friend,Home; Another house,Digaale
+2177,Other relative,Another house; Home,Digaale
+2178,Other relative,Home,Digaale
+2179,Other relative,Home,Digaale
+2180,Friend,Home; Another house,Digaale
+2181,Friend,Home; Another house,Digaale
+2182,Friend,Home; Another house,Digaale
+2183,Other relative,Home,Digaale
+2184,Household member,Home,Digaale
+2185,Household member,Home,Digaale
+2186,Household member,Home,Digaale
+2187,Other relative,Another house,Digaale
+2188,Other relative,Another house,Digaale
+2189,Other relative,Another house,Digaale
+2190,Other relative,Another house,Digaale
+2191,Coworker or schoolmate,Another house,Digaale
+2192,Household member,Home,Digaale
+2193,Household member,Home,Digaale
+2194,Household member,Home,Digaale
+2195,Household member,Home,Digaale
+2196,Household member,Home,Digaale
+2197,Household member,Home,Digaale
+2198,Household member,Home,Digaale
+2199,Other relative,Another house,Digaale
+2200,Other relative,Another house,Digaale
+2201,Other relative,Another house,Digaale
+2202,Other relative,Another house,Digaale
+2203,Other relative,Another house,Digaale
+2204,Friend,Another house,Digaale
+2205,Friend,Another house,Digaale
+2206,Other,Home,Digaale
+2207,Other,Home,Digaale
+2208,Other,Home,Digaale
+2209,Other,Shop,Digaale
+2210,Other,Another house,Digaale
+2211,Other,Another house,Digaale
+2212,Other,Home; Another house,Digaale
+2213,Other,Home,Digaale
+2214,Friend,Another house,Digaale
+2215,Friend,Home; Market,Digaale
+2216,Friend,Home; Market,Digaale
+2217,Other,Home,Digaale
+2218,Other,Another house; Home,Digaale
+2219,Other,Home,Digaale
+2220,Other,Home,Digaale
+2221,Friend,Another house,Digaale
+2222,Household member,Home,Digaale
+2223,Household member,Home,Digaale
+2224,Household member,Home,Digaale
+2225,Household member,Home,Digaale
+2226,Household member,Home,Digaale
+2227,Household member,Home,Digaale
+2228,Household member,Home,Digaale
+2229,Household member,Home,Digaale
+2230,Household member,Market,Digaale
+2231,Other relative,Another house,Digaale
+2232,Household member,Home,Digaale
+2233,Friend,Another house,Digaale
+2234,Other,Home,Digaale
+2235,Other,Another house,Digaale
+2236,Household member,Home,Digaale
+2237,Other relative,Another house,Digaale
+2238,Other,Market,Digaale
+2239,Friend,Market,Digaale
+2240,Other,Another house,Digaale
+2241,Other,Home,Digaale
+2242,Other,Another house,Digaale
+2243,Household member,Home,Digaale
+2244,Household member,Home,Digaale
+2245,Other,Market,Digaale
+2246,Friend,Market,Digaale
+2247,Other,Market,Digaale
+2248,Friend,Market,Digaale
+2249,Other,Market,Digaale
+2250,Friend,Another house,Digaale
+2251,Household member,Home,Digaale
+2252,Household member,Home,Digaale
+2253,Household member,Home,Digaale
+2254,Household member,Home,Digaale
+2255,Household member,Home,Digaale
+2256,Household member,Home,Digaale
+2257,Household member,Home,Digaale
+2258,Other relative,Home,Digaale
+2259,Other relative,Home,Digaale
+2260,Household member,Home,Digaale
+2261,Household member,Home,Digaale
+2262,Other relative,Another house,Digaale
+2263,Other relative,Home,Digaale
+2264,Friend,Another house,Digaale
+2265,Friend,Market,Digaale
+2266,Other relative,Home,Digaale
+2267,Other relative,Another house,Digaale
+2268,Household member,Home,Digaale
+2269,Household member,Home,Digaale
+2270,Other relative,Home,Digaale
+2271,Other,Home; Market,Digaale
+2272,Household member,Home,Digaale
+2273,Household member,Home,Digaale
+2274,Other relative,Another house,Digaale
+2275,Other,Home,Digaale
+2276,Other,Home,Digaale
+2277,Other,Home,Digaale
+2278,Other relative,Market,Digaale
+2279,Other,Another house,Digaale
+2280,Friend,Another house,Digaale
+2281,Friend,Market,Digaale
+2282,Friend,Another house,Digaale
+2283,Friend,Work,Digaale
+2284,Other relative,Another house,Digaale
+2285,Other,Another house,Digaale
+2286,Other,Another house,Digaale
+2287,Friend,Work,Digaale
+2288,Other relative,Another house,Digaale
+2289,Other relative,Another house,Digaale
+2290,Other,Market,Digaale
+2291,Friend,Another house,Digaale
+2292,Other,Market,Digaale
+2293,Friend,Another house,Digaale
+2294,Friend,Another house,Digaale
+2295,Coworker or schoolmate,School,Digaale
+2296,Other relative,Another house,Digaale
+2297,Coworker or schoolmate,Home,Digaale
+2298,Friend,Another house,Digaale
+2299,Household member,Home,Digaale
+2300,Friend,Another house,Digaale
+2301,Other relative,Another house,Digaale
+2302,don’t know,Another house,Digaale
+2303,Other relative,Another house,Digaale
+2304,Other relative,Another house,Digaale
+2305,Other relative,Another house,Digaale
+2306,Other relative,Another house,Digaale
+2307,Other relative,Another house,Digaale
+2308,Other relative,Another house,Digaale
+2309,Household member,Home,Digaale
+2310,Household member,Home,Digaale
+2311,Household member,Home,Digaale
+2312,Household member,Home,Digaale
+2313,Household member,Home,Digaale
+2314,Other relative,Market,Digaale
+2315,Other relative,Market,Digaale
+2316,Other relative,Market,Digaale
+2317,Other relative,Market,Digaale
+2318,Other relative,Market,Digaale
+2319,Other relative,Market,Digaale
+2320,Other relative,Home,Digaale
+2321,Friend,Shop,Digaale
+2322,Other relative,Another house,Digaale
+2323,Friend,Another house,Digaale
+2324,Other,Another house,Digaale
+2325,Household member,Home,Digaale
+2326,Household member,Home,Digaale
+2327,Household member,Home,Digaale
+2328,Household member,Home,Digaale
+2329,Household member,Home,Digaale
+2330,Other relative,Another house,Digaale
+2331,Other relative,Another house,Digaale
+2332,Other relative,Another house,Digaale
+2333,Household member,Home,Digaale
+2334,Household member,Home,Digaale
+2335,Household member,Home,Digaale
+2336,Household member,Home,Digaale
+2337,Friend,Shop,Digaale
+2338,Other relative,Another house,Digaale
+2339,Other relative,Another house,Digaale
+2340,Other relative,Another house,Digaale
+2341,Friend,Another house,Digaale
+2342,Household member,Home,Digaale
+2343,Other relative,Another house,Digaale
+2344,Other relative,Another house,Digaale
+2345,Other relative,Another house,Digaale
+2346,Household member,Home,Digaale
+2347,Household member,Home,Digaale
+2348,Household member,Home,Digaale
+2349,Household member,Home,Digaale
+2350,Household member,Home,Digaale
+2351,Household member,Home,Digaale
+2352,Household member,Home,Digaale
+2353,Household member,Home,Digaale
+2354,Friend,School,Digaale
+2355,Friend,School,Digaale
+2356,Friend,School,Digaale
+2357,Coworker or schoolmate,School,Digaale
+2358,Coworker or schoolmate,School,Digaale
+2359,Household member,Another house; Home,Digaale
+2360,Household member,Home,Digaale
+2361,Household member,Home,Digaale
+2362,Friend,Home,Digaale
+2363,Household member,Home,Digaale
+2364,Household member,Home,Digaale
+2365,Household member,Home,Digaale
+2366,Household member,Home,Digaale
+2367,Friend,Another house; School,Digaale
+2368,Friend,Home; Another house,Digaale
+2369,Coworker or schoolmate,School,Digaale
+2370,Coworker or schoolmate,School,Digaale
+2371,Household member,Home,Digaale
+2372,Friend,School,Hargeisa
+2373,Friend,School,Hargeisa
+2374,Friend,School,Hargeisa
+2375,Friend,School,Hargeisa
+2376,Friend,School,Hargeisa
+2377,Friend,School,Hargeisa
+2378,Friend,School,Hargeisa
+2379,Household member,Home,Digaale
+2380,Household member,Home,Digaale
+2381,Household member,Home,Digaale
+2382,Other relative,Another house,Digaale
+2383,Other relative,Another house,Digaale
+2384,Other relative,Another house,Digaale
+2385,Other relative,Another house,Digaale
+2386,Other relative,Another house,Digaale
+2387,Coworker or schoolmate,School,Digaale
+2388,Coworker or schoolmate,School,Digaale
+2389,Other relative,Another house,Digaale
+2390,Household member,Home,Digaale
+2391,Friend,Shop,Digaale
+2392,Other relative,Shop,Digaale
+2393,Other relative,Shop,Digaale
+2394,Other relative,Shop,Digaale
+2395,Other relative,Shop,Digaale
+2396,Other relative,Shop,Digaale
+2397,Household member,Home,Digaale
+2398,Household member,Home,Digaale
+2399,Household member,Home; Another house,Digaale
+2400,Friend,Home; Another house,Digaale
+2401,Friend,Home,Digaale
+2402,Friend,Home,Digaale
+2403,Other relative,Home; Another house,Digaale
+2404,Friend,Home; Another house,Digaale
+2405,Other relative,Home; Another house,Digaale
+2406,Friend,Home; Another house,Digaale
+2407,Friend,Another house,Digaale
+2408,Friend,Another house,Digaale
+2409,Friend,Another house,Digaale
+2410,Friend,Another house,Digaale
+2411,Household member,Home,Digaale
+2412,Household member,Home,Digaale
+2413,Household member,Home,Digaale
+2414,Household member,Home,Digaale
+2415,Household member,Home,Digaale
+2416,Household member,Home,Digaale
+2417,Household member,Home,Digaale
+2418,Household member,Home,Digaale
+2419,Household member,Home,Digaale
+2420,Friend,School,Digaale
+2421,Friend,School,Digaale
+2422,Friend,School,Digaale
+2423,Coworker or schoolmate,School,Digaale
+2424,Coworker or schoolmate,School,Digaale
+2425,Friend,Another house,Digaale
+2426,Other relative,Another house,Digaale
+2427,Other relative,Another house,Digaale
+2428,Household member,Home,Digaale
+2429,Household member,Home,Digaale
+2430,Other relative,Home,Digaale
+2431,Other relative,Home; Another house,Digaale
+2432,Other,Home,Digaale
+2433,Other,Market,Digaale
+2434,Other,Home,Digaale
+2435,Other,Another house,Digaale
+2436,Friend,Home,Digaale
+2437,Household member,Another house,Digaale
+2438,Friend,Shop,Digaale
+2439,Friend,Home,Digaale
+2440,Other relative,Another house,Digaale
+2441,Other,Home,Digaale
+2442,Other,Home,Digaale
+2443,Friend,Home,Digaale
+2444,Other relative,Home,Digaale
+2445,Friend,Market,Digaale
+2446,Friend,School,Digaale
+2447,Friend,School,Digaale
+2448,Friend,Home; Another house; School,Digaale
+2449,Friend,Home; Another house,Digaale
+2450,Household member,Home,Digaale
+2451,Household member,Home,Digaale
+2452,Household member,Home,Digaale
+2453,Household member,Home,Digaale
+2454,Household member,Home,Digaale
+2455,Household member,Home,Digaale
+2456,Household member,Home,Digaale
+2457,Household member,Home,Digaale
+2458,Household member,Home,Digaale
+2459,Friend,Another house,Digaale
+2460,Friend,Another house,Digaale
+2461,Friend,Another house,Digaale
+2462,Other relative,Home,Digaale
+2463,Household member,Home,Digaale
+2464,Friend,Another house; Home,Digaale
+2465,Friend,Home; Another house,Digaale
+2466,Other relative,Home; Another house,Digaale
+2467,Other relative,Home; Another house,Digaale
+2468,Friend,School,Digaale
+2469,Other relative,Home,Digaale
+2470,Other relative,Home; Another house,Digaale
+2471,Friend,Home,Digaale
+2472,Other relative,Home; Another house; School,Digaale
+2473,Friend,Home,Digaale
+2474,Other relative,Home,Digaale
+2475,Other relative,Home; Another house,Digaale
+2476,Household member,Home,Digaale
+2477,Household member,Home,Digaale
+2478,Household member,Home,Digaale
+2479,Household member,Home,Digaale
+2480,Coworker or schoolmate,School,Digaale
+2481,Coworker or schoolmate,School,Digaale
+2482,Coworker or schoolmate,School,Digaale
+2483,Coworker or schoolmate,School,Digaale
+2484,Coworker or schoolmate,School,Digaale
+2485,Coworker or schoolmate,School,Digaale
+2486,Household member,Home,Digaale
+2487,Household member,Home,Digaale
+2488,Household member,Home,Digaale
+2489,Household member,Home,Digaale
+2490,Household member,Home,Digaale
+2491,Household member,Home,Digaale
+2492,Other relative,Another house,Digaale
+2493,Other relative,Another house,Digaale
+2494,Other relative,Another house,Digaale
+2495,Other relative,Another house,Digaale
+2496,Other relative,Another house,Digaale
+2497,Other relative,Another house,Digaale
+2498,Other relative,Another house,Digaale
+2499,Other relative,Another house,Digaale
+2500,Friend,Another house,Digaale
+2501,Other,Home,Digaale
+2502,Other,Another house,Digaale
+2503,Household member,Home,Digaale
+2504,Household member,Home,Digaale
+2505,Other,Home,Digaale
+2506,Other,Home,Digaale
+2507,Household member,Home,Digaale
+2508,Household member,Home,Digaale
+2509,Household member,Home,Digaale
+2510,Household member,Home,Digaale
+2511,Household member,Home,Digaale
+2512,Household member,Home,Digaale
+2513,Friend,Another house; Shop,Digaale
+2514,Friend,Another house,Digaale
+2515,Friend,Another house; Shop,Digaale
+2516,Friend,Another house,Digaale
+2517,Friend,Another house,Digaale
+2518,Friend,Another house,Digaale
+2519,Friend,Another house,Digaale
+2520,Friend,Another house,Digaale
+2521,Household member,Home,Digaale
+2522,Household member,Home,Digaale
+2523,Household member,Home,Digaale
+2524,Household member,Home,Digaale
+2525,Household member,Home,Digaale
+2526,Household member,Home,Digaale
+2527,Household member,Home,Digaale
+2528,Household member,Home,Digaale
+2529,Household member,Home,Digaale
+2530,Friend,Another house,Digaale
+2531,Friend,Another house,Digaale
+2532,Friend,Another house,Digaale
+2533,Friend,Home; School,Digaale
+2534,Coworker or schoolmate,Home; School,Digaale
+2535,Friend,School,Digaale
+2536,Other,Home,Digaale
+2537,Friend,Home; School,Digaale
+2538,Other,Home; School,Digaale
+2539,Friend,Home,Digaale
+2540,Friend,Home,Digaale
+2541,Friend,Home,Digaale
+2542,Other,Another house,Digaale
+2543,Household member,Home; School,Digaale
+2544,Friend,Home,Digaale
+2545,Household member,Home,Digaale
+2546,Household member,Home,Digaale
+2547,Friend,Market,Digaale
+2548,Other relative,Market,Digaale
+2549,Other relative,Home,Digaale
+2550,Friend,Market,Digaale
+2551,Other relative,Another house,Digaale
+2552,Other relative,Market,Digaale
+2553,Other relative,Another house,Digaale
+2554,Friend,Market,Digaale
+2555,Household member,Home,Digaale
+2556,Household member,Home,Digaale
+2557,Other relative,Another house,Digaale
+2558,Other relative,Another house,Digaale
+2559,Coworker or schoolmate,Another house,Digaale
+2560,Coworker or schoolmate,Another house,Digaale
+2561,Coworker or schoolmate,Another house,Digaale
+2562,Other relative,Another house,Digaale
+2563,Other relative,Another house,Digaale
+2564,Other relative,Another house,Digaale
+2565,Other relative,Another house,Digaale
+2566,Household member,Home,Digaale
+2567,Other relative,Another house,Digaale
+2568,Friend,Other,Digaale
+2569,Friend,Other,Digaale
+2570,Friend,Shop,Digaale
+2571,Friend,Other,Digaale
+2572,Friend,Other,Digaale
+2573,Friend,Another house,Digaale
+2574,Friend,Another house,Digaale
+2575,Other relative,Home,Digaale
+2576,Coworker or schoolmate,School; Home,Digaale
+2577,Friend,Home,Digaale
+2578,Friend,Another house,Digaale
+2579,Other,School,Digaale
+2580,Other relative,Home,Digaale
+2581,Other relative,Home,Digaale
+2582,Other relative,Home,Digaale
+2583,Household member,Home,Digaale
+2584,Other relative,Another house,Digaale
+2585,Friend,School,Digaale
+2586,Friend,Another house,Digaale
+2587,Friend,Home,Digaale
+2588,Friend,Home,Digaale
+2589,Friend,Another house,Digaale
+2590,Friend,Another house,Digaale
+2591,Household member,Home,Digaale
+2592,Friend,Home,Digaale
+2593,Friend,Home,Digaale
+2594,Friend,Another house,Digaale
+2595,Friend,Home,Digaale
+2596,Friend,Home,Digaale
+2597,Other relative,Another house,Digaale
+2598,Household member,Home,Digaale
+2599,Household member,Home,Digaale
+2600,Other relative,Home,Digaale
+2601,Other relative,Another house,Digaale
+2602,Other relative,Another house,Digaale
+2603,Other relative,Another house,Digaale
+2604,Other relative,Another house,Digaale
+2605,Other relative,Another house,Digaale
+2606,Household member,Another house,Digaale
+2607,Other relative,Another house,Digaale
+2608,Other relative,Another house,Digaale
+2609,Other relative,Another house,Digaale
+2610,Other relative,Home,Digaale
+2611,Household member,Home,Digaale
+2612,Household member,Home,Digaale
+2613,Friend,Market,Digaale
+2614,Friend,Market,Digaale
+2615,Friend,Market,Digaale
+2616,Friend,Market,Digaale
+2617,Friend,Another house,Digaale
+2618,Friend,Another house,Digaale
+2619,Friend,Another house,Digaale
+2620,Friend,Shop,Digaale
+2621,Household member,Home,Digaale
+2622,Household member,Home,Digaale
+2623,Household member,Home,Digaale
+2624,Friend,Shop,Digaale
+2625,Friend,Market,Digaale
+2626,Friend,Shop,Digaale
+2627,Friend,Home,Digaale
+2628,Friend,Home; Another house,Digaale
+2629,Friend,Another house,Digaale
+2630,Friend,Home,Digaale
+2631,Household member,Home,Digaale
+2632,Household member,Home,Digaale
+2633,Household member,Home,Digaale
+2634,Friend,Home,Digaale
+2635,Friend,Another house,Digaale
+2636,Household member,Home,Digaale
+2637,Household member,Home,Digaale
+2638,Household member,Home,Digaale
+2639,Friend,School,Digaale
+2640,Friend,School,Digaale
+2641,Friend,School,Digaale
+2642,Friend,School,Digaale
+2643,Friend,School,Digaale
+2644,Friend,School,Digaale
+2645,Friend,School,Digaale
+2646,Friend,School,Digaale
+2647,Friend,School,Digaale
+2648,Friend,School,Digaale
+2649,Other relative,Another house,Digaale
+2650,Other relative,Another house,Digaale
+2651,Friend,Home,Digaale
+2652,Friend,Home; Another house,Digaale
+2653,Friend,Home,Digaale
+2654,Friend,Another house,Digaale
+2655,Friend,Home,Digaale
+2656,Friend,Home,Digaale
+2657,Friend,Another house,Digaale
+2658,Friend,Another house,Digaale
+2659,Other relative,Home; Another house,Digaale
+2660,Household member,Home,Digaale
+2661,Household member,Home,Digaale
+2662,Friend,School,Digaale
+2663,Friend,School,Digaale
+2664,Friend,School,Digaale
+2665,Friend,School,Digaale
+2666,Friend,School,Digaale
+2667,Household member,Home,Digaale
+2668,Household member,Home,Digaale
+2669,Household member,Home,Digaale
+2670,Household member,Home,Digaale
+2671,Household member,Home,Digaale
+2672,Household member,Home,Digaale
+2673,Household member,Home,Digaale
+2674,Household member,Home,Digaale
+2675,Household member,Home,Digaale
+2676,Household member,Home,Digaale
+2677,Household member,Home,Digaale
+2678,Household member,Home,Digaale
+2679,Household member,Home,Digaale
+2680,Friend,School,Hargeisa
+2681,Friend,School,Hargeisa
+2682,Friend,School,Hargeisa
+2683,Friend,School,Hargeisa
+2684,Friend,School,Hargeisa
+2685,Household member,School,Hargeisa
+2686,Friend,School,Hargeisa
+2687,Friend,School,Hargeisa
+2688,Friend,Market,Digaale
+2689,Friend,Market,Digaale
+2690,Friend,Market,Digaale
+2691,Household member,Home,Digaale
+2692,Household member,Home,Digaale
+2693,Household member,Home,Digaale
+2694,Household member,Home,Digaale
+2695,Other,Home; Another house,Digaale
+2696,Friend,Another house; Home,Digaale
+2697,Friend,Another house; Home,Digaale
+2698,Other,Home,Digaale
+2699,Friend,Home; Shop,Digaale
+2700,Friend,Home,Digaale
+2701,Other,Another house,Digaale
+2702,Other,Home,Digaale
+2703,Friend,Another house; Home,Digaale
+2704,Friend,Home,Digaale
+2705,Household member,Home,Digaale
+2706,Household member,Home,Digaale
+2707,refuse to answer,Home,Digaale
+2708,Household member,Home,Digaale
+2709,Friend,School,Digaale
+2710,Coworker or schoolmate,School,Digaale
+2711,Coworker or schoolmate,School,Digaale
+2712,Coworker or schoolmate,School,Digaale
+2713,Coworker or schoolmate,School,Digaale
+2714,Coworker or schoolmate,School,Digaale
+2715,Coworker or schoolmate,School,Digaale
+2716,Household member,School,Digaale
+2717,Friend,School,Digaale
+2718,Friend,School,Digaale
+2719,Friend,School,Digaale
+2720,Friend,School,Digaale
+2721,Friend,Another house; Home,Digaale
+2722,Friend,Home; Another house,Digaale
+2723,Friend,Another house; Market,Digaale
+2724,Other,Another house,Digaale
+2725,Other,Home; Another house,Digaale
+2726,Household member,Home,Digaale
+2727,Other,Another house,Digaale
+2728,Friend,Another house,Digaale
+2729,Other,Another house,Digaale
+2730,Friend,Home; Another house,Digaale
+2731,Friend,Another house,Digaale
+2732,Friend,School,Digaale
+2733,Other relative,Another house,Digaale
+2734,Other relative,Another house,Digaale
+2735,Other relative,Another house,Digaale
+2736,Other relative,Another house,Digaale
+2737,Household member,Home,Digaale
+2738,Household member,Home,Digaale
+2739,Household member,Home,Digaale
+2740,Other relative,Another house,Digaale
+2741,Other relative,Another house,Digaale
+2742,Other relative,Another house,Digaale
+2743,Friend,School,Hargeisa
+2744,Friend,Market,Hargeisa
+2745,Friend,Market,Digaale
+2746,Friend,Work,Digaale
+2747,Friend,School,Digaale
+2748,Friend,Market,Digaale
+2749,Friend,Market,Hargeisa
+2750,Friend,Market,Hargeisa
+2751,Household member,Home,Digaale
+2752,Household member,Home,Digaale
+2753,Household member,Home,Digaale
+2754,Household member,Home,Digaale
+2755,Household member,Home,Digaale
+2756,Household member,Home,Digaale
+2757,Household member,Home,Digaale
+2758,don’t know,Home,Digaale
+2759,Household member,Home,Digaale
+2760,Household member,Home,Digaale
+2761,Household member,Home,Digaale
+2762,Friend,School,Digaale
+2763,Friend,School,Digaale
+2764,Friend,School,Digaale
+2765,Friend,School,Digaale
+2766,Friend,School,Digaale
+2767,Friend,School,Digaale
+2768,Friend,School,Digaale
+2769,Household member,Home,Digaale
+2770,Household member,Home,Digaale
+2771,Household member,Home,Digaale
+2772,Household member,Home,Digaale
+2773,Other relative,Another house,Digaale
+2774,Other relative,Home,Digaale
+2775,Friend,Another house,Digaale
+2776,Friend,Another house,Digaale
+2777,Household member,Home,Digaale
+2778,Household member,Home,Digaale
+2779,Household member,Home,Digaale
+2780,Household member,Home,Digaale
+2781,Household member,Home,Digaale
+2782,Household member,Home,Digaale
+2783,Household member,Home,Digaale
+2784,Friend,School,Hargeisa
+2785,Friend,School,Digaale
+2786,Friend,School,Digaale
+2787,Other,Home,Digaale
+2788,Other,Home,Digaale
+2789,Friend,Home,Digaale
+2790,Friend,Home,Digaale
+2791,Household member,Another house,Digaale
+2792,Household member,Home,Digaale
+2793,Other,Home,Digaale
+2794,Friend,Another house,Digaale
+2795,Other,Market,Digaale
+2796,Other,Home,Digaale
+2797,Friend,Home,Digaale
+2798,Household member,Another house,Digaale
+2799,Household member,Home,Digaale
+2800,Household member,Home,Digaale
+2801,Household member,Home,Digaale
+2802,Household member,Home,Digaale
+2803,Household member,Home,Digaale
+2804,Household member,Home,Digaale
+2805,Friend,Home,Digaale
+2806,Friend,Home,Digaale
+2807,Coworker or schoolmate,School,Digaale
+2808,Coworker or schoolmate,School,Digaale
+2809,Friend,School,Digaale
+2810,Friend,School,Digaale
+2811,Coworker or schoolmate,School,Digaale
+2812,Friend,School,Digaale
+2813,Friend,School,Digaale
+2814,Other,School,Digaale
+2815,Coworker or schoolmate,School,Digaale
+2816,Other,Home,Digaale
+2817,Other,Another house,Digaale
+2818,Other,Another house,Digaale
+2819,Friend,School,Digaale
+2820,Household member,Home,Digaale
+2821,Household member,Home,Digaale
+2822,Household member,Home,Digaale
+2823,Household member,Home,Digaale
+2824,Friend,Another house,Digaale
+2825,Household member,Home,Digaale
+2826,Friend,Market,Digaale
+2827,Friend,Another house,Digaale
+2828,Friend,Another house,Digaale
+2829,Friend,School,Digaale
+2830,Coworker or schoolmate,School,Digaale
+2831,Friend,School,Digaale
+2832,Household member,Home,Digaale
+2833,Household member,Home,Digaale
+2834,Household member,Home,Digaale
+2835,Household member,Home,Digaale
+2836,Household member,Home,Digaale
+2837,Household member,Home,Digaale
+2838,Other relative,Another house,Digaale
+2839,Other,Work,Digaale
+2840,Household member,Home,Digaale
+2841,Household member,Home,Digaale
+2842,Household member,Home,Digaale
+2843,Other relative,Another house,Digaale
+2844,Friend,Another house,Digaale
+2845,Friend,Shop,Digaale
+2846,Other relative,Another house,Digaale
+2847,Other relative,Another house,Digaale
+2848,Household member,Home,Digaale
+2849,Household member,Home,Digaale
+2850,Other relative,Another house,Digaale
+2851,Other relative,Home,Digaale
+2852,Household member,Home,Digaale
+2853,Household member,Home,Digaale
+2854,Household member,Home,Digaale
+2855,Household member,Home,Digaale
+2856,Other relative,Home,Digaale
+2857,Household member,Market,Digaale
+2858,Household member,Another house,Digaale
+2859,Other,Home,Digaale
+2860,Household member,Market,Digaale
+2861,Friend,Another house,Digaale
+2862,Friend,Another house,Digaale
+2863,Other relative,Another house,Digaale
+2864,Other relative,Another house,Digaale
+2865,Other relative,Another house,Digaale
+2866,Household member,Home,Digaale
+2867,Friend,Other,Digaale
+2868,Friend,Another house,Digaale
+2869,Friend,Another house,Digaale
+2870,Household member,Home,Digaale
+2871,Household member,Home,Digaale
+2872,Household member,Home,Digaale
+2873,Household member,Home,Digaale
+2874,Household member,Home,Digaale
+2875,Household member,Home,Digaale
+2876,Household member,Home,Digaale
+2877,Household member,Home,Digaale
+2878,Household member,Home,Digaale
+2879,Other relative,Another house,Digaale
+2880,Household member,Home,Digaale
+2881,Household member,Home,Digaale
+2882,Household member,Home,Digaale
+2883,Household member,Home,Digaale
+2884,Household member,Home,Digaale
+2885,Other relative,Home,Digaale
+2886,Friend,Another house,Digaale
+2887,Friend,Another house,Digaale
+2888,Friend,Another house,Digaale
+2889,Friend,Another house,Digaale
+2890,Friend,Another house,Digaale
+2891,Friend,Another house,Digaale
+2892,Friend,Another house,Digaale
+2893,Friend,Another house,Digaale
+2894,Household member,Home,Digaale
+2895,Household member,Home,Digaale
+2896,Household member,Home,Digaale
+2897,Household member,Home,Digaale
+2898,Other relative,Another house,Digaale
+2899,Other relative,Another house,Digaale
+2900,Other relative,Another house,Digaale
+2901,Other relative,Another house,Digaale
+2902,Other relative,Another house,Digaale
+2903,Household member,Home,Digaale
+2904,Household member,Home,Digaale
+2905,Household member,Home,Digaale
+2906,Household member,Home,Digaale
+2907,Household member,Home,Digaale
+2908,Other relative,Home,Digaale
+2909,Other relative,Home,Digaale
+2910,Household member,Home,Digaale
+2911,Household member,Home,Digaale
+2912,Other relative,Shop,Digaale
+2913,Other relative,Another house,Digaale
+2914,Household member,Home,Digaale
+2915,Household member,Home,Digaale
+2916,Household member,Home,Digaale
+2917,Household member,Home,Digaale
+2918,Household member,Home,Digaale
+2919,Household member,Home,Digaale
+2920,Household member,Home,Digaale
+2921,Household member,Home,Digaale
+2922,Household member,Home,Digaale
+2923,Household member,Home,Digaale
+2924,Household member,Home,Digaale
+2925,Household member,Home,Digaale
+2926,Other relative,Home,Digaale
+2927,Household member,Home,Digaale
+2928,Household member,Home,Digaale
+2929,Household member,Home,Digaale
+2930,Household member,Home,Digaale
+2931,Household member,Home,Digaale
+2932,Household member,Home,Digaale
+2933,Other relative,Another house,Digaale
+2934,Other relative,Another house,Digaale
+2935,Other relative,Another house,Digaale
+2936,Household member,Home,Digaale
+2937,Household member,Home,Digaale
+2938,Household member,Home,Digaale
+2939,Household member,Home,Digaale
+2940,Household member,Home,Digaale
+2941,Household member,Home,Digaale
+2942,Household member,Home,Digaale
+2943,Other relative,Home,Digaale
+2944,Household member,Home,Digaale
+2945,Household member,Home,Digaale
+2946,Other relative,Home,Digaale
+2947,Other relative,Another house,Digaale
+2948,Household member,Home,Digaale
+2949,Household member,Home,Digaale
+2950,Household member,Home,Digaale
+2951,Household member,Home,Digaale
+2952,Household member,Home,Digaale
+2953,Household member,Home,Digaale
+2954,Household member,Home,Digaale
+2955,Household member,Home,Digaale
+2956,Household member,Home,Digaale
+2957,Household member,Home,Digaale
+2958,Household member,Home,Digaale
+2959,Household member,Home,Digaale
+2960,Household member,Home,Digaale
+2961,Household member,Home,Digaale
+2962,Household member,Home,Digaale
+2963,Household member,Home,Digaale
+2964,Household member,Home,Digaale
+2965,Household member,Home,Digaale
+2966,Household member,Home,Digaale
+2967,Household member,Home,Digaale
+2968,Household member,Home,Digaale
+2969,Other relative,Another house,Digaale
+2970,Other relative,Another house,Digaale
+2971,Other relative,Another house,Digaale
+2972,Other relative,Another house,Digaale
+2973,Other relative,Another house,Digaale
+2974,Household member,Home,Digaale
+2975,Household member,Home,Digaale
+2976,Household member,Home,Digaale
+2977,Friend,Another house,Digaale
+2978,Friend,Another house,Digaale
+2979,Other relative,Home,Digaale
+2980,Household member,Home,Digaale
+2981,Household member,Home,Digaale
+2982,Household member,Home,Digaale
+2983,Other relative,Home,Digaale
+2984,Household member,Home,Digaale
+2985,Household member,Home,Digaale
+2986,Other,Market,Digaale
+2987,Household member,Home,Digaale
+2988,Household member,Home,Digaale
+2989,Other,Market,Digaale
+2990,Friend,Another house,Digaale
+2991,Coworker or schoolmate,Another house,Digaale
+2992,Household member,Home,Digaale
+2993,Household member,Home,Digaale
+2994,Household member,Home,Digaale
+2995,Household member,Home,Digaale
+2996,Friend,Home; Another house,Digaale
+2997,Friend,Home; Another house,Digaale
+2998,Friend,Home; Another house; Shop,Digaale
+2999,Friend,Home,Digaale
+3000,Household member,Home; Another house,Digaale
+3001,Household member,Home,Digaale
+3002,Other relative,Home,Digaale
+3003,Household member,Home,Digaale
+3004,Household member,Home,Digaale
+3005,Household member,Home,Digaale
+3006,Friend,Home,Digaale
+3007,Friend,Home; Another house,Digaale
+3008,Other,Home,Digaale
+3009,Friend,Home,Digaale
+3010,Other relative,Home,Digaale
+3011,Household member,Home,Digaale
+3012,Household member,Home,Digaale
+3013,Household member,Home,Digaale
+3014,Other relative,Another house,Digaale
+3015,Household member,Home,Digaale
+3016,Household member,Home,Digaale
+3017,Other relative,Another house,Digaale
+3018,Other relative,Another house,Digaale
+3019,Other relative,Another house,Digaale
+3020,Other relative,Another house,Digaale
+3021,Other relative,Another house,Digaale
+3022,Household member,Home,Digaale
+3023,Household member,Home,Digaale
+3024,Household member,Home,Digaale
+3025,Household member,Home,Digaale
+3026,Household member,Home,Digaale
+3027,Household member,Home,Digaale
+3028,Household member,Home,Digaale
+3029,Household member,Home,Digaale
+3030,Household member,Home,Digaale
+3031,Household member,Home,Digaale
+3032,Household member,Home,Digaale
+3033,Other,Market,Digaale
+3034,Other,Market,Digaale
+3035,Other relative,Home,Digaale
+3036,Other relative,Home,Digaale
+3037,Household member,Home,Digaale
+3038,Household member,Home,Digaale
+3039,Household member,Home,Digaale
+3040,Other relative,Home,Digaale
+3041,Other relative,Home; Another house,Digaale
+3042,Other relative,Home; Another house,Digaale
+3043,Other relative,Home; Another house,Digaale
+3044,Other relative,Home; Work,Digaale
+3045,Other relative,Home; Another house,Digaale
+3046,Other relative,Home; Another house,Digaale
+3047,Other relative,Home; Another house,Digaale
+3048,Other relative,Home; Another house,Digaale
+3049,Household member,Home,Digaale
+3050,Household member,Home,Digaale
+3051,Household member,Home,Digaale
+3052,Other relative,Another house,Digaale
+3053,Household member,Home,Digaale
+3054,Household member,Home,Digaale
+3055,Household member,Home,Digaale
+3056,Household member,Home,Digaale
+3057,Household member,Home,Digaale
+3058,Household member,Home,Digaale
+3059,Household member,Home,Digaale
+3060,Household member,Home,Digaale
+3061,Other relative,Home,Digaale
+3062,Other relative,Home,Digaale
+3063,Other relative,Home,Digaale
+3064,Friend,Home,Digaale
+3065,Friend,Another house,Digaale
+3066,Other,Market,Digaale
+3067,Friend,Another house,Digaale
+3068,Household member,Home,Digaale
+3069,Household member,Home,Digaale
+3070,Household member,Home,Digaale
+3071,Friend,Another house,Digaale
+3072,Friend,Another house,Digaale
+3073,Friend,Another house,Digaale
+3074,Other relative,Another house,Digaale
+3075,Other relative,Another house,Digaale
+3076,Household member,Home,Digaale
+3077,Other relative,Another house,Digaale
+3078,Other relative,Another house,Digaale
+3079,Coworker or schoolmate,Another house,Digaale
+3080,Other relative,Another house,Digaale
+3081,Household member,Home,Digaale
+3082,Household member,Home,Digaale
+3083,Household member,Home,Digaale
+3084,Household member,Home,Digaale
+3085,Household member,Home,Digaale
+3086,Other relative,Another house,Digaale
+3087,Other relative,Another house,Digaale
+3088,Other relative,Another house,Digaale
+3089,Other relative,Home,Digaale
+3090,Other relative,Home,Digaale
+3091,Other relative,Home,Digaale
+3092,Household member,Home,Digaale
+3093,Household member,Home,Digaale
+3094,Other relative,Another house,Digaale
+3095,Household member,Home,Digaale
+3096,Household member,Home,Digaale
+3097,Friend,Home,Digaale
+3098,Friend,Another house,Digaale
+3099,Friend,Another house,Digaale
+3100,Friend,Shop,Digaale
+3101,Other relative,Home,Digaale
+3102,Friend,Home,Digaale
+3103,Friend,Home,Digaale
+3104,Other,Home,Digaale
+3105,Friend,Shop,Digaale
+3106,Other,Home; Another house,Digaale
+3107,Other,Another house,Digaale
+3108,Other,Another house,Digaale
+3109,Other,Home,Digaale
+3110,Household member,Home,Digaale
+3111,Other,Home,Digaale
+3112,Other,Home,Digaale
+3113,Friend,Home,Digaale
+3114,Friend,Home,Digaale
+3115,Friend,Home,Digaale
+3116,Household member,Another house,Digaale
+3117,Household member,Another house,Digaale
+3118,Friend,Work,Digaale
+3119,Other relative,Another house,Digaale
+3120,Friend,Market,Digaale
+3121,Friend,Another house,Digaale
+3122,Other relative,Market,Digaale
+3123,Other,Another house,Digaale
+3124,Other relative,Another house,Digaale
+3125,Other relative,Market,Digaale
+3126,Other relative,Home,Digaale
+3127,Other relative,Another house,Digaale
+3128,Other,Another house,Digaale
+3129,Household member,Home,Digaale
+3130,Household member,Home,Digaale
+3131,Other relative,Home,Digaale
+3132,Household member,Home,Digaale
+3133,Household member,Home,Digaale
+3134,Household member,Home,Digaale
+3135,Other,Home,Digaale
+3136,Friend,Home,Digaale
+3137,Friend,Home,Digaale
+3138,Friend,Another house,Digaale
+3139,Friend,Home,Digaale
+3140,Friend,Another house,Digaale
+3141,Household member,Home,Digaale
+3142,Other,Home,Digaale
+3143,Other,Home,Digaale
+3144,Friend,Home,Digaale
+3145,Friend,Another house,Digaale
+3146,Friend,Another house,Digaale
+3147,Friend,Another house,Digaale
+3148,Other relative,Market,Digaale
+3149,Other relative,Another house,Digaale
+3150,Friend,Transport,Digaale
+3151,Friend,Another house,Digaale
+3152,Other relative,Another house,Digaale
+3153,Other relative,Another house,Digaale
+3154,Other relative,Transport,Digaale
+3155,Other relative,Another house,Digaale
+3156,Friend,Another house,Digaale
+3157,Other relative,Another house,Digaale
+3158,Other relative,Another house,Digaale
+3159,Other relative,Another house,Digaale
+3160,Household member,Home,Digaale
+3161,Household member,Home,Digaale
+3162,Household member,Home,Digaale
+3163,Household member,Home,Digaale
+3164,Household member,Home,Digaale
+3165,Household member,Home,Digaale
+3166,Friend,Another house,Digaale
+3167,Friend,Another house,Digaale
+3168,Other relative,Another house,Digaale
+3169,Friend,Market,Digaale
+3170,Other relative,Another house,Digaale
+3171,Household member,Home,Digaale
+3172,Other relative,Home,Digaale
+3173,Other relative,Another house,Hargeisa
+3174,Other relative,Another house,Hargeisa
+3175,Household member,Home,Digaale
+3176,Household member,Home,Digaale
+3177,Household member,Home,Digaale
+3178,Household member,Home,Digaale
+3179,Household member,Home,Digaale
+3180,Household member,Home,Digaale
+3181,Other relative,Another house,Digaale
+3182,Other relative,Another house,Digaale
+3183,Other relative,Another house,Digaale
+3184,Other relative,Another house,Digaale
+3185,Other relative,Another house,Digaale
+3186,Friend,Shop,Digaale
+3187,Friend,Another house,Digaale
+3188,Friend,Another house,Digaale
+3189,Other relative,Shop,Digaale
+3190,Other relative,Another house,Digaale
+3191,Friend,Another house,Digaale
+3192,Friend,Another house,Digaale
+3193,Other relative,Another house,Digaale
+3194,Friend,Another house,Digaale
+3195,Household member,Home,Digaale
+3196,Household member,Home,Digaale
+3197,Household member,Home,Digaale
+3198,Household member,Home,Digaale
+3199,Household member,Home,Digaale
+3200,Household member,Another house,Digaale
+3201,Other relative,Home,Digaale
+3202,Other relative,Home,Digaale
+3203,Friend,Home,Digaale
+3204,Household member,Home,Digaale
+3205,Household member,Home,Digaale
+3206,Friend,Another house,Digaale
+3207,Friend,Work,Digaale
+3208,Friend,Work; School,Digaale
+3209,Friend,Another house; School; Work,Digaale
+3210,Friend,Work; School,Digaale
+3211,Friend,School,Digaale
+3212,Friend,School; Work,Digaale
+3213,Coworker or schoolmate,Work,Digaale
+3214,Coworker or schoolmate,Work,Digaale
+3215,Friend,Work,Digaale
+3216,Household member,Home,Digaale
+3217,Household member,Home,Digaale
+3218,Other relative,Home,Digaale
+3219,refuse to answer,Home,Digaale
+3220,Friend,Another house,Digaale
+3221,Other,Another house,Digaale
+3222,Friend,Another house,Digaale
+3223,Friend,Home,Digaale
+3224,Friend,Home,Digaale
+3225,Friend,Home,Digaale
+3226,Friend,Home,Digaale
+3227,Household member,Home,Digaale
+3228,Household member,Home,Digaale
+3229,Household member,Home,Digaale
+3230,Household member,Home,Digaale
+3231,Household member,Home,Digaale
+3232,Friend,Shop,Digaale
+3233,Friend,Market,Digaale
+3234,Friend,Market,Digaale
+3235,Friend,Another house,Digaale
+3236,Friend,Shop,Digaale
+3237,Friend,Other,Digaale
+3238,Friend,Other,Digaale
+3239,Friend,Market,Digaale
+3240,Friend,Another house,Digaale
+3241,Friend,Market,Digaale
+3242,Household member,Home,Digaale
+3243,Household member,Home,Digaale
+3244,Friend,Home,Digaale
+3245,Friend,Market,Digaale
+3246,Friend,Market,Digaale
+3247,Friend,Home,Digaale
+3248,Friend,Market,Hargeisa
+3249,Friend,Market,Hargeisa
+3250,Friend,Market,Hargeisa
+3251,Friend,Market,Hargeisa
+3252,Coworker or schoolmate,Work,Hargeisa
+3253,Friend,Work; Market,Hargeisa
+3254,Friend,Market,Digaale
+3255,Friend,Market,Hargeisa
+3256,Friend,Market,Hargeisa
+3257,Friend,Market,Hargeisa
+3258,Household member,Home,Digaale
+3259,Household member,Home,Digaale
+3260,Friend,Market,Digaale
+3261,Friend,Market,Digaale
+3262,Friend,Market,Digaale
+3263,Friend,Market,Digaale
+3264,Friend,Market,Digaale
+3265,Friend,Market,Digaale
+3266,Household member,Another house,Digaale
+3267,Household member,Home,Digaale
+3268,Household member,Home,Digaale
+3269,Other relative,Another house,Digaale
+3270,Other relative,Home,Digaale
+3271,Friend,Market,Digaale
+3272,Friend,Market,Digaale
+3273,Friend,Market,Digaale
+3274,Friend,Market,Digaale
+3275,Friend,Market,Digaale
+3276,Friend,Market,Digaale
+3277,Household member,Home,Digaale
+3278,Household member,Home,Digaale
+3279,Other relative,Market,Digaale
+3280,Friend,Home,Digaale
+3281,Other relative,Home,Digaale
+3282,Coworker or schoolmate,Work,Digaale
+3283,Household member,Home,Digaale
+3284,Household member,Home,Digaale
+3285,Household member,Home,Digaale
+3286,Other,Another house,Digaale
+3287,Friend,Home,Digaale
+3288,Other,Market,Digaale
+3289,Friend,Market,Digaale
+3290,Other relative,Home,Digaale
+3291,Friend,Home,Digaale
+3292,Friend,Market,Digaale
+3293,Friend,Market,Digaale
+3294,Friend,Market,Digaale
+3295,Friend,Market,Digaale
+3296,Household member,Home,Digaale
+3297,Household member,Home,Digaale
+3298,Household member,Home,Digaale
+3299,Friend,Market,Digaale
+3300,Friend,Market,Hargeisa
+3301,Other relative,Work,Hargeisa
+3302,Coworker or schoolmate,School,Hargeisa
+3303,Other relative,Home,Digaale
+3304,Friend,Mosque,Digaale
+3305,Friend,Market,Digaale
+3306,Friend,Mosque,Digaale
+3307,Household member,Home,Digaale
+3308,Household member,Home,Digaale
+3309,Friend,Another house,Digaale
+3310,Friend,Market,Digaale
+3311,Friend,Work,Digaale
+3312,Friend,Work,Digaale
+3313,Friend,Market,Digaale
+3314,Friend,Another house,Digaale
+3315,Friend,Market,Digaale
+3316,Friend,Another house,Digaale
+3317,Friend,Another house,Digaale
+3318,Friend,Market,Digaale
+3319,Friend,Market,Digaale
+3320,Friend,Shop,Digaale
+3321,Other relative,Shop,Digaale
+3322,Friend,Shop,Digaale
+3323,Other relative,Home,Digaale
+3324,Other relative,Another house,Digaale
+3325,Friend,Transport,Digaale
+3326,Friend,Market,Digaale
+3327,Other relative,Another house,Digaale
+3328,Friend,Home,Digaale
+3329,Friend,Market,Digaale
+3330,Friend,Another house,Digaale
+3331,Friend,Another house,Digaale
+3332,Household member,Home; Water source,Digaale
+3333,Household member,Home,Digaale
+3334,Household member,Home,Digaale
+3335,Household member,Home,Digaale
+3336,Household member,Home,Digaale
+3337,Household member,Home,Digaale
+3338,Household member,Home,Digaale
+3339,Household member,Home,Digaale
+3340,Household member,Home,Digaale
+3341,Household member,Home,Digaale
+3342,Household member,Home,Digaale
+3343,Friend,School,Hargeisa
+3344,Friend,School,Hargeisa
+3345,Friend,School,Hargeisa
+3346,Other,Home,Digaale
+3347,Other,Home,Digaale
+3348,Household member,Home,Digaale
+3349,Other relative,Another house,Digaale
+3350,Friend,School,Digaale
+3351,Friend,School,Digaale
+3352,Friend,Work,Digaale
+3353,Friend,School,Digaale
+3354,Friend,School,Digaale
+3355,Friend,Mosque,Digaale
+3356,Friend,Market,Digaale
+3357,Friend,Mosque,Digaale
+3358,Household member,Home,Digaale
+3359,Household member,Home,Digaale
+3360,Household member,Home,Digaale
+3361,Friend,Home; Another house,Digaale
+3362,Friend,Home; Another house,Digaale
+3363,Household member,Home,Digaale
+3364,Household member,Home,Digaale
+3365,Household member,Home; Another house,Digaale
+3366,Household member,Home,Digaale
+3367,Household member,Home,Digaale
+3368,Household member,Home,Digaale
+3369,Household member,Home,Digaale
+3370,Household member,Home,Digaale
+3371,Household member,Home,Digaale
+3372,Friend,Another house,Digaale
+3373,Friend,Home,Digaale
+3374,Friend,Home,Digaale
+3375,Friend,Home,Digaale
+3376,Friend,Home,Digaale
+3377,Friend,Home,Digaale
+3378,Friend,Home; Another house,Digaale
+3379,Friend,Home,Digaale
+3380,Coworker or schoolmate,School,Digaale
+3381,Other,Home,Digaale
+3382,Coworker or schoolmate,School,Digaale
+3383,Coworker or schoolmate,School,Digaale
+3384,Friend,School; Home,Digaale
+3385,Household member,Home,Digaale
+3386,Household member,Home,Digaale
+3387,Household member,Home,Digaale
+3388,Household member,Home,Digaale
+3389,Household member,Home,Digaale
+3390,Household member,Home,Digaale
+3391,Household member,Home,Digaale
+3392,Household member,Home,Digaale
+3393,Friend,Another house,Digaale
+3394,Friend,Another house,Digaale
+3395,Other relative,Another house,Digaale
+3396,Friend,Another house,Digaale
+3397,Other relative,Another house,Digaale
+3398,Other relative,Another house,Digaale
+3399,Friend,Another house,Digaale
+3400,Other relative,Another house,Digaale
+3401,Friend,Another house,Digaale
+3402,Other relative,Another house,Digaale
+3403,Household member,Home,Digaale
+3404,Household member,Home,Digaale
+3405,Household member,Home,Digaale
+3406,Household member,Home,Digaale
+3407,Other relative,Home,Digaale
+3408,Other relative,Home,Digaale
+3409,Other relative,Home; Another house,Digaale
+3410,Other relative,Another house; Home,Digaale
+3411,Household member,Home,Digaale
+3412,Friend,Another house; Home,Digaale
+3413,Friend,Home,Digaale
+3414,Friend,Another house,Digaale
+3415,Friend,Another house,Digaale
+3416,Other relative,Shop,Digaale
+3417,Friend,Shop,Digaale
+3418,Other relative,Home; Shop,Digaale
+3419,Household member,Home,Digaale
+3420,Friend,Shop,Digaale
+3421,Friend,Shop,Digaale
+3422,Household member,Home; Shop,Digaale
+3423,Coworker or schoolmate,Home,Digaale
+3424,Household member,Home,Digaale
+3425,Household member,Home,Digaale
+3426,Household member,Home,Digaale
+3427,Household member,Home,Digaale
+3428,Household member,Home,Digaale
+3429,Household member,Home,Digaale
+3430,Other relative,Home,Digaale
+3431,Household member,Home,Digaale
+3432,Friend,Home,Digaale
+3433,Friend,Home,Digaale
+3434,Household member,Home,Digaale
+3435,Friend,Home,Digaale
+3436,Friend,Home,Digaale
+3437,Household member,Home,Digaale
+3438,Household member,Home,Digaale
+3439,Household member,Home,Digaale
+3440,Household member,Home,Digaale
+3441,Household member,Home,Digaale
+3442,Household member,Home,Digaale
+3443,Household member,Home,Digaale
+3444,Other relative,Another house,Digaale
+3445,Other relative,Another house,Digaale
+3446,Friend,Another house,Digaale
+3447,Other relative,Home,Digaale
+3448,Household member,Home,Digaale
+3449,Household member,Home,Digaale
+3450,Household member,Home,Digaale
+3451,Household member,Home,Digaale
+3452,Household member,Home,Digaale
+3453,Household member,Home,Digaale
+3454,Household member,Home,Digaale
+3455,Other relative,Another house,Digaale
+3456,Household member,Home,Digaale
+3457,Household member,Home,Digaale
+3458,Household member,Home,Digaale
+3459,Household member,Home,Digaale
+3460,Household member,Home,Digaale
+3461,Household member,Home,Digaale
+3462,Household member,Home,Digaale
+3463,Household member,Home,Digaale
+3464,Household member,Home,Digaale
+3465,Friend,Home; Another house,Digaale
+3466,Friend,Home,Digaale
+3467,Friend,Home; Another house,Digaale
+3468,Other,Market,Digaale
+3469,Household member,Home,Digaale
+3470,Friend,Another house; Home; Market,Digaale
+3471,Friend,Another house; Home,Digaale
+3472,Other,Another house; Home,Digaale
+3473,Other,Another house,Digaale
+3474,Other relative,Home; Another house,Digaale
+3475,Household member,Home,Digaale
+3476,Household member,Home,Digaale
+3477,Household member,Home,Digaale
+3478,Household member,Home,Digaale
+3479,Household member,Home,Digaale
+3480,Household member,Home,Digaale
+3481,Other relative,Another house,Digaale
+3482,Household member,Another house,Digaale
+3483,Household member,Another house,Digaale
+3484,Other relative,Another house,Digaale
+3485,Other relative,Another house,Digaale
+3486,Other relative,Another house,Digaale
+3487,Other relative,Another house,Digaale
+3488,Friend,Another house,Digaale
+3489,Friend,Another house,Digaale
+3490,Friend,Shop,Digaale
+3491,Friend,Another house,Digaale
+3492,Friend,Market,Digaale
+3493,Friend,Another house,Digaale
+3494,Friend,Another house,Digaale
+3495,Other,Another house,Digaale
+3496,Other relative,Another house,Digaale
+3497,Other,Another house,Digaale
+3498,Household member,Home,Digaale
+3499,Household member,Home,Digaale
+3500,Household member,Home,Digaale
+3501,Household member,Home,Digaale
+3502,Other relative,Another house,Digaale
+3503,Other relative,Another house,Digaale
+3504,Other relative,Home,Digaale
+3505,Other relative,Another house,Digaale
+3506,Other relative,Another house,Digaale
+3507,Other relative,Another house,Digaale
+3508,Other relative,Another house,Digaale
+3509,Household member,Home,Digaale
+3510,Household member,Home,Digaale
+3511,Household member,Home,Digaale
+3512,Household member,Home,Digaale
+3513,Household member,Home,Digaale
+3514,Household member,Home,Digaale
+3515,Household member,Home,Digaale
+3516,Household member,Home,Digaale
+3517,Household member,Home,Digaale
+3518,Household member,Home,Digaale
+3519,Household member,Home,Digaale
+3520,Household member,Home,Digaale
+3521,Other relative,Home,Digaale
+3522,Friend,Another house,Digaale
+3523,Friend,Another house,Digaale
+3524,Friend,Another house,Digaale
+3525,Friend,Another house,Digaale
+3526,Friend,Another house,Digaale
+3527,Friend,Another house,Digaale
+3528,Friend,Another house,Digaale
+3529,Friend,Another house,Digaale
+3530,Household member,Home,Digaale
+3531,Friend,Another house,Digaale
+3532,Friend,Another house,Digaale
+3533,Friend,Home,Digaale
+3534,Other relative,Market,Digaale
+3535,Friend,Another house,Digaale
+3536,Household member,Home,Digaale
+3537,Household member,Home,Digaale
+3538,Household member,Home,Digaale
+3539,Friend,Shop,Digaale
+3540,Friend,Another house,Digaale
+3541,Other relative,Home,Digaale
+3542,Friend,Home,Digaale
+3543,Friend,Another house,Digaale
+3544,Friend,Home,Digaale
+3545,Friend,Home,Digaale
+3546,Friend,Another house,Digaale
+3547,Friend,Another house,Digaale
+3548,Friend,Home,Digaale
+3549,Friend,Another house; Home,Digaale
+3550,Household member,Home,Digaale
+3551,Household member,Home,Digaale
+3552,Household member,Home,Digaale
+3553,Household member,Home,Digaale
+3554,Household member,Home,Digaale
+3555,Household member,Home,Digaale
+3556,Household member,Home,Digaale
+3557,Household member,Home,Digaale
+3558,Household member,Home,Digaale
+3559,Friend,Market,Digaale
+3560,Other relative,Another house,Digaale
+3561,Other relative,Another house,Digaale
+3562,Household member,Home,Digaale
+3563,Household member,Home,Digaale
+3564,Household member,Home,Digaale
+3565,Friend,Another house,Digaale
+3566,Friend,Another house,Digaale
+3567,Friend,Home,Digaale
+3568,Friend,Home,Digaale
+3569,Friend,Home,Digaale
+3570,Friend,Home; Another house,Digaale
+3571,Friend,Home; Another house,Digaale
+3572,Friend,Home,Digaale
+3573,Household member,Home,Digaale
+3574,Household member,Home,Digaale
+3575,Household member,Home,Digaale
+3576,Other,Home,Digaale
+3577,Friend,Home,Digaale
+3578,Friend,Home,Digaale
+3579,Friend,Home,Digaale
+3580,Friend,Another house,Digaale
+3581,Friend,Home,Digaale
+3582,Friend,Another house,Digaale
+3583,Friend,Home,Digaale
+3584,Friend,Home,Digaale
+3585,Friend,Home,Digaale
+3586,Friend,Home,Digaale
+3587,Friend,Home,Digaale
+3588,Friend,Home,Digaale
+3589,Household member,Home,Digaale
+3590,Friend,Home,Digaale
+3591,Household member,Home,Digaale
+3592,Household member,Home,Digaale
+3593,Household member,Home,Digaale
+3594,Friend,Market,Digaale
+3595,Friend,Market,Digaale
+3596,Friend,Market,Digaale
+3597,Friend,Another house,Digaale
+3598,Friend,Another house,Digaale
+3599,Other relative,Another house,Digaale
+3600,Other relative,Another house,Digaale
+3601,Other relative,Another house,Digaale
+3602,Other relative,Another house,Digaale
+3603,Other relative,Another house,Digaale
+3604,Other relative,Another house,Digaale
+3605,Other relative,Another house,Digaale
+3606,Other relative,Another house,Digaale
+3607,Household member,Home,Digaale
+3608,Household member,Home,Digaale
+3609,Household member,Home,Digaale
+3610,Household member,Home,Digaale
+3611,Other relative,Home,Digaale
+3612,Other relative,Home,Digaale
+3613,Other relative,Home,Digaale
+3614,Household member,Home,Digaale
+3615,Other relative,Another house,Digaale
+3616,Friend,Another house,Digaale
+3617,Other relative,Another house,Digaale
+3618,Household member,Home,Digaale
+3619,Household member,Home,Digaale
+3620,Friend,Another house,Digaale
+3621,Friend,Another house,Digaale
+3622,Friend,Another house,Digaale
+3623,Friend,Another house,Digaale
+3624,Household member,Home,Digaale
+3625,Household member,Home,Digaale
+3626,Household member,Home,Digaale
+3627,Household member,Home,Digaale
+3628,Household member,Home,Digaale
+3629,Household member,Home,Digaale
+3630,Household member,Home,Digaale
+3631,Household member,Home,Digaale
+3632,Household member,Home,Digaale
+3633,Household member,Home,Digaale
+3634,Other relative,Another house,Digaale
+3635,Other relative,Another house,Digaale
+3636,Other relative,Another house,Digaale
+3637,Other relative,Another house,Digaale
+3638,Other relative,Another house,Digaale
+3639,Friend,Another house,Digaale
+3640,Friend,Another house,Digaale
+3641,Other relative,Another house,Digaale
+3642,Household member,Home,Digaale
+3643,Household member,Home,Digaale
+3644,Household member,Home,Digaale
+3645,Friend,Another house,Digaale
+3646,Friend,Another house,Digaale
+3647,Friend,Home,Digaale
+3648,Friend,Home; Another house,Digaale
+3649,Other,Home,Digaale
+3650,Friend,Shop,Digaale
+3651,Friend,Another house,Digaale
+3652,Household member,Home,Digaale
+3653,Other,Another house,Digaale
+3654,Other relative,Another house; Home,Digaale
+3655,Other relative,Market,Digaale
+3656,Friend,Home,Digaale
+3657,Household member,Home,Digaale
+3658,Household member,Home,Digaale
+3659,Household member,Home,Digaale
+3660,Household member,Home,Digaale
+3661,Household member,Home,Digaale
+3662,Household member,Home,Digaale
+3663,Household member,Home,Digaale
+3664,Household member,Home,Digaale
+3665,Other,School,Digaale
+3666,Friend,School,Digaale
+3667,Friend,School,Digaale
+3668,Friend,School,Digaale
+3669,Household member,Home,Digaale
+3670,Household member,Home,Digaale
+3671,Household member,Home,Digaale
+3672,Household member,Home,Digaale
+3673,Household member,Home,Digaale
+3674,Household member,Home,Digaale
+3675,Other relative,Another house,Digaale
+3676,Other relative,Another house,Digaale
+3677,Household member,Another house,Digaale
+3678,Friend,Another house,Digaale
+3679,Friend,Another house,Digaale
+3680,Friend,Another house,Digaale
+3681,Other relative,Another house,Digaale
+3682,Household member,Home,Digaale
+3683,Household member,Home,Digaale
+3684,Household member,Home,Digaale
+3685,Household member,Home,Digaale
+3686,Household member,Home,Digaale
+3687,Other relative,Another house,Digaale
+3688,Other relative,Another house,Digaale
+3689,Household member,Another house,Digaale
+3690,Household member,Home,Digaale
+3691,Household member,Home,Digaale
+3692,Household member,Home,Digaale
+3693,Household member,Home,Digaale
+3694,Household member,Home,Digaale
+3695,Household member,Home,Digaale
+3696,Other relative,Another house,Digaale
+3697,Other relative,Another house,Digaale
+3698,Other relative,Another house,Digaale
+3699,Other relative,Another house,Digaale
+3700,Other relative,Another house,Digaale
+3701,Other relative,Home,Digaale
+3702,Household member,Home,Digaale
+3703,Household member,Home,Digaale
+3704,Household member,Home,Digaale
+3705,Household member,Home,Digaale
+3706,Other relative,Home,Digaale
+3707,Other relative,Home,Digaale
+3708,Other relative,Home,Digaale
+3709,Other relative,Home,Digaale
+3710,Other relative,Home,Digaale
+3711,Household member,Home,Digaale
+3712,Household member,Home,Digaale
+3713,Other relative,Home,Digaale
+3714,Household member,Home,Digaale
+3715,Other,Market,Digaale
+3716,Other,Market,Digaale
+3717,Household member,Home,Digaale
+3718,Household member,Home,Digaale
+3719,Household member,Home,Digaale
+3720,Household member,Home,Digaale
+3721,Household member,Home,Digaale
+3722,Household member,Home,Digaale
+3723,Other relative,Home,Digaale
+3724,Other relative,Home,Digaale
+3725,Household member,Home,Digaale
+3726,Household member,Home,Digaale
+3727,Household member,Home,Digaale
+3728,Friend,Another house,Digaale
+3729,Friend,Another house,Digaale
+3730,Friend,Home,Digaale
+3731,Other relative,Another house,Digaale
+3732,Other relative,Home,Digaale
+3733,Other relative,Another house,Digaale
+3734,Household member,Home,Digaale
+3735,Household member,Home,Digaale
+3736,Friend,Home,Digaale
+3737,Other relative,Home,Digaale
+3738,Friend,Home; Another house,Digaale
+3739,Friend,Home,Digaale
+3740,Other,Home,Digaale
+3741,Household member,Home,Digaale
+3742,Household member,Home,Digaale
+3743,Friend,Home,Digaale
+3744,Friend,Home,Digaale
+3745,Friend,Shop,Digaale
+3746,Other relative,Home,Digaale
+3747,Other,Home,Digaale
+3748,Friend,Home,Digaale
+3749,Household member,Home,Digaale
+3750,Coworker or schoolmate,Home,Digaale
+3751,Household member,Home,Digaale
+3752,Household member,Home,Digaale
+3753,Other relative,Home,Digaale
+3754,Other relative,Another house,Digaale
+3755,Other relative,Another house,Digaale
+3756,Household member,Another house,Digaale
+3757,Other relative,Another house,Digaale
+3758,Other relative,Another house,Digaale
+3759,Other relative,Home,Digaale
+3760,Other relative,Another house,Digaale
+3761,Household member,Home,Digaale
+3762,Household member,Home,Digaale
+3763,Household member,Home,Digaale
+3764,Household member,Home,Digaale
+3765,Other relative,Home,Digaale
+3766,Other relative,Home,Digaale
+3767,Other relative,Home; Another house,Digaale
+3768,Other relative,Home; Another house,Digaale
+3769,Other relative,Home,Digaale
+3770,Household member,Home,Digaale
+3771,Household member,Home,Digaale
+3772,Household member,Home,Digaale
+3773,Household member,Home,Digaale
+3774,Household member,Home,Digaale
+3775,Other relative,Another house,Digaale
+3776,Other relative,Home,Digaale
+3777,Household member,Another house,Digaale
+3778,Other relative,Another house,Digaale
+3779,Other relative,Another house,Digaale
+3780,Household member,Home,Digaale
+3781,Household member,Home,Digaale
+3782,Household member,Home,Digaale
+3783,Friend,Home,Digaale
+3784,Household member,Home,Digaale
+3785,Other relative,Home,Digaale
+3786,Household member,Home,Digaale
+3787,Household member,Home,Digaale
+3788,Household member,Home,Digaale
+3789,Other relative,Another house,Digaale
+3790,Other relative,Another house,Digaale
+3791,Household member,Home,Digaale
+3792,Household member,Home,Digaale
+3793,Household member,Home,Digaale
+3794,Household member,Home,Digaale
+3795,Household member,Home,Digaale
+3796,Household member,Home,Digaale
+3797,Other relative,Home,Digaale
+3798,Household member,Home,Digaale
+3799,Other relative,Another house,Digaale
+3800,Other relative,Another house,Digaale
+3801,Other relative,Home,Digaale
+3802,Other relative,Home,Digaale
+3803,Other relative,Home,Digaale
+3804,Household member,Another house,Digaale
+3805,refuse to answer,Home,Digaale
+3806,Household member,Home,Digaale
+3807,Household member,Home,Digaale
+3808,Household member,Home,Digaale
+3809,Friend,Another house,Digaale
+3810,Friend,Another house,Digaale
+3811,Friend,Another house,Digaale
+3812,Friend,Home,Digaale
+3813,Friend,Another house,Digaale
+3814,Friend,Another house,Digaale
+3815,Household member,Home,Digaale
+3816,Household member,Another house,Digaale
+3817,Household member,Home,Digaale
+3818,Household member,Home,Digaale
+3819,Friend,Another house,Digaale
+3820,Household member,Home,Digaale
+3821,Other relative,Home,Digaale
+3822,Household member,Home,Digaale
+3823,Friend,Another house,Digaale
+3824,Friend,Another house,Digaale
+3825,Other relative,Another house,Digaale
+3826,Other relative,Another house,Digaale
+3827,Friend,Another house,Digaale
+3828,Other relative,Another house,Digaale
+3829,Other relative,Another house,Digaale
+3830,Other relative,Another house,Digaale
+3831,Other relative,Another house,Digaale
+3832,Other relative,Another house,Digaale
+3833,Other relative,Another house,Digaale
+3834,Household member,Home,Digaale
+3835,Household member,Home,Digaale
+3836,Household member,Home,Digaale
+3837,Household member,Home,Digaale
+3838,Household member,Home,Digaale
+3839,Household member,Home,Digaale
+3840,Friend,Another house; Market,Digaale
+3841,Other,Another house,Digaale
+3842,Friend,Another house; Home,Digaale
+3843,Friend,Market,Digaale
+3844,Friend,Home,Digaale
+3845,Other relative,Home,Digaale
+3846,Friend,Other,Digaale
+3847,Friend,Another house,Digaale
+3848,Friend,Another house,Digaale
+3849,Friend,Other,Digaale
+3850,Household member,Home,Digaale
+3851,Other relative,Another house,Hargeisa
+3852,Other relative,Another house,Hargeisa
+3853,Household member,Home,Digaale
+3854,Household member,Home,Digaale
+3855,Household member,Home,Digaale
+3856,Household member,Home,Digaale
+3857,Household member,Home,Digaale
+3858,Household member,Home,Digaale
+3859,Household member,Home; Another house,Digaale
+3860,Friend,Home; Another house; School,Digaale
+3861,Friend,Home; School; Another house,Digaale
+3862,Friend,Home; Another house; School,Digaale
+3863,Friend,Home; Another house; School,Digaale
+3864,Other relative,Home; Another house; School,Digaale
+3865,Household member,Home; Another house,Digaale
+3866,Friend,Home; Another house,Digaale
+3867,Friend,Home; Another house,Digaale
+3868,Household member,Home,Digaale
+3869,Household member,Home; Another house,Digaale
+3870,Household member,Home,Digaale
+3871,Other,Shop,Digaale
+3872,Other,Home,Digaale
+3873,Other,Home,Digaale
+3874,Other,Home,Digaale
+3875,Friend,Home,Digaale
+3876,Other relative,Another house,Digaale
+3877,Friend,Another house,Digaale
+3878,Friend,Home,Digaale
+3879,Household member,Home,Digaale
+3880,Household member,Another house,Digaale
+3881,Household member,Home,Digaale
+3882,Household member,Home,Digaale
+3883,Household member,Home,Digaale
+3884,Household member,Home,Digaale
+3885,Friend,Another house,Digaale
+3886,Other,Shop,Digaale
+3887,Friend,Another house,Digaale
+3888,Friend,Another house,Digaale
+3889,Friend,Another house,Digaale
+3890,Friend,Another house,Digaale
+3891,Friend,Another house,Digaale
+3892,Friend,Another house,Digaale
+3893,Friend,Another house,Digaale
+3894,Friend,Another house,Digaale
+3895,Household member,Home,Digaale
+3896,Friend,Another house,Digaale
+3897,Household member,Another house,Digaale
+3898,Friend,Another house,Digaale
+3899,Friend,Another house,Digaale
+3900,Friend,Another house,Digaale
+3901,Household member,Home,Digaale
+3902,Household member,Home,Digaale
+3903,Household member,Home,Digaale
+3904,Household member,Home,Digaale
+3905,Household member,Home,Digaale
+3906,Household member,Home,Digaale
+3907,Other relative,Another house,Digaale
+3908,Other relative,Another house,Digaale
+3909,Friend,Another house,Digaale
+3910,Friend,Another house,Digaale
+3911,Friend,Another house,Digaale
+3912,Friend,Another house,Digaale
+3913,Friend,Another house,Digaale
+3914,Household member,Home,Digaale
+3915,Household member,Home,Digaale
+3916,Household member,Home,Digaale
+3917,Household member,Home,Digaale
+3918,Other relative,Another house,Digaale
+3919,Friend,Another house; Home,Digaale
+3920,Other relative,Home,Digaale
+3921,Other relative,Home,Digaale
+3922,Friend,Another house; Home,Digaale
+3923,Friend,Home,Digaale
+3924,Other relative,Home; Another house,Digaale
+3925,Friend,Home,Digaale
+3926,Friend,Home,Digaale
+3927,Friend,Home,Digaale
+3928,Friend,Home,Digaale
+3929,Friend,Home,Digaale
+3930,Friend,Home,Digaale
+3931,Other relative,Home,Digaale
+3932,Other relative,Work,Digaale
+3933,Friend,Work,Digaale
+3934,Friend,Home,Digaale
+3935,Other relative,Work,Digaale
+3936,Friend,Work,Digaale
+3937,Household member,Home,Digaale
+3938,Household member,Home,Digaale
+3939,Household member,Home,Digaale
+3940,Household member,Home,Digaale
+3941,Household member,Home,Digaale
+3942,Friend,Another house,Digaale
+3943,Other,Home,Digaale
+3944,Friend,Another house; Home,Digaale
+3945,Other,Home,Digaale
+3946,Friend,Home,Digaale
+3947,Friend,Home; Another house,Digaale
+3948,Other,Home,Digaale
+3949,Friend,Work,Hargeisa
+3950,Other relative,Home,Digaale
+3951,Friend,Work,Hargeisa
+3952,Friend,Work,Hargeisa
+3953,Friend,Work,Hargeisa
+3954,Friend,Work,Hargeisa
+3955,Friend,Work,Hargeisa
+3956,Friend,Work,Hargeisa
+3957,Friend,Work,Hargeisa
+3958,Friend,Work,Hargeisa
+3959,don’t know,Work,Digaale
+3960,Friend,Work,Digaale
+3961,Friend,Work,Digaale
+3962,Friend,Work,Digaale
+3963,Friend,Work,Digaale
+3964,Friend,Work,Digaale
+3965,Friend,Work,Digaale
+3966,Friend,Work,Digaale
+3967,Friend,Work,Digaale
+3968,Friend,Work,Digaale
+3969,Friend,Home,Digaale
+3970,Friend,Work,Digaale
+3971,Friend,Work,Digaale
+3972,Friend,Work,Digaale
+3973,Other,Market,Digaale
+3974,Friend,Market,Digaale
+3975,Friend,Market,Digaale
+3976,Friend,Mosque,Digaale
+3977,Friend,Market,Digaale
+3978,Household member,Home,Digaale
+3979,Friend,Market,Digaale
+3980,Friend,Market,Digaale
+3981,Other relative,Market,Digaale
+3982,Other relative,Another house,Digaale
+3983,Friend,Market,Digaale
+3984,Other,Another house,Digaale
+3985,Other,Market,Digaale
+3986,Other relative,Another house; Home,Digaale
+3987,Other,Market,Digaale
+3988,Friend,Home; Another house,Digaale
+3989,Friend,Market,Digaale
+3990,Other,Market,Digaale
+3991,Other,Another house,Digaale
+3992,Friend,Market,Digaale
+3993,Friend,Shop,Digaale
+3994,Friend,Market,Digaale
+3995,Friend,Another house,Digaale
+3996,Friend,Home,Digaale
+3997,Other,Another house,Digaale
+3998,Friend,School,Digaale
+3999,Other relative,Another house,Digaale
+4000,Household member,Home,Digaale
+4001,Household member,Home,Digaale
+4002,Other relative,Another house,Digaale
+4003,Friend,Work,Digaale
+4004,Friend,Work,Digaale
+4005,Friend,Work,Digaale
+4006,Friend,Another house,Digaale
+4007,Friend,Another house,Digaale
+4008,Other relative,Home,Digaale
+4009,Household member,Home,Digaale
+4010,Household member,Home,Digaale
+4011,Friend,Work,Digaale
+4012,Friend,Work,Digaale
+4013,Friend,Market,Digaale
+4014,Friend,Market,Digaale
+4015,Friend,Market,Digaale
+4016,Other,Market,Digaale
+4017,Friend,Another house,Digaale
+4018,Friend,Another house,Digaale
+4019,Friend,Market,Digaale
+4020,Other relative,Home,Digaale
+4021,Other relative,Home,Digaale
+4022,Other relative,Home,Digaale
+4023,Other relative,Market,Digaale
+4024,Other relative,Market,Digaale
+4025,Other relative,Home,Digaale
+4026,Other relative,Market,Digaale
+4027,Other relative,Market,Digaale
+4028,Other,Shop,Digaale
+4029,Household member,Home,Digaale
+4030,Household member,Home,Digaale
+4031,Household member,Home,Digaale
+4032,Other relative,Home,Digaale
+4033,Other relative,Home,Digaale
+4034,Friend,Home,Digaale
+4035,Other,Another house,Digaale
+4036,Other,Another house,Digaale
+4037,Friend,Another house,Digaale
+4038,Friend,Market,Digaale
+4039,Friend,Home,Digaale
+4040,Other,Home,Digaale
+4041,Household member,Home,Digaale
+4042,Other,Home,Digaale
+4043,Other,Home,Digaale
+4044,Other,Home,Digaale
+4045,Other,Shop,Digaale
+4046,Other,Home,Digaale
+4047,Other,Home,Digaale
+4048,Other relative,Market,Digaale
+4049,Other relative,Market,Digaale
+4050,Other,Home,Digaale
+4051,Other,Market,Digaale
+4052,Friend,Another house; Market,Digaale
+4053,Friend,Market,Digaale
+4054,Other,Another house,Digaale
+4055,Other,Home,Digaale
+4056,Friend,Home,Digaale
+4057,Friend,Home,Digaale
+4058,Friend,Home,Digaale
+4059,Friend,Home,Digaale
+4060,Friend,Home,Digaale
+4061,Household member,Home,Digaale
+4062,Coworker or schoolmate,Work,Digaale
+4063,Friend,Market,Digaale
+4064,Friend,Market,Digaale
+4065,Friend,Home; Market,Digaale
+4066,Friend,Market,Digaale
+4067,Other,Home,Digaale
+4068,Other,Another house,Digaale
+4069,Friend,Market,Digaale
+4070,Other,Another house,Digaale
+4071,Other relative,Home,Digaale
+4072,Other relative,Another house,Digaale
+4073,Other relative,Another house,Digaale
+4074,Other relative,Another house,Digaale
+4075,Household member,Another house,Digaale
+4076,Other relative,Another house,Digaale
+4077,Other relative,Another house,Digaale
+4078,Other relative,Home,Digaale
+4079,Other relative,Another house,Digaale
+4080,Other relative,Another house,Digaale
+4081,Friend,Market,Hargeisa
+4082,Friend,Market,Hargeisa
+4083,Friend,Market,Hargeisa
+4084,Friend,Market,Hargeisa
+4085,Friend,Another house; Market,Digaale
+4086,Friend,Market,Hargeisa
+4087,Friend,Market,Hargeisa
+4088,Friend,Mosque; Market,Hargeisa
+4089,Friend,Mosque; Market,Hargeisa
+4090,Other,Another house; Home,Digaale
+4091,Other,Home; Another house,Digaale
+4092,Other,Another house; Home,Digaale
+4093,Friend,Market,Digaale
+4094,Household member,Home,Digaale
+4095,Friend,Market,Digaale
+4096,Friend,Home,Digaale
+4097,Other,Another house,Digaale
+4098,Friend,Home; Other,Digaale
+4099,Friend,Another house,Digaale
+4100,Friend,Market,Digaale
+4101,Friend,Market,Digaale
+4102,Friend,Market,Digaale
+4103,Other,Market,Digaale
+4104,Friend,Shop,Digaale
+4105,Other relative,Mosque,Digaale
+4106,Friend,Another house,Digaale
+4107,Other relative,Another house,Digaale
+4108,Friend,Another house,Digaale
+4109,Other relative,Another house,Digaale
+4110,Household member,Home,Digaale
+4111,Friend,Market,Digaale
+4112,Friend,Market,Digaale
+4113,Friend,Market,Digaale
+4114,Friend,Market,Digaale
+4115,Other,Market,Digaale
+4116,Coworker or schoolmate,Work,Digaale
+4117,Coworker or schoolmate,Work,Digaale
+4118,Coworker or schoolmate,Work,Digaale
+4119,Other,Work,Digaale
+4120,Other,Another house,Digaale
+4121,Other,Another house,Digaale
+4122,Other,Another house,Digaale
+4123,Friend,Market,Digaale
+4124,Friend,Market,Digaale
+4125,Friend,Market,Digaale
+4126,Friend,Market,Digaale
+4127,Other,Another house,Digaale
+4128,Other,Home,Digaale
+4129,Other,Another house,Digaale
+4130,Other,Home,Digaale
+4131,Other,Home,Digaale
+4132,Other,Another house; Home,Digaale
+4133,Other,Home,Digaale
+4134,Friend,Market,Digaale
+4135,Friend,Market,Digaale
+4136,Friend,Market,Digaale
+4137,Friend,Market,Digaale
+4138,Friend,Market,Digaale
+4139,Friend,Market,Digaale
+4140,Friend,Market,Digaale
+4141,Household member,Market,Digaale
+4142,Friend,Home,Digaale
+4143,Other relative,Another house,Digaale
+4144,Other relative,Another house,Digaale
+4145,Friend,Work,Digaale
+4146,Friend,Work,Digaale
+4147,Friend,Another house,Digaale
+4148,Other relative,Home,Digaale
+4149,Friend,Work,Digaale
+4150,Other relative,Work,Digaale
+4151,Coworker or schoolmate,Work,Digaale
+4152,Coworker or schoolmate,Work,Digaale
+4153,Coworker or schoolmate,Work,Digaale
+4154,Coworker or schoolmate,Work,Digaale
+4155,Coworker or schoolmate,Work,Digaale
+4156,Household member,Another house,Hargeisa
+4157,Other,Market,Hargeisa
+4158,don’t know,Home,Digaale
+4159,don’t know,Home,Digaale
+4160,Other,Home,Digaale
+4161,Friend,Another house,Digaale
+4162,Friend,Home,Digaale
+4163,Friend,Another house,Digaale
+4164,Other relative,Home,Digaale
+4165,Friend,Market,Digaale
+4166,Other relative,Work,Digaale
+4167,Other,Home,Digaale
+4168,Friend,Home,Digaale
+4169,Other relative,Another house,Digaale
+4170,Other relative,Mosque,Digaale
+4171,Friend,Work,Digaale
+4172,Household member,Home,Digaale
+4173,Coworker or schoolmate,Home,Digaale
+4174,Household member,Home,Digaale
+4175,Household member,Home,Digaale
+4176,Household member,Home,Digaale
+4177,Household member,Home,Digaale
+4178,Friend,Another house; Home,Digaale
+4179,Friend,Home,Digaale
+4180,Friend,Home,Digaale
+4181,Friend,Market,Hargeisa
+4182,Other relative,Market,Hargeisa
+4183,Other relative,Market,Hargeisa
+4184,Other relative,Market,Hargeisa
+4185,Household member,Market,Hargeisa
+4186,Household member,Home,Digaale
+4187,Other,Transport,Hargeisa
+4188,Other relative,Another house,Digaale
+4189,Other relative,Another house,Digaale
+4190,Other relative,Another house,Digaale
+4191,Other relative,Home,Digaale
+4192,Other,Market,Digaale
+4193,Friend,Work,Digaale
+4194,Friend,Work,Digaale
+4195,Other relative,Another house,Digaale
+4196,Other relative,Home,Digaale
+4197,Household member,Home,Digaale
+4198,Friend,Home; Market,Digaale
+4199,Friend,Market,Digaale
+4200,Friend,Home,Digaale
+4201,Friend,Home,Digaale
+4202,Coworker or schoolmate,Home; Another house,Digaale
+4203,Other relative,Home; Another house,Digaale
+4204,Other,Another house,Digaale
+4205,Other,Another house; Home,Digaale
+4206,Other,Home; Another house,Digaale
+4207,Other relative,Home,Digaale
+4208,Friend,Another house,Digaale
+4209,Other,Another house,Digaale
+4210,Friend,Home,Digaale
+4211,Household member,Another house,Digaale
+4212,Other,Market,Digaale
+4213,Friend,Another house,Digaale
+4214,Friend,School; Home,Digaale
+4215,Other,Home,Digaale
+4216,Other,Market,Digaale
+4217,Friend,Market,Digaale
+4218,Friend,Market,Digaale
+4219,Friend,School,Digaale
+4220,Friend,School,Digaale
+4221,Friend,School,Digaale
+4222,Friend,School,Digaale
+4223,Friend,School,Digaale
+4224,Household member,Home,Digaale
+4225,Household member,Another house,Digaale
+4226,Other relative,Another house,Digaale
+4227,Other,Other,Digaale
+4228,Other relative,Another house,Digaale
+4229,Other relative,Another house,Digaale
+4230,Friend,Another house,Digaale
+4231,Friend,Another house,Digaale
+4232,Household member,Home,Digaale
+4233,Household member,Home,Digaale
+4234,Other relative,Shop,Digaale
+4235,Other relative,Shop,Digaale
+4236,Household member,Home,Digaale
+4237,Household member,Home,Digaale
+4238,Household member,Home,Digaale
+4239,Other,Home,Digaale
+4240,Other relative,Another house,Digaale
+4241,Other relative,Another house,Digaale
+4242,Other relative,Another house,Digaale
+4243,Other relative,Another house,Digaale
+4244,Household member,Home,Digaale
+4245,Friend,Another house,Digaale
+4246,Friend,Another house,Digaale
+4247,Friend,Another house,Digaale
+4248,Other relative,Another house,Digaale
+4249,Other relative,Another house,Digaale
+4250,Other relative,Another house,Digaale
+4251,Other relative,Another house,Digaale
+4252,Other relative,Another house,Digaale
+4253,Friend,Market,Digaale
+4254,Other relative,Another house,Digaale
+4255,Other relative,Another house,Digaale
+4256,Other relative,Another house,Digaale
+4257,Friend,Another house,Digaale
+4258,Other,Other,Digaale
+4259,Household member,Home,Digaale
+4260,Other relative,Home,Digaale
+4261,Household member,Home,Digaale
+4262,Household member,Home,Digaale
+4263,Household member,Home,Digaale
+4264,Other relative,Home,Digaale
+4265,Friend,Another house,Digaale
+4266,Household member,Home,Digaale
+4267,Household member,Home,Digaale
+4268,Friend,Another house,Digaale
+4269,Household member,Home,Digaale
+4270,Household member,Home,Digaale
+4271,Household member,Home,Digaale
+4272,Household member,Home,Digaale
+4273,Friend,Another house,Digaale
+4274,Household member,Home,Digaale
+4275,Household member,Home,Digaale
+4276,Household member,Home,Digaale
+4277,Household member,Home,Digaale
+4278,Friend,Home; Another house,Digaale
+4279,Friend,Home; Another house; School,Digaale
+4280,Friend,Home; Another house,Digaale
+4281,Household member,Home,Digaale
+4282,Household member,Home,Digaale
+4283,Household member,Home,Digaale
+4284,Household member,Home,Digaale
+4285,Household member,Home,Digaale
+4286,Household member,Home,Digaale
+4287,Household member,Home,Digaale
+4288,Household member,Home,Digaale
+4289,Other relative,Home,Digaale
+4290,Other relative,Home,Digaale
+4291,Household member,Home,Digaale
+4292,Household member,Home,Digaale
+4293,Other,Home,Digaale
+4294,Other,Home; Another house,Digaale
+4295,Other,Another house,Digaale
+4296,Friend,Home; Market,Digaale
+4297,Friend,Home,Digaale
+4298,Friend,Another house; Home,Digaale
+4299,Other,Home,Digaale
+4300,Other,Another house,Digaale
+4301,Other relative,Another house,Digaale
+4302,Friend,Another house,Digaale
+4303,Friend,School; Another house,Digaale
+4304,Household member,Home,Digaale
+4305,Household member,Home,Digaale
+4306,Household member,Home,Digaale
+4307,Household member,Home,Digaale
+4308,Household member,Home,Digaale
+4309,Friend,Home,Digaale
+4310,Friend,Home,Digaale
+4311,Friend,Home,Digaale
+4312,Other relative,School,Digaale
+4313,Other relative,Home,Digaale
+4314,Friend,Home,Digaale
+4315,Friend,Another house; Home,Digaale
+4316,Friend,Home; Another house,Digaale
+4317,Friend,Home; Another house,Digaale
+4318,Household member,Home,Digaale
+4319,Household member,Home,Digaale
+4320,Household member,Home,Digaale
+4321,Household member,Home,Digaale
+4322,Friend,Another house,Digaale
+4323,Friend,Another house,Digaale
+4324,Friend,School,Digaale
+4325,Other relative,Another house,Digaale
+4326,Friend,School,Digaale
+4327,Friend,School,Digaale
+4328,Friend,Home,Digaale
+4329,Friend,School,Digaale
+4330,Coworker or schoolmate,School,Digaale
+4331,Coworker or schoolmate,School,Digaale
+4332,Coworker or schoolmate,School,Digaale
+4333,Coworker or schoolmate,School,Digaale
+4334,Friend,Another house,Digaale
+4335,Coworker or schoolmate,School,Digaale
+4336,Friend,Home,Digaale
+4337,Other relative,Home; School,Digaale
+4338,Friend,Home,Digaale
+4339,Coworker or schoolmate,School,Digaale
+4340,Coworker or schoolmate,School,Digaale
+4341,Coworker or schoolmate,Home,Digaale
+4342,Friend,Home,Digaale
+4343,Other,Shop,Digaale
+4344,Friend,Home,Digaale
+4345,Friend,Another house,Digaale
+4346,Friend,Home,Digaale
+4347,Friend,Home,Digaale
+4348,Friend,Another house; Home,Digaale
+4349,Friend,Home,Digaale
+4350,Friend,School,Digaale
+4351,Friend,Market,Digaale
+4352,Friend,School,Digaale
+4353,Friend,Market,Digaale
+4354,Friend,Market,Digaale
+4355,Other relative,Another house,Digaale
+4356,Friend,School,Digaale
+4357,Friend,Market,Digaale
+4358,Friend,Market,Digaale
+4359,Friend,Market,Digaale
+4360,Household member,Home,Digaale
+4361,Household member,Home,Digaale
+4362,Friend,Another house,Digaale
+4363,Friend,Another house,Digaale
+4364,Friend,Another house,Digaale
+4365,Other relative,Another house,Digaale
+4366,Household member,Another house,Digaale
+4367,Friend,Another house,Digaale
+4368,Friend,Another house,Digaale
+4369,Friend,School,Digaale
+4370,Friend,School,Digaale
+4371,Friend,School,Digaale
+4372,Friend,School,Digaale
+4373,Friend,School,Digaale
+4374,Friend,School,Digaale
+4375,Friend,School,Digaale
+4376,Friend,School,Digaale
+4377,Friend,School,Digaale
+4378,Friend,School,Digaale
+4379,Other,School,Digaale
+4380,Household member,Home,Digaale
+4381,Household member,Home,Digaale
+4382,Other relative,Another house,Digaale
+4383,Household member,Home,Digaale
+4384,Other relative,Another house,Digaale
+4385,Other relative,Another house,Digaale
+4386,Other relative,Another house,Digaale
+4387,Other,Shop,Digaale
+4388,Other,Shop,Digaale
+4389,Other relative,Home,Digaale
+4390,Household member,Home,Digaale
+4391,Household member,Home,Digaale
+4392,Household member,Home,Digaale
+4393,Household member,Home,Digaale
+4394,Other relative,Another house,Digaale
+4395,Other relative,Another house,Digaale
+4396,Other,Home,Digaale
+4397,Other,Home,Digaale
+4398,Other,Shop,Digaale
+4399,Friend,Home,Digaale
+4400,Friend,Another house,Digaale
+4401,Other,Market,Digaale
+4402,Other relative,Another house,Digaale
+4403,Other relative,Another house,Digaale
+4404,Household member,Home,Digaale
+4405,Household member,Home,Digaale
+4406,Household member,Home,Digaale
+4407,Coworker or schoolmate,Home,Digaale
+4408,Household member,Home,Digaale
+4409,Household member,Home,Digaale
+4410,Coworker or schoolmate,Home,Digaale
+4411,Coworker or schoolmate,School,Digaale
+4412,Coworker or schoolmate,School,Digaale
+4413,Coworker or schoolmate,School,Digaale
+4414,Coworker or schoolmate,School,Digaale
+4415,Coworker or schoolmate,School,Digaale
+4416,Coworker or schoolmate,School,Digaale
+4417,Friend,School,Digaale
+4418,Friend,School,Digaale
+4419,Friend,School,Digaale
+4420,Friend,School,Digaale
+4421,Friend,School,Digaale
+4422,Friend,School,Digaale
+4423,Friend,School,Digaale
+4424,Friend,School,Digaale
+4425,Friend,School,Digaale
+4426,Friend,School,Digaale
+4427,Friend,School,Digaale
+4428,Household member,Home,Digaale
+4429,Friend,School,Digaale
+4430,Other,Another house,Digaale
+4431,Household member,Home,Digaale
+4432,Household member,Home,Digaale
+4433,Coworker or schoolmate,School,Digaale
+4434,Coworker or schoolmate,School,Digaale
+4435,Coworker or schoolmate,School,Digaale
+4436,Coworker or schoolmate,School,Digaale
+4437,Household member,Home,Digaale
+4438,Household member,Home,Digaale
+4439,Household member,Home,Digaale
+4440,Household member,Home,Digaale
+4441,Household member,Home,Digaale
+4442,Household member,Home,Digaale
+4443,Household member,Home,Digaale
+4444,Household member,Home,Digaale
+4445,Household member,Home,Digaale
+4446,Friend,Work,Digaale
+4447,Friend,School,Digaale
+4448,Friend,Work,Digaale
+4449,Other relative,Another house,Digaale
+4450,Friend,Another house,Digaale
+4451,Other relative,Another house,Digaale
+4452,Household member,Home,Digaale
+4453,Household member,Home,Digaale
+4454,Household member,Home,Digaale
+4455,Household member,Home,Digaale
+4456,Friend,Home,Digaale
+4457,Friend,Home,Digaale
+4458,Friend,School,Digaale
+4459,Friend,School,Digaale
+4460,Friend,School,Digaale
+4461,Friend,School,Digaale
+4462,Friend,School,Digaale
+4463,Friend,School,Digaale
+4464,Friend,School,Digaale
+4465,Household member,Home,Digaale
+4466,Household member,Home,Digaale
+4467,Household member,Home,Digaale
+4468,Household member,Home,Digaale
+4469,Household member,Home,Digaale
+4470,Friend,School,Digaale
+4471,Friend,School,Digaale
+4472,Friend,Market,Digaale
+4473,Friend,School,Digaale
+4474,Friend,School,Digaale
+4475,Friend,School,Digaale
+4476,Friend,Market,Digaale
+4477,Friend,School,Digaale
+4478,Household member,Home,Digaale
+4479,Household member,Home,Digaale
+4480,Household member,Home,Digaale
+4481,Household member,Home,Digaale
+4482,Household member,Home,Digaale
+4483,Household member,Market,Digaale
+4484,Other relative,Market,Digaale
+4485,Other relative,Market,Digaale
+4486,Other relative,Home,Digaale
+4487,Other relative,Market,Digaale
+4488,Other relative,Market,Digaale
+4489,Household member,Home,Digaale
+4490,Other relative,Home,Digaale
+4491,Other relative,Home,Digaale
+4492,Household member,Home,Digaale
+4493,Household member,Home,Digaale
+4494,Household member,Home,Digaale
+4495,Household member,Another house,Digaale
+4496,Other relative,Another house,Digaale
+4497,Other relative,Another house,Digaale
+4498,Other relative,Another house,Digaale
+4499,Household member,Home,Digaale
+4500,Household member,Another house,Digaale
+4501,Friend,Another house,Digaale
+4502,Household member,Another house,Digaale
+4503,Friend,Another house,Digaale
+4504,Household member,Home,Digaale
+4505,Household member,Home,Digaale
+4506,Household member,Home,Digaale
+4507,Other relative,Another house,Digaale
+4508,Other relative,Another house,Digaale
+4509,Other relative,Another house,Digaale
+4510,Other relative,Another house,Digaale
+4511,Friend,Another house,Digaale
+4512,Friend,Another house,Digaale
+4513,Friend,Another house,Digaale
+4514,Household member,Home,Digaale
+4515,Household member,Home,Digaale
+4516,Household member,Home,Digaale
+4517,Household member,Home,Digaale
+4518,Household member,Home,Digaale
+4519,Household member,Home,Digaale
+4520,Household member,Home,Digaale
+4521,Household member,Home,Digaale
+4522,Household member,Home,Digaale
+4523,Household member,Home,Digaale
+4524,Friend,Shop,Digaale
+4525,Friend,Shop,Digaale
+4526,Other relative,Home,Digaale
+4527,Friend,Shop,Digaale
+4528,Friend,Shop,Digaale
+4529,Friend,School,Digaale
+4530,Friend,School,Digaale
+4531,Friend,School,Digaale
+4532,Household member,Home,Digaale
+4533,Household member,Home,Digaale
+4534,Household member,Home,Digaale
+4535,don’t know,Home,Digaale
+4536,Household member,Home,Digaale
+4537,Household member,Home,Digaale
+4538,Friend,School,Digaale
+4539,Friend,School,Digaale
+4540,Coworker or schoolmate,School,Digaale
+4541,Coworker or schoolmate,School,Digaale
+4542,Friend,School,Digaale
+4543,Friend,Home; Shop,Digaale
+4544,Household member,Home; Water source,Digaale
+4545,Friend,Home; Shop,Digaale
+4546,Friend,Work,Digaale
+4547,Friend,Home,Digaale
+4548,Friend,Home; Another house,Digaale
+4549,Friend,Shop,Digaale
+4550,Friend,Another house,Digaale
+4551,Friend,Home,Digaale
+4552,Friend,Home,Digaale
+4553,Friend,Home,Digaale
+4554,Household member,Home,Digaale
+4555,Household member,Home,Digaale
+4556,Household member,Home,Digaale
+4557,Household member,Home,Digaale
+4558,Household member,Home,Digaale
+4559,Household member,Home,Digaale
+4560,Household member,Home,Digaale
+4561,Household member,Home,Digaale
+4562,Household member,Home,Digaale
+4563,Household member,Home,Digaale
+4564,Other relative,Another house,Digaale
+4565,Other relative,Another house,Digaale
+4566,Other relative,Another house,Digaale
+4567,Household member,Home,Digaale
+4568,Other,Another house,Digaale
+4569,Friend,Home,Digaale
+4570,Other,Market,Digaale
+4571,Friend,Home,Digaale
+4572,Other,Market,Digaale
+4573,Other,Market,Digaale
+4574,Other relative,Home,Digaale
+4575,Friend,Home,Digaale
+4576,Other,Another house,Digaale
+4577,Other,Home,Digaale
+4578,Household member,Home,Digaale
+4579,Household member,Home,Digaale
+4580,Household member,Home; Another house,Digaale
+4581,Household member,Home; Another house,Digaale
+4582,Other relative,Home; Another house,Digaale
+4583,Friend,Home,Digaale
+4584,Friend,Home; Another house,Digaale
+4585,Friend,Home; Another house,Digaale
+4586,Friend,Shop; Home,Digaale
+4587,Friend,Another house; Home; Shop; Market,Digaale
+4588,Friend,Home; Another house,Digaale
+4589,Friend,Another house; Home,Digaale
+4590,Household member,Home,Digaale
+4591,Household member,Home,Digaale
+4592,Household member,Home,Digaale
+4593,refuse to answer,Another house,Digaale
+4594,Friend,Market,Digaale
+4595,Other relative,Another house,Digaale
+4596,Friend,Market,Digaale
+4597,Friend,Another house,Digaale
+4598,Household member,Home,Digaale
+4599,Household member,Home,Digaale
+4600,Household member,Home,Digaale
+4601,Household member,Home,Digaale
+4602,Household member,Home,Digaale
+4603,Household member,Home,Digaale
+4604,Other relative,Another house,Digaale
+4605,Other relative,Another house,Digaale
+4606,Other relative,Another house,Digaale
+4607,Other relative,Another house,Digaale
+4608,Friend,Home,Digaale
+4609,Other,Home; Another house,Digaale
+4610,Friend,Home,Digaale
+4611,Other relative,Home,Digaale
+4612,Other relative,Home,Digaale
+4613,Household member,Home,Digaale
+4614,Other,Market,Digaale
+4615,Friend,Home,Digaale
+4616,Other,Market,Digaale
+4617,Friend,Home,Digaale
+4618,Other relative,Another house,Digaale
+4619,Other relative,Home,Digaale
+4620,Other relative,Home,Digaale
+4621,Friend,Another house,Digaale
+4622,Other relative,Home,Digaale
+4623,Household member,Home,Digaale
+4624,Other relative,Home,Digaale
+4625,Household member,Home,Digaale
+4626,Household member,Home,Digaale
+4627,Other relative,Home,Digaale
+4628,Friend,Another house,Digaale
+4629,Other relative,Market,Digaale
+4630,Friend,Market,Digaale
+4631,Other relative,Home,Digaale
+4632,Other relative,Market,Digaale
+4633,Household member,Home,Digaale
+4634,Household member,Home,Digaale
+4635,Household member,Home,Digaale
+4636,Household member,Home,Digaale
+4637,Household member,Home,Digaale
+4638,Household member,Home,Digaale
+4639,Other relative,Another house,Digaale
+4640,Other relative,Another house,Digaale
+4641,Other relative,Another house,Digaale
+4642,Other relative,Another house,Digaale
+4643,Other,Another house,Digaale
+4644,Other,Home,Digaale
+4645,Friend,Home,Digaale
+4646,Friend,Market,Digaale
+4647,Household member,Home,Digaale
+4648,Other relative,Home; Another house,Digaale
+4649,Other,Home,Digaale
+4650,Friend,Home,Digaale
+4651,Household member,Home,Digaale
+4652,Household member,Home,Digaale
+4653,Household member,Home,Digaale
+4654,Household member,Home,Digaale
+4655,Household member,Home,Digaale
+4656,Household member,Home,Digaale
+4657,Household member,Home,Digaale
+4658,Household member,Home,Digaale
+4659,Other relative,Another house,Digaale
+4660,Household member,Home,Digaale
+4661,Household member,Home,Digaale
+4662,Household member,Home,Digaale
+4663,Household member,Home,Digaale
+4664,Household member,Home,Digaale
+4665,Household member,Home,Digaale
+4666,Friend,Market,Digaale
+4667,Household member,Home,Digaale
+4668,Household member,Home,Digaale
+4669,Household member,Home,Digaale
+4670,Household member,Home,Digaale
+4671,Other,Home,Digaale
+4672,Friend,Another house,Digaale
+4673,Friend,Another house,Digaale
+4674,Friend,Another house,Digaale
+4675,Friend,Another house,Digaale
+4676,Friend,Another house,Digaale
+4677,Household member,Market,Digaale
+4678,Household member,Home,Digaale
+4679,Other relative,Another house,Digaale
+4680,Other relative,Another house,Digaale
+4681,Household member,Home,Digaale
+4682,Household member,Home,Digaale
+4683,Household member,Home,Digaale
+4684,Household member,Home,Digaale
+4685,Household member,Home,Digaale
+4686,Household member,Home,Digaale
+4687,Household member,Home,Digaale
+4688,Household member,Home,Digaale
+4689,Friend,Home,Digaale
+4690,Household member,Home,Digaale
+4691,Friend,Another house,Digaale
+4692,Other,Another house,Digaale
+4693,Friend,Another house,Digaale
+4694,Other,Home,Digaale
+4695,Other relative,Home,Digaale
+4696,Friend,Another house,Digaale
+4697,Other,Shop,Digaale
+4698,Other,Another house,Digaale
+4699,Other relative,Home,Digaale
+4700,Friend,Another house,Digaale
+4701,Household member,Home,Digaale
+4702,Household member,Home,Digaale
+4703,Household member,Home,Digaale
+4704,Household member,Home,Digaale
+4705,Household member,Home,Digaale
+4706,Other relative,Home,Digaale
+4707,Other relative,Home,Digaale
+4708,Other relative,Home,Digaale
+4709,Household member,Home,Digaale
+4710,Household member,Home,Digaale
+4711,Household member,Home,Digaale
+4712,Household member,Home,Digaale
+4713,Household member,Home,Digaale
+4714,Household member,Home,Digaale
+4715,Household member,Home,Digaale
+4716,Household member,Home,Digaale
+4717,Household member,Home,Digaale
+4718,Household member,Home,Digaale
+4719,Friend,Home,Digaale
+4720,Friend,Another house,Digaale
+4721,Friend,Market,Digaale
+4722,Friend,Market,Digaale
+4723,Friend,Market,Digaale
+4724,Household member,Home,Digaale
+4725,Household member,Home,Digaale
+4726,Household member,Home,Digaale
+4727,Household member,Home,Digaale
+4728,Household member,Home,Digaale
+4729,Household member,Home,Digaale
+4730,Household member,Home,Digaale
+4731,Household member,Home,Digaale
+4732,Household member,Home,Digaale
+4733,Household member,Home,Digaale
+4734,Household member,Home,Digaale
+4735,Household member,Home,Digaale
+4736,Friend,Another house,Digaale
+4737,Friend,Another house,Digaale
+4738,Friend,Shop,Digaale
+4739,Other relative,Home,Digaale
+4740,Other relative,Home,Digaale
+4741,Friend,Another house,Digaale
+4742,Friend,Another house,Digaale
+4743,Household member,Home,Digaale
+4744,Household member,Home,Digaale
+4745,Household member,Home,Digaale
+4746,Household member,Home,Digaale
+4747,Household member,Home,Digaale
+4748,Household member,Home,Digaale
+4749,Other relative,Another house,Digaale
+4750,Other relative,Another house,Digaale
+4751,Other relative,Another house,Digaale
+4752,Household member,Home,Digaale
+4753,don’t know,Home,Digaale
+4754,Other relative,Home,Digaale
+4755,Friend,Other,Digaale
+4756,Friend,Other,Digaale
+4757,Friend,Market,Digaale
+4758,Friend,Market,Digaale
+4759,Household member,Home,Digaale
+4760,Household member,Home,Digaale
+4761,Other relative,Another house,Digaale
+4762,Friend,Another house,Digaale
+4763,Friend,Another house; Shop,Digaale
+4764,Friend,Shop,Digaale
+4765,Friend,Shop,Digaale
+4766,Other relative,Another house,Digaale
+4767,Household member,Home,Digaale
+4768,Other,Other,Digaale
+4769,Other,Other,Digaale
+4770,Other,Other,Digaale
+4771,Household member,Home,Digaale
+4772,Household member,Home,Digaale
+4773,Other relative,Another house,Digaale
+4774,Other relative,Another house,Digaale
+4775,Household member,Home,Digaale
+4776,Household member,Home,Digaale
+4777,Household member,Home,Digaale
+4778,Household member,Home,Digaale
+4779,Household member,Home,Digaale
+4780,Other relative,Another house,Digaale
+4781,Household member,Another house,Digaale
+4782,Other relative,Home,Digaale
+4783,Other relative,Another house,Digaale
+4784,Other relative,Home,Digaale
+4785,Household member,Home,Digaale
+4786,Household member,Home,Digaale
+4787,Household member,Home,Digaale
+4788,Household member,Home,Digaale
+4789,Other relative,Another house; Home,Digaale
+4790,Friend,Another house,Digaale
+4791,Friend,Home,Digaale
+4792,Friend,Home,Digaale
+4793,Household member,Home; Another house,Digaale
+4794,Friend,Home; Another house,Digaale
+4795,Household member,Home,Digaale
+4796,Household member,Home,Digaale
+4797,Household member,Home,Digaale
+4798,Household member,Home,Digaale
+4799,Household member,Home,Digaale
+4800,Household member,Home,Digaale
+4801,Household member,Home,Digaale
+4802,Other relative,Home,Digaale
+4803,Other relative,Home,Digaale
+4804,Other relative,Home,Digaale
+4805,Household member,Home,Digaale
+4806,Other relative,Home,Digaale
+4807,Household member,Home,Digaale
+4808,Household member,Home,Digaale
+4809,Household member,Home,Digaale
+4810,Household member,Home,Digaale
+4811,Household member,Home,Digaale
+4812,Household member,Home,Digaale
+4813,Household member,Home,Digaale
+4814,Household member,Home,Digaale
+4815,Household member,Home,Digaale
+4816,Friend,Home,Digaale
+4817,Other relative,Home,Digaale
+4818,Other relative,Home,Digaale
+4819,Friend,Home,Digaale
+4820,Friend,Shop,Digaale
+4821,Friend,Home; Another house,Digaale
+4822,Household member,Home,Digaale
+4823,Household member,Home,Digaale
+4824,Household member,Home,Digaale
+4825,Household member,Home,Digaale
+4826,Household member,Home,Digaale
+4827,Other relative,Another house,Digaale
+4828,Other relative,Another house,Digaale
+4829,Other relative,Another house,Digaale
+4830,Other relative,Another house,Digaale
+4831,Household member,Home,Digaale
+4832,Household member,Home,Digaale
+4833,Other relative,Another house,Digaale
+4834,Other relative,Another house,Digaale
+4835,Friend,Home,Digaale
+4836,Friend,Another house,Digaale
+4837,Other relative,Home,Digaale
+4838,Household member,Home,Digaale
+4839,Household member,Home,Digaale
+4840,Household member,Home,Digaale
+4841,Household member,Home,Digaale
+4842,Household member,Home,Digaale
+4843,Household member,Home,Digaale
+4844,Household member,Home,Digaale
+4845,Household member,Home,Digaale
+4846,Household member,Home,Digaale
+4847,Household member,Home,Digaale
+4848,Household member,Home,Digaale
+4849,Household member,Home,Digaale
+4850,Household member,Home,Digaale
+4851,Household member,Home,Digaale
+4852,Household member,Home,Digaale
+4853,Household member,Home,Digaale
+4854,Other relative,Another house,Digaale
+4855,Other relative,Another house,Digaale
+4856,Other relative,Another house,Digaale
+4857,Household member,Another house,Digaale
+4858,Other relative,Another house,Digaale
+4859,Other relative,Another house,Digaale

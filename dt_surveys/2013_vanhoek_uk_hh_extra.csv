@@ -1,0 +1,117 @@
+"hh_id","hh_relationship_1","hh_age_1","hh_sex_1","hh_relationship_2","hh_age_2","hh_sex_2","hh_relationship_3","hh_age_3","hh_sex_3","hh_relationship_4","hh_age_4","hh_sex_4","hh_relationship_5","hh_age_5","hh_sex_5","hh_relationship_6","hh_age_6","hh_sex_6","hh_relationship_7","hh_age_7","hh_sex_7","hh_relationship_8","hh_age_8","hh_sex_8"
+"HH1","Father",30,"Male","Mother",32,"Female","Brother or Sister",6,"Female","Brother or Sister",4,"Male","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH2","Mother",36,"Female","Father",37,"Male","Brother or Sister",4,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH3","Mother",25,"Female","Father",28,"Male","Brother or Sister",3,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH4","Father",33,"Male","Mother",29,"Female","Brother or Sister",9,"Male","Brother or Sister",8,"Male","Brother or Sister",3,"Male","",NA,"","",NA,"",NA,NA,NA
+"HH5","Father",37,"Male","Mother",35,"Female","Brother or Sister",2,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH6","Mother",32,"Female","Father",31,"Male","Brother or Sister",2,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH7","Mother",30,"Female","Father",33,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH8","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH9","Mother",25,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH10","Father",28,"Male","Mother",32,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH11","Father",31,"Male","Mother",32,"Female","Other family",65,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH12","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH13","Mother",30,"Female","Father",37,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH14","Mother",35,"Female","Father",36,"Male","Brother or Sister",5,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH15","Father",34,"Male","Mother",34,"Female","Brother or Sister",4,"Male","Brother or Sister",2,"Male","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH16","Mother",39,"Female","Father",39,"Male","Brother or Sister",4,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH17","Mother",41,"Female","Father",44,"Male","Brother or Sister",5,"Male","Brother or Sister",3,"Male","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH18","Father",41,"Male","Mother",33,"Female","Brother or Sister",3,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH19","Mother",21,"Female","Father",32,"Male","Brother or Sister",3,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH20","Mother",33,"Female","Father",34,"Male","Brother or Sister",2,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH21","Father",37,"Male","Mother",38,"Female","Brother or Sister",2,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH22","Mother",36,"Female","Father",40,"Male","Brother or Sister",1,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH23","Father",37,"Male","Mother",31,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH24","Mother",34,"Female","Father",37,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH25","Father",27,"Male","Mother",26,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH26","Father",32,"Male","Mother",32,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH27","Mother",44,"Female","Father",40,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH28","Father",30,"Male","Mother",36,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH29","Father",29,"Male","Mother",30,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH30","Father",39,"Male","Mother",35,"Female","Brother or Sister",8,"Male","Brother or Sister",6,"Male","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH31","Mother",30,"Female","Father",33,"Male","Brother or Sister",4,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH32","Father",23,"Male","Brother or Sister",24,"Female","Brother or Sister",2,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH33","Mother",37,"Female","Father",44,"Male","Brother or Sister",6,"Male","Brother or Sister",2,"Female","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH34","Father",24,"Male","Mother",23,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH35","Father",32,"Male","Mother",25,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH36","Father",38,"Male","Mother",41,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH37","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH38","Father",28,"Male","Mother",29,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH39","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH40","Father",35,"Male","Mother",25,"Female","Brother or Sister",3,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH41","Father",33,"Male","Mother",35,"Female","Brother or Sister",6,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH42","Father",32,"Male","Mother",31,"Female","Brother or Sister",4,"Male","Brother or Sister",2,"Male","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH43","Mother",28,"Female","Father",30,"Male","Brother or Sister",3,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH44","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH45","Mother",28,"Female","Father",34,"Male","Brother or Sister",2,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH46","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH47","Father",28,"Male","Mother",23,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH48","Father",55,"Male","Mother",37,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH49","Mother",22,"Female","Father",24,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH50","Father",25,"Male","Mother",25,"Female","Other family",48,"Female","Other family",20,"Male","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH51","Mother",29,"Female","Father",29,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH52","Father",32,"Male","Mother",33,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH53","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH54","Father",29,"Male","Mother",27,"Female","Other family",37,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH55","Mother",29,"Female","Mother",31,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH56","Mother",42,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH57","Father",38,"Male","Mother",38,"Female","Brother or Sister",3,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH58","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH59","Father",30,"Male","Mother",24,"Female","Other family",45,"Female","Other family",47,"Male","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH60","Mother",20,"Female","Other family",34,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH61","Father",33,"Male","Mother",35,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH62","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH63","Mother",29,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH64","Mother",30,"Female","Father",30,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH65","Mother",35,"Female","Father",39,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH66","Mother",30,"Female","Father",31,"Male","Brother or Sister",5,"Female","Brother or Sister",2,"Female","Other family",70,"Male","Other family",63,"Female","",NA,"",NA,NA,NA
+"HH67","Father",33,"Male","Mother",33,"Female","Brother or Sister",4,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH68","Mother",24,"Female","Brother or Sister",6,"Female","Brother or Sister",2,"Male","Brother or Sister",1,"Male","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH69","Father",33,"Male","Mother",36,"Female","Brother or Sister",1,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH70","Father",38,"Male","Mother",31,"Female","Brother or Sister",1,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH71","Father",40,"Male","Mother",31,"Female","Brother or Sister",4,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH72","Mother",26,"Female","Father",25,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH73","Mother",33,"Female","Father",36,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH74","Father",21,"Male","Mother",22,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH75","Mother",30,"Female","Father",32,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH76","Mother",24,"Female","Father",24,"Male","Brother or Sister",1,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH77","Mother",35,"Female","Father",37,"Male","Brother or Sister",10,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH78","Mother",41,"Female","Father",41,"Male","Brother or Sister",9,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH79","Father",38,"Male","Mother",39,"Female","Brother or Sister",6,"Male","Brother or Sister",6,"Female","Brother or Sister",1,"Female","",NA,"","",NA,"",NA,NA,NA
+"HH80","Mother",23,"Female","Other family",53,"Female","Other family",56,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH81","Mother",29,"Female","Father",36,"Male","Brother or Sister",8,"Male","Brother or Sister",4,"Male","Brother or Sister",1,"Male","",NA,"","",NA,"",NA,NA,NA
+"HH82","Mother",30,"Female","Father",32,"Male","Brother or Sister",3,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH83","Father",46,"Male","Mother",30,"Female","Brother or Sister",3,"Female","Brother or Sister",1,"Male","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH84","Father",30,"Male","Mother",30,"Female","Brother or Sister",1,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH85","Mother",24,"Female","Father",31,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH86","Mother",31,"Female","Father",32,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH87","Mother",32,"Female","Father",35,"Male","Brother or Sister",5,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH88","Mother",40,"Female","Father",31,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH89","Mother",30,"Female","Father",29,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH90","Mother",32,"Female","Other family",59,"Female","Other family",63,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH91","Father",36,"Male","Mother",28,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH92","Father",30,"Male","Mother",28,"Female","Brother or Sister",4,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH93","Father",37,"Male","Mother",38,"Female","Brother or Sister",3,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH94","Mother",32,"Female","Father",33,"Male","Brother or Sister",2,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH95","Father",22,"Male","Mother",20,"Female","Other family",39,"Female","Other family",34,"Male","Other family",14,"Male","Other family",16,"Female","Other family",6,"Female",NA,NA,NA
+"HH96","Mother",25,"Female","Father",26,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH97","Father",45,"Male","Mother",34,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH98","Other family",16,"Male","Other family",38,"Female","Other family",43,"Male","Father",26,"Male","Mother",21,"Female","",NA,"","",NA,"",NA,NA,NA
+"HH99","Mother",31,"Female","Father",31,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH100","Mother",41,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH101","Mother",37,"Female","Father",33,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH102","Father",30,"Male","Mother",28,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH103","Father",33,"Male","Mother",35,"Female","Brother or Sister",6,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH104","Mother",36,"Female","Father",38,"Male","Brother or Sister",4,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH105","Mother",37,"Female","Father",38,"Male","Brother or Sister",4,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH106","Father",33,"Male","Mother",26,"Female","Brother or Sister",3,"Male","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH107","Mother",31,"NK","Father",30,"Male","Brother or Sister",2,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH108","Father",29,"Male","Mother",29,"Female","Brother or Sister",2,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH109","Mother",NA,"Female","Brother or Sister",NA,"","Other family",NA,"","Other family",NA,"","Other family",NA,"","Other family",NA,"","Other family",NA,"",NA,NA,NA
+"HH110","Father",29,"Male","Mother",29,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH111","Mother",33,"Female","Father",37,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH112","Father",26,"Male","Mother",26,"Female","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH113","Mother",35,"Female","Father",41,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH114","Father",36,"Male","Brother or Sister",1,"Male","Brother or Sister",7,"Female","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH115","Mother",26,"Female","Father",24,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
+"HH116","Mother",37,"Female","Father",43,"Male","",NA,"","",NA,"","",NA,"","",NA,"","",NA,"",NA,NA,NA
