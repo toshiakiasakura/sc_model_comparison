@@ -2,9 +2,9 @@ function default_plot_setting()
 	gr(fontfamily = "Helvetica",
 		foreground_color_legend = nothing,
 		background_color_legend = nothing,
-		#titlefontsize = 11, tickfontsize = 10,
-		#legendfontsize = 8, legendtitlefontsize = 8,
-		#labelfontsize = 10,
+		titlefontsize = 11, tickfontsize = 10,
+		legendfontsize = 8, legendtitlefontsize = 8,
+		labelfontsize = 10,
 		grid = true, tick_direction = :out,
 		size = (600, 450))
 end
@@ -30,3 +30,5 @@ end
 function convert_date_to_quarter(date::Date)::String
 	return string(Dates.year(date)) * "_" * string(Dates.quarterofyear(date))
 end
+
+boldstring(s::AbstractString) = map(c -> 'a' ≤ c ≤ 'z' ? c + ('𝐚'-'a') : 'A' ≤ c ≤ 'Z' ? c + ('𝐀'-'A') : c, s)

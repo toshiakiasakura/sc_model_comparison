@@ -17,7 +17,8 @@ function plot_pdf_raw!(pl::Plots.Plot, d::UnivariateDistribution; kwds...)
 end
 
 function plot_ccdf!(pl::Plots.Plot, d::UnivariateDistribution; kwds...)
-	k = [(1:9)..., (10:10:90)..., (100:100:900)..., (1000:1000:9000)..., 10000]
+	k = [(1:9)..., (10:10:90)..., (100:100:900)..., (1000:1000:9000)..., 10_000]
+	[ccdf.(d, k[end:-1:begin])] # To avoid the repetition errors. Create cache.
 	plot!(pl, k, log10.(ccdf.(d, k)); xaxis = :log10, kwds...)
 end
 
@@ -32,7 +33,12 @@ function plot_ccdf!(pl::Plots.Plot, d::ZeroInfConvolutedDist; kwds...)
 	plot_ccdf!(pl, d_trunc; kwds...)
 end
 
-function plot_pdf!(pl::Plots.Plot, d::UnivariateDistribution; kwds...)
+function plot_pdf!(pl::Plots.Plot, d::UnivariateDistribution;
+		conv_log10 = true, kwds...)
 	k = [(0:9)..., (10:10:90)..., (100:100:900)..., (1000:1000:9000)..., 10000]
-	plot!(pl, k, log10.(pdf.(d, k)); kwds...)
+	y = pdf.(d, k)
+	if conv_log10 == true
+		y = log10.(y)
+	end
+	plot!(pl, k, y; kwds...)
 end

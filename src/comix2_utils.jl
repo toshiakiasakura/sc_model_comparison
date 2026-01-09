@@ -4,6 +4,7 @@
 ###############################
 
 function get_ZInf_PLomax_mean()
+    model_names = get_model_names()
     res = load("../dt_intermediate/CoMix2_chns.jld2")["result"];
     chn = res["chns_non-home"][model_names[3]]
     d_lomax = get_ZeroInfDist(chn, model_names[3]);
@@ -11,6 +12,7 @@ function get_ZInf_PLomax_mean()
 end
 
 function get_ZInf_means()
+    model_names = get_model_names()
     res = load("../dt_intermediate/CoMix2_chns.jld2")["result"];
     ms = []
     for m in model_names
@@ -21,11 +23,69 @@ function get_ZInf_means()
     return ms
 end
 
+function plot_illustrative_dist_comparison()
+    # Base distributions inferred from the fitted distributions.
+    d_negbin = NegBin(4.0, 0.169)
+    @show mean100(d_negbin)
+    @show var100(d_negbin);
+    d_lognormal = PoissonLogNormal(-0.046, 1.84)
+    @show mean100(d_lognormal)
+    @show var100(d_lognormal);
+    d_lomax = PoissonLomax(1.239, 1.759)
+    @show mean100(d_lomax)
+    @show var100(d_lomax);
+
+    # Simulated data and take means.
+    n_sim = 1_00
+    n_sample = 1000
+    ms_negbin = [mean(rand(d_negbin, n_sample)) for _ in 1:n_sim]
+    ms_lognormal = [mean(rand(d_lognormal, n_sample)) for _ in 1:n_sim]
+    ms_lomax = [mean(rand(d_lomax, n_sample)) for _ in 1:n_sim]
+    df_ms = DataFrame(
+        :mean => vcat(ms_negbin, ms_lognormal, ms_lomax),
+        :model => vcat(
+            fill("NB", n_sim), fill("PLN", n_sim), fill("PLomax", n_sim)))
+    df_ms.model = categorical(df_ms.model,
+        levels = ["NB", "PLN", "PLomax"]);
+
+    pos = (-0.1, 1.12)
+    pl1 = plot(xlim=[0,30], ylabel = "Probability mass function",
+        xlabel="Number of contacts per day",
+        bottom_margin=5Plots.mm, left_margin=5Plots.mm, top_margin = 10Plots.mm)
+    plot_pdf!(pl1, d_negbin; conv_log10=false, label="Negative binomial")
+    plot_pdf!(pl1, d_lognormal; conv_log10=false, label="Poisson-lognormal")
+    plot_pdf!(pl1, d_lomax; conv_log10=false, label="Poisson-Lomax")
+    annotate!(pl1, pos, text("A", :left, 18, "Helvetica"))
+
+    xtk = ([1, 10, 100, 1000], [L"1", L"10", L"10^{2}", L"10^{3}"])
+    ytk = ([-5, -4, -3, -2, -1, 0],
+        [L"10^{-5}", L"10^{-4}", L"10^{-3}", L"10^{-2}", L"10^{-1}", L"10^{0}"])
+    pl2 = plot(xlim=[1,5_000], ylim=[-5,0], ylabel="CCDF",
+        xlabel="Number of contacts per day", xticks=xtk, yticks=ytk)
+    plot_ccdf!(pl2, d_negbin; conv_log10=false, label="Negative binomial")
+    plot_ccdf!(pl2, d_lognormal; conv_log10=false, label="Poisson-lognormal")
+    plot_ccdf!(pl2, d_lomax; conv_log10=false, label="Poisson-Lomax")
+    annotate!(pl2, pos, text("B", :left, 18, "Helvetica"))
+
+    pl3 = plot(ylim=[0, 20], ylabel="Sample means of 1000 simulated contacts")
+    dotplot!(pl3, df_ms[:, :model], df_ms[:, :mean],
+        legend=false, color=1, markerstrokewidth=0.1, markersize=2.2, xrotation=0)
+    boxplot!(pl3, df_ms[:, :model], df_ms[:, :mean], outliers=false, fillalpha=0.75, color=1,)
+    hline!(pl3, [3.909], ls= :dot, color = 2, lw=2.5)
+    annotate!(pl3, pos, text("C", :left, 18, "Helvetica"))
+
+    pl = plot(pl1, pl2, pl3, layout= (1, 3), size=(900, 300), dpi=300)
+    return pl
+end
+
+
+
 """
 Args:
 - df_sum: returned by `parse_bootstrap_estimated_data`.
 """
 function plot_coverage_prob(df_sum::DataFrame)
+    model_names = get_model_names()
     ms = ["ZInf-NB", "ZInf-PLN", "ZInf-PLomax"]
     rep_dic = Dict( m => m_new for (m, m_new) in zip(model_names, ms))
     df_cov = @pipe groupby(df_sum, [:tp, :sample_size]) |> combine(_) do gdf
@@ -36,13 +96,15 @@ function plot_coverage_prob(df_sum::DataFrame)
         @transform(_, :tp = replace.(:tp, rep_dic...),
                     :sample_size = string.(:sample_size))
     pl = plot(; xlabel="Number of samples per simulation",
-        ylabel="Coverage probability (%)"
+        ylabel="Coverage probability (%)", xlabelfontsize=11, ylabelfontsize=12,
     )
     plot!(pl,
         df_cov[:, :sample_size], df_cov[:, :cov_prob], group=df_cov[:, :tp],
         marker=:circle, markerstrokewidth = 0.5, color= [7 6 13],
         legend = (0.7, 0.5),
+        #xlim=[2.8,6.2],
     )
+    hline!(pl, [95], ls=:dash, color=:black, label="", alpha=0.7)
     return pl
 end
 
@@ -62,7 +124,7 @@ function plot_simulated_sample_mean(df_mer::DataFrame; color=1)
         m = ms[i]
         ytk = i == 1 ? true : false
 
-        pl = plot(; ylim=[0, 10], xrotation=30)
+        pl = plot(; ylim=[0, 10], xrotation=30, ylabelfontsize=11)
         dotplot!(pl, df_tmp[:, :sample_size], df_tmp[:, :mean],
             ylabel=ylbl, xlabel="", yticks = ytk,
             legend=false, color=color,
@@ -75,16 +137,18 @@ function plot_simulated_sample_mean(df_mer::DataFrame; color=1)
         push!(pls, pl)
     end
     plot!(pls[4], right_margin = 5Plots.mm, bottom_margin=10Plots.mm)
-    annotate!(pls[2], (1.0, -0.22),
+    annotate!(pls[2], (1.0, -0.27),
         text("Number of samples per simulation",
-            :black, :centre, 12, "Helvetica"))
+            :black, :centre, 11, "Helvetica"))
+    annotate!(pls[1], (-0.35, 1.15), text("A", :left, 18, "Helvetica"))
+    plot!(pls[1], top_margin=10Plots.mm, left_margin=5Plots.mm)
     return plot(pls..., layout=(1, 4), size= (800, 400), )
 end
 
 function parse_bootstrap_estimated_data(paths)
     m_PLomax = get_ZInf_PLomax_mean()
-
     model_names = get_model_names()
+
     df_sum = DataFrame()
     for (i, path) in enumerate(paths)
         M = M_lis[i]
@@ -114,8 +178,9 @@ Args:
 - df_sum: returned by `parse_bootstrap_estimated_data`,
 """
 function plot_estimated_means(df_sum::DataFrame)
+    model_names = get_model_names()
     m_PLomax = get_ZInf_PLomax_mean()
-    order = ["Sample mean", "ZInf-NB", "ZInf-PLN", "ZInf-Lomax"]
+    order = ["Sample mean", "ZInf-NB", "ZInf-PLN", "ZInf-PLomax"]
     rep_dic = Dict( m => m_new for (m, m_new) in zip(["Sample mean", model_names...], order) )
     @transform!(df_sum, :tp = replace(:tp, rep_dic...));
     # Check NaN
@@ -128,7 +193,7 @@ function plot_estimated_means(df_sum::DataFrame)
         order = order,
         ylabel="Estimated means",
         color = [7 6 13],
-        title="")
+        title="", xlabelfontsize=12, ylabelfontsize=12)
     return pl
 end
 
@@ -169,13 +234,14 @@ function plot_mean(df_vis::DataFrame, h_m::Real;
 	df_vis.tp = categorical(df_vis.tp, levels = order, ordered = true)
 
 	ylim = [0, 10.0]
-	pl = plot(ylim = ylim, ylabel = ylabel, xlabel = "Number of samples per simulation"; kwds...)
+	pl = plot(ylim = ylim, ylabel = ylabel,
+        xlabel = "Number of samples per simulation"; kwds...)
 	groupeddotplot!(pl, df_vis[:, :sample_size], df_vis[:, :mean];
 		group = df_vis[:, :tp], label = "", color = color,
 		markersize = 2.2, markerstrokewidth = 0.2)
 	groupedboxplot!(pl, df_vis[:, :sample_size], df_vis[:, :mean]; group = df_vis[:, :tp],
 		fillalpha = 0.75, outliers = false, color = color)
-	hline!([h_m], ls = :dash, color = :black, label = "") # , label="Baseline eigenvalue")
+	hline!([h_m], ls = :dash, color = :black, label = "", alpha=0.7) # , label="Baseline eigenvalue")
 	return pl
 end
 
@@ -210,7 +276,7 @@ function fit_convoluted_dist(df_dds::DataFrame)
     prior_dic["nhm_p3"] = prior_kernel(log.(df_chn_nhm[:, :π0]));
 
     model = model_ZeroInfConvDist(dd_all, dd_hm, prior_dic)
-    chn = sample(model, NUTS(), 1000; progress = true)
+    chn = sample(model, NUTS(), 2000; progress = true)
     jldsave("../dt_intermediate/CoMix2_convoluted_chns.jld2", result=chn)
 
 end
@@ -227,26 +293,37 @@ function plot_conv_fit()
     dists_nhm = [get_ZeroInfDist(chns_nhm[m], m) for m in model_names]
     conv_dist = get_ZeroInfConvDist(chn_conv, dd_hm);
 
+    # TODO: replace it
+    # m = model_names[3]
+    #chn = load("../dt_intermediate/CoMix2_chns_all.jld2")["result"]["chns_all"][m]
+    #dist_all = get_ZeroInfDist(chn, m)
     chn = load("../dt_intermediate/CoMix2_chns_all.jld2")["result"]
     dist_all = get_ZeroInfDist(chn, model_names[3])
 
     pl1 = plot_hm_nhm(dd_hm, dd_nhm, dists_hm, dists_nhm, plot_pdf!; ylim=[-5, 0], xlim=[0,50])
     pl2 = plot_hm_nhm(dd_hm, dd_nhm, dists_hm, dists_nhm, plot_ccdf!; ylim=[-5, 0])
     xlab = "Number of contacts per day"
-    plot!(pl1, xlabel=xlab, ylabel="Probability density function",
+    plot!(pl1, xlabel=xlab, ylabel="Probability mass function",
         left_margin=5Plots.mm)
     plot!(pl2, xlabel=xlab, ylabel="CCDF")
     plot(pl1, pl2, size =(800, 400), bottom_margin=5Plots.mm)
 
     pl3 = plot_conv(dd_all, dist_all, conv_dist, plot_pdf!; ylim=[-5, 0], xlim=[0,50])
     pl4 = plot_conv(dd_all, dist_all, conv_dist, plot_ccdf!; ylim=[-5, 0])
-    plot!(pl3, xlabel=xlab, ylabel="Probability density function",
+    plot!(pl3, xlabel=xlab, ylabel="Probability mass function",
         left_margin=5Plots.mm
     )
     plot!(pl4, xlabel=xlab, ylabel="CCDF")
 
+    pos = (-0.2, 1.0)
+    annotate!(pl1, pos, text("A", :left, 18, "Helvetica"))
+    annotate!(pl2, pos, text("B", :left, 18, "Helvetica"))
+    annotate!(pl3, pos, text("C", :left, 18, "Helvetica"))
+    annotate!(pl4, pos, text("D", :left, 18, "Helvetica"))
     layout = @layout [a b; c d]
-    return plot(pl1, pl2, pl3, pl4, layout=layout, size=(800, 800), dpi=150, fig=:png)
+    pl = plot(pl1, pl2, pl3, pl4, layout=layout, size=(800, 800),
+        dpi=300, fig=:png, top_margin=5Plots.mm)
+    return pl
 end
 
 function plot_hm_nhm(dd_hm::DegreeDist, dd_nhm::DegreeDist, dists_hm, dists_nhm, plot_func!;
@@ -276,6 +353,20 @@ function plot_conv(dd_all, dist_all, conv_dist, plot_func!; kwds...)
     plot_func!(pl, dist_all, label="Best 2-parameter dist"; color=13, kwds_fit...)
     plot_func!(pl, conv_dist, label="Convoluted"; color = :red, kwds_fit...)
     #plot_func!(pl, conv_dist_refit, label="Convoluted (no-fit)"; kwds_fit...)
+end
+
+function fit_CoMix2_all()
+    dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
+    models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
+        model_ZeroInfPoissonLomax]
+    res = Dict("chns_all" => Dict())
+    for model_func in models
+        model = model_func(dd_all)
+        med, chn = get_median_parms_from_model(model)
+        chn = fit_model_with_forward_mode(model, 2000; iparms = med, progress = false)
+        res["chns_all"][get_dist_name_from_model(model_func)] = chn
+    end
+    return res
 end
 
 ######################################

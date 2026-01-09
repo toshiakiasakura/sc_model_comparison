@@ -209,8 +209,8 @@ end
 ##### Jonathan M. Read 2014 #####
 #################################
 
-function read_Jonathan_2014_dds()
-	path = "../dt_surveys/2014_Jonathan_China.csv"
+function read_Read_2014_dds()
+	path = "../dt_surveys/2014_Read_China.csv"
 	df = CSV.read(path, DataFrame)
 	df_tmp = filter_adult_cate(df; col=:age);
 	df_all = df_tmp[:, Symbol("c.all")] |> DegreeDist |> dd_to_df
@@ -220,7 +220,7 @@ function read_Jonathan_2014_dds()
 	df_nhm = (df_tmp[:, Symbol("c.all")] .- df_tmp[:, Symbol("c.home")]) |> DegreeDist |> dd_to_df
 	df_nhm[:, :strat] .= "non-home"
 	df_dd = vcat(df_all, df_hm, df_nhm)
-	df_dd[:, :key] .= "Jonathan_2014"
+	df_dd[:, :key] .= "Read_2014"
 	return (df_dd, nothing)
 end
 
@@ -301,19 +301,19 @@ function add_group_counts_to_Zhang_2019(df_deg::DataFrame, r_survey)
 end
 
 #########################
-##### Leon 2013     #####
+##### Danon 2013     #####
 #########################
 
-function read_Leon_2013_dds()
-	df, df_part = read_leon_2013_contact(; fil_adult = true);
-	df_tmp = leon_degree_dist_for_all_hm_nhm(df, df_part)
+function read_Danon_2013_dds()
+	df, df_part = read_danon_2013_contact(; fil_adult = true);
+	df_tmp = danon_degree_dist_for_all_hm_nhm(df, df_part)
 	df_dd = add_zero_counts_to_df_deg(df_tmp, df_part)
-	df_dd[:, :key] .= "Leon_2013"
+	df_dd[:, :key] .= "Danon_2013"
 	return (df_dd, df_part)
 end
 
-function read_Leon_2013_stratified_dds()
-	df, df_part = read_leon_2013_contact(; fil_adult = true);
+function read_Danon_2013_stratified_dds()
+	df, df_part = read_danon_2013_contact(; fil_adult = true);
 	cond = df_part[:, :P_Post] .== 1
 	df_part_post = df_part[cond, :]
 	df_part_online = df_part[.!cond, :]
@@ -321,26 +321,26 @@ function read_Leon_2013_stratified_dds()
 	df_post = df[cond, :]
 	df_online = df[.!cond, :]
 
-	df_tmp = leon_degree_dist_for_all_hm_nhm(df_post, df_part_post)
+	df_tmp = danon_degree_dist_for_all_hm_nhm(df_post, df_part_post)
 	df_dd_post = add_zero_counts_to_df_deg(df_tmp, df_part_post)
-	df_dd_post[:, :key] .= "Leon_2013_post"
+	df_dd_post[:, :key] .= "Danon_2013_post"
 
-	df_tmp = leon_degree_dist_for_all_hm_nhm(df_online, df_part_online)
+	df_tmp = danon_degree_dist_for_all_hm_nhm(df_online, df_part_online)
 	df_dd_online = add_zero_counts_to_df_deg(df_tmp, df_part_online)
-	df_dd_online[:, :key] .= "Leon_2013_online"
+	df_dd_online[:, :key] .= "Danon_2013_online"
 	return (vcat(df_dd_post, df_dd_online), vcat(df_part_post, df_part_online))
 end
 
 """
 Note: including group contacts, the number of those with 0 total contacts are zero.
 """
-function read_leon_2013_contact(; fil_adult = false)
-	df_leon = CSV.read("../dt_Leon_Danon_2013/Contact_data.csv", DataFrame)
-	@rename!(df_leon, :part_id_d = :C_PID)
-	df_part = read_leon_2013_part(; fil_adult = fil_adult)
+function read_danon_2013_contact(; fil_adult = false)
+	df_danon = CSV.read("../dt_Leon_Danon_2013/Contact_data.csv", DataFrame)
+	@rename!(df_danon, :part_id_d = :C_PID)
+	df_part = read_danon_2013_part(; fil_adult = fil_adult)
 	# Remove children answers by inner join.
-	df = innerjoin(df_leon, df_part; on = :part_id_d) |>
-		 standardise_leon_2013_to_socialmixer_data
+	df = innerjoin(df_danon, df_part; on = :part_id_d) |>
+		 standardise_danon_2013_to_socialmixer_data
 	# Remove parts with total contacts of missing.
 	cond = ismissing.(df_part[:, :P_total_contacts])
 	ids = df_part[cond, :part_id_d] |> unique
@@ -349,7 +349,7 @@ function read_leon_2013_contact(; fil_adult = false)
 	return (df, df_part)
 end
 
-function read_leon_2013_part(; fil_adult = false)
+function read_danon_2013_part(; fil_adult = false)
 	df_part = CSV.read("../dt_Leon_Danon_2013/Person_data.csv", DataFrame)
 	@rename!(df_part, :part_id_d = :P_ID, :part_age = :P_age,
 		:part_gender = :P_gender)
@@ -362,13 +362,13 @@ function read_leon_2013_part(; fil_adult = false)
 	return df_part
 end
 
-function standardise_leon_2013_to_socialmixer_data(df::DataFrame)::DataFrame
+function standardise_danon_2013_to_socialmixer_data(df::DataFrame)::DataFrame
 	df_new = @select(df, :part_id_d, :C_Wheres_1)
 	@rename!(df_new,
 		:cnt_home = :C_Wheres_1,
 	)
 	@transform!(df_new,
-		:key = "Leon_2013",
+		:key = "Danon_2013",
 		# Note: this is a temporal filling.
 		:cnt_work = "NA", # Since Work/school is mixed.
 		:cnt_hh = "NA",
@@ -381,7 +381,7 @@ function standardise_leon_2013_to_socialmixer_data(df::DataFrame)::DataFrame
 	return df_new
 end
 
-function leon_degree_dist_for_all_hm_nhm(df::DataFrame, df_part::DataFrame)
+function danon_degree_dist_for_all_hm_nhm(df::DataFrame, df_part::DataFrame)
 	df_hm = @subset(df, :cnt_home .== 1)
 	df_hm = combine(groupby(df_hm, :part_id_d), nrow => :cnt)
 
@@ -516,7 +516,7 @@ end
 
 function stacked_bar_cate(df_dds)
 	tab = @pipe groupby(df_dds, [:key, :strat]) |> combine(_, :y => sum => :n_part)
-	rem_lis = ["Leon_2013", "Leung_2017",  #"CoMix2",
+	rem_lis = ["Danon_2013", "Leung_2017",  #"CoMix2",
 		"CoMix2_at", "CoMix2_be", "CoMix2_dk",
 		"CoMix2_ee", "CoMix2_gr", "CoMix2_hr",
 		"CoMix2_it", "CoMix2_pl", "CoMix2_pt",
@@ -562,7 +562,7 @@ function stacked_bar_cate(df_dds)
 end
 
 function plot_all_deg_and_separate_subplots(df_dds)
-    keys = ["CoMix UK", "CoMix2", "Leon 2013 (paper)", "Willem 2012", "Grijalva 2015"]
+    keys = ["CoMix UK", "CoMix2", "Danon 2013 (paper)", "Willem 2012", "Grijalva 2015"]
     df_dds_tmp = @subset(df_dds, in.(:key, Ref(keys)), :strat .== "non-home")
 
     xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
@@ -571,12 +571,13 @@ function plot_all_deg_and_separate_subplots(df_dds)
         dd = @subset(df_dds_tmp, :key .== k) |> DegreeDist
         plot_ccdf!(pl, dd; label=k, markersize=2.5, markerstrokewidth = 0.0)
     end
+	annotate!(pl, (-0.12, 1.03), text("A", :black, 16, "Helvetica"))
     #pl = plot_ccdf_across_survey(df_dds_tmp; xtick = xtk)
-    pl1 = plot_all_hm_nhm(df_dds, "CoMix UK")
-    pl2 = plot_all_hm_nhm(df_dds, "CoMix2")
-    pl3 = plot_all_hm_nhm(df_dds, "Grijalva 2015")
-    pl4 = plot_all_hm_nhm(df_dds, "Willem 2012")
-    pl5 = plot_all_hm_nhm(df_dds, "Leon 2013 (paper)")
+    pl1 = plot_all_hm_nhm(df_dds, "CoMix UK"; panel_name="B")
+    pl2 = plot_all_hm_nhm(df_dds, "CoMix2"; panel_name="C")
+    pl3 = plot_all_hm_nhm(df_dds, "Grijalva 2015"; panel_name="D")
+    pl4 = plot_all_hm_nhm(df_dds, "Willem 2012"; panel_name="E")
+    pl5 = plot_all_hm_nhm(df_dds, "Danon 2013 (paper)"; panel_name="F")
 
     xlabel = "Number of contacts per day"
     plot!(pl, ylabel = "CCDF")
@@ -588,42 +589,12 @@ function plot_all_deg_and_separate_subplots(df_dds)
     h = []
     layout = @layout [a{0.66w, 0.66h} [b; c]; [d e] f]
     plot(pls..., layout = layout,
-        size = (800, 800), right_margin = 5Plots.mm,
-        dpi=200)
+        size = (800, 800),
+		right_margin = 5Plots.mm, top_margin=5Plots.mm,
+        dpi=300)
 end
 
-function plot_all_deg_and_separate_subplots(df_dds)
-    keys = ["CoMix UK", "CoMix2", "Leon 2013 (paper)", "Willem 2012", "Grijalva 2015"]
-    df_dds_tmp = @subset(df_dds, in.(:key, Ref(keys)), :strat .== "non-home")
-
-    xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
-    pl = plot(; xaxis = :log10, ylim = [-5, 0], xlim=[1, 10_000], xticks = xtk)
-    for k in keys
-        dd = @subset(df_dds_tmp, :key .== k) |> DegreeDist
-        plot_ccdf!(pl, dd; label=k, markersize=2.5, markerstrokewidth = 0.0)
-    end
-    #pl = plot_ccdf_across_survey(df_dds_tmp; xtick = xtk)
-    pl1 = plot_all_hm_nhm(df_dds, "CoMix UK")
-    pl2 = plot_all_hm_nhm(df_dds, "CoMix2")
-    pl3 = plot_all_hm_nhm(df_dds, "Grijalva 2015")
-    pl4 = plot_all_hm_nhm(df_dds, "Willem 2012")
-    pl5 = plot_all_hm_nhm(df_dds, "Leon 2013 (paper)")
-
-    xlabel = "Number of contacts per day"
-    plot!(pl, ylabel = "CCDF")
-    plot!(pl3, ylabel = "CCDF", xlabel = xlabel)
-    plot!(pl4, xlabel = xlabel)
-    plot!(pl5, xlabel = xlabel)
-
-    pls = [pl, pl1, pl2, pl3, pl4, pl5]
-    h = []
-    layout = @layout [a{0.66w, 0.66h} [b; c]; [d e] f]
-    plot(pls..., layout = layout,
-        size = (800, 800), right_margin = 5Plots.mm,
-        dpi=200)
-end
-
-function plot_all_hm_nhm(df_dds::DataFrame, key::String; color = 1, kwds...)
+function plot_all_hm_nhm(df_dds::DataFrame, key::String; panel_name = "", color = 1, kwds...)
 	df_tmp = @subset(df_dds, :key .== key)
 	dd_all = @subset(df_tmp, :strat .== "all") |> DegreeDist
 	dd_hm = @subset(df_tmp, :strat .== "home") |> DegreeDist
@@ -641,6 +612,7 @@ function plot_all_hm_nhm(df_dds::DataFrame, key::String; color = 1, kwds...)
 	plot_ccdf!(pl, dd_hm; color = 9, ls = :solid, label = "Home", kwds2...)
 	plot_ccdf!(pl, dd_nhm; color = 16, ls = :solid, label = "Non-Home", kwds2...)
 	annotate!(pl, (0.8, 0.9), text(key, :black, 10, "Helvetica"))
+	annotate!(pl, (-0.10, 1.08), text(panel_name, :black, 16, "Helvetica"))
 	plot!(pl; kwds...)
 	pl
 end
