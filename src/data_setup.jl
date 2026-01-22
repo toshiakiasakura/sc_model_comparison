@@ -617,9 +617,10 @@ function plot_all_hm_nhm(df_dds::DataFrame, key::String; panel_name = "", color 
 	pl
 end
 
-function clean_key_names!(df_dds::DataFrame)
+function clean_survey_key_names!(df_dds::DataFrame)
+	df_dds[!, :key] = replace(df_dds[:, :key], "CoMix2" => "CoMix2 All")
 	@transform!(df_dds, :key = replace.(:key,
-		"CoMix_uk_internal" => "CoMix UK",
+		"CoMix_uk_internal" => "CoMix UK",  # TODO: update CoMix_uk_internal to CoMix UK.
 		"post" => "(paper)",
 		"paper" => "(paper)",
 		"online" => "(online)",

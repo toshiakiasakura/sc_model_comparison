@@ -14,6 +14,18 @@ function read_survey_master_data()
 	return XLSX.readtable(path, "Sheet1") |> DataFrame
 end
 
+const model_abbr = Dict(
+	"ZeroInfNegativeBinomial" => "ZInf-NB",
+	"ZeroInfPoissonLogNormal" => "ZInf-PLN",
+	"ZeroInfPoissonLomax" => "ZInf-PLomax"
+)
+
+const setting_pretty = Dict(
+	"all" => "All",
+	"home" => "Home",
+	"non-home" => "Non-home"
+)
+
 function value_counts(df::DataFrame, by::Vector; cname = :nrow)::DataFrame
 	return @pipe groupby(df, by) |>
 				 combine(_, nrow => cname)

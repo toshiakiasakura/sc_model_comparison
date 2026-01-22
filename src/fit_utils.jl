@@ -115,30 +115,6 @@ function flag_minimum_IC(df_res::DataFrame, ic::Symbol)::DataFrame
 	return df_new
 end
 
-function obs_estimated_validation_plot(df_res::DataFrame;
-	col_raw = :mean_raw, col_est = :mean, label = "mean", dx = 5.0, dxy_anno = 1.0)
-	df_best = @subset(df_res, :fmin_waic .== true)
-	df_res[:, :key] = string.(df_res[:, :key])
-	gdfs = groupby(df_best, :strat)
-	pls = []
-	for (k, gdf) in zip(Base.keys(gdfs), gdfs)
-		m_max = maximum(gdf[:, col_raw]) + dx
-		pl = plot(xlabel = "$label (observed)", ylabel = "estimated $label")
-		plot!(pl, [0, m_max], [0, m_max], color = :black, label = "", title = k[:strat])
-		for r in eachrow(gdf)
-			if (r.model == "ZeroInfPoissonLomax") | (r.key == "Danon_2013")
-				annotate!(pl, r[col_raw] + dxy_anno, r[col_est] - dxy_anno,
-					text(r.key, :black, :left, 8))
-			end
-		end
-		@with gdf scatter!(pl, $col_raw, $col_est, group = :model)
-		push!(pls, pl)
-	end
-	plot(pls..., layout = (1, 2), size = (800, 400), legend = :topleft, format = :png,
-		bottom_margin = 5Plots.mm, left_margin = 5Plots.mm,
-	)
-end
-
 function get_model_names()
 	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
 		model_ZeroInfPoissonLomax]
@@ -321,7 +297,6 @@ function plot_bar_waic_pretty(df_obs::DataFrame, df_res::DataFrame, df_EVI::Data
 	table_styl_annotate!(pls[1], grp_cate, "Group\ncontacts", x_base + 2*dx; dy = dy)
 	table_styl_annotate!(pls[1], df_ana[:, :n_sample], "Sample\nsize", x_base + 3*dx; dy = dy)
 	df_tmp = copy(df_ana)
-	df_tmp[!, :key] = replace(df_tmp[:, :key], "CoMix2" => "CoMix2 All")
 	clean_key_names!(df_tmp)
 	table_styl_annotate!(pls[1], df_tmp[:, :key], "Study", x_base + 4*dx - 33)
 	plot!(pls[1], left_margin = 80Plots.mm)
