@@ -7,6 +7,7 @@ using Dates
 using Distributions
 using Glob
 using GLM
+using Images
 using JLD2
 using LaTeXStrings
 using LinearAlgebra
@@ -24,6 +25,7 @@ using SpecialFunctions
 using StatsBase
 using StatsPlots
 using StringEncodings
+using Test
 using XLSX
 
 # Turing related packages
@@ -38,3 +40,4 @@ include("degree_dist.jl")
 include("turing_utils.jl")
 include("turing_models.jl")
 include("fit_utils.jl")
+include("plot_utils.jl")

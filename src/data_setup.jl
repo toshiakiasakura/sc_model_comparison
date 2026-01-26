@@ -561,62 +561,6 @@ function stacked_bar_cate(df_dds)
 	plot!(pl, xlabel="Number of answers", ylabel= "Number of survey")
 end
 
-function plot_all_deg_and_separate_subplots(df_dds)
-    keys = ["CoMix UK", "CoMix2", "Danon 2013 (paper)", "Willem 2012", "Grijalva 2015"]
-    df_dds_tmp = @subset(df_dds, in.(:key, Ref(keys)), :strat .== "non-home")
-
-    xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
-    pl = plot(; xaxis = :log10, ylim = [-5, 0], xlim=[1, 10_000], xticks = xtk)
-    for k in keys
-        dd = @subset(df_dds_tmp, :key .== k) |> DegreeDist
-        plot_ccdf!(pl, dd; label=k, markersize=2.5, markerstrokewidth = 0.0)
-    end
-	annotate!(pl, (-0.12, 1.03), text("A", :black, 16, "Helvetica"))
-    #pl = plot_ccdf_across_survey(df_dds_tmp; xtick = xtk)
-    pl1 = plot_all_hm_nhm(df_dds, "CoMix UK"; panel_name="B")
-    pl2 = plot_all_hm_nhm(df_dds, "CoMix2"; panel_name="C")
-    pl3 = plot_all_hm_nhm(df_dds, "Grijalva 2015"; panel_name="D")
-    pl4 = plot_all_hm_nhm(df_dds, "Willem 2012"; panel_name="E")
-    pl5 = plot_all_hm_nhm(df_dds, "Danon 2013 (paper)"; panel_name="F")
-
-    xlabel = "Number of contacts per day"
-    plot!(pl, ylabel = "CCDF")
-    plot!(pl3, ylabel = "CCDF", xlabel = xlabel)
-    plot!(pl4, xlabel = xlabel)
-    plot!(pl5, xlabel = xlabel)
-
-    pls = [pl, pl1, pl2, pl3, pl4, pl5]
-    h = []
-    layout = @layout [a{0.66w, 0.66h} [b; c]; [d e] f]
-    plot(pls..., layout = layout,
-        size = (800, 800),
-		right_margin = 5Plots.mm, top_margin=5Plots.mm,
-        dpi=300)
-end
-
-function plot_all_hm_nhm(df_dds::DataFrame, key::String; panel_name = "", color = 1, kwds...)
-	df_tmp = @subset(df_dds, :key .== key)
-	dd_all = @subset(df_tmp, :strat .== "all") |> DegreeDist
-	dd_hm = @subset(df_tmp, :strat .== "home") |> DegreeDist
-	dd_nhm = @subset(df_tmp, :strat .== "non-home") |> DegreeDist;
-
-	pl = plot(;
-		xaxis = :log10, size = (500, 500),
-		xlim = [1, 100], ylim = [-1.5, 0.1],
-		legend = (0.1, 0.2),
-		xticks = ([1, 10, 100], [L"1", L"10", L"10^{2}"]),
-	)
-	kwds1 = (markersize = 2.5, markerstrokewidth = 0, lw = 1.5, ytk_digit=2)
-	kwds2 = (markersize = 2.5, markerstrokewidth = 0, ytk_digit=2)
-	plot_ccdf!(pl, dd_all; color = 14, ls = :solid, label = "All", kwds1...)
-	plot_ccdf!(pl, dd_hm; color = 9, ls = :solid, label = "Home", kwds2...)
-	plot_ccdf!(pl, dd_nhm; color = 16, ls = :solid, label = "Non-Home", kwds2...)
-	annotate!(pl, (0.8, 0.9), text(key, :black, 10, "Helvetica"))
-	annotate!(pl, (-0.10, 1.08), text(panel_name, :black, 16, "Helvetica"))
-	plot!(pl; kwds...)
-	pl
-end
-
 function clean_survey_key_names!(df_dds::DataFrame)
 	df_dds[!, :key] = replace(df_dds[:, :key], "CoMix2" => "CoMix2 All")
 	@transform!(df_dds, :key = replace.(:key,
