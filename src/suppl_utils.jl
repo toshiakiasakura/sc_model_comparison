@@ -99,7 +99,7 @@ function plot_validation_est_vs_pc_error(df_pos::DataFrame;
 	end
     plot!(pls[1], left_margin=10Plots.mm, top_margin=5Plots.mm)
     plot!(pls[2], right_margin=10Plots.mm)
-    pos = (-0.1, 1.05)
+    pos = (-0.1, 1.07)
     annotate!(pls[1], pos, text("A", :left, 18, "Helvetica"))
     annotate!(pls[2], pos, text("B", :left, 18, "Helvetica"))
 	plot(pls..., layout = (1, 2), size = (800, 500), legend = :topright, format = :png)
@@ -151,7 +151,7 @@ function plot_validation_sample_vs_estimated(df_pos::DataFrame;
     end
     plot!(pls[1], left_margin=10Plots.mm, top_margin=5Plots.mm)
     plot!(pls[2], right_margin=10Plots.mm)
-    pos = (-0.1, 1.05)
+    pos = (-0.1, 1.07)
     annotate!(pls[1], pos, text("A", :left, 18, "Helvetica"))
     annotate!(pls[2], pos, text("B", :left, 18, "Helvetica"))
     plot(pls..., layout = (1, 2), size = (800, 500), legend = :topleft, format = :png)
