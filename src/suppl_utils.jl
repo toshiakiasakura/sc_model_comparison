@@ -1,5 +1,5 @@
 
-function read_master_with_fit_summary()
+function read_master_with_fit_summary(; update_data = false)
 	df_dds = CSV.read("../dt_surveys_master/master_dds.csv", DataFrame);
 	df_obs = @pipe groupby(df_dds, [:key, :strat]) |>
 				   combine(_, :y => sum => :n_answer);
@@ -13,8 +13,11 @@ function read_master_with_fit_summary()
 		end
 		CSV.write("../dt_intermediate/fit_summary.csv", df_sum)
 	end
-	# Note: use this function if data is updated.
-	# summarise_data()
+
+    if update_data == true
+        # summarise_data()
+    end
+
 	df_sum = CSV.read("../dt_intermediate/fit_summary.csv", DataFrame)
     df_res = clean_df_res_dataframe(df_sum)
 	return df_res

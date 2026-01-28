@@ -1,4 +1,3 @@
-
 #####################################
 ##### Post-processing functions #####
 #####################################
@@ -125,9 +124,11 @@ end
 #################################
 ##### EVI related functions #####
 #################################
-function read_EVI_summary(df_n_obs)
+function read_EVI_summary(df_n_obs; filter_quantile = false)
 	df_EVI = CSV.read("../dt_intermediate/EVI_summary.csv", DataFrame)
-	df_EVI = @subset(df_EVI, :q .== 0.98)
+	if filter_quantile == true
+		df_EVI = @subset(df_EVI, :q .== 0.98)
+	end
 	df_EVI = @pipe leftjoin(df_EVI, df_n_obs, on = :key) |>
 				   sort(_, :n_answer; rev = false)
 	@transform!(df_EVI, :m_l = :mean - :lower, :m_u = :upper - :mean)
@@ -202,6 +203,79 @@ function table_styl_annotate!(
 	for (i, lbl) in enumerate(labels)
 		annotate!(pl, x_pos, i, text(lbl, :black, :left, :centre, 8, "Helvetica"))
 	end
+end
+
+function plot_EVI_forest_multi_q(df_EVI::DataFrame;
+    col_ytick = :key, title = "", show_yticks = true)
+
+    qs = sort(unique(df_EVI.q))
+    df_plot = @subset(df_EVI, :q .∈ Ref(qs))
+
+    # Get unique keys and prepare spacing
+    keys_unique = unique(df_plot.key)
+    n_keys = length(keys_unique)
+    n_q = length(qs)
+
+    # Calculate y positions: each key gets n_q positions with spacing
+    y_spacing = 1.0  # spacing between different q within same key
+    row_height = n_q * y_spacing + 0.5  # total height per key including gap
+
+    @transform!(df_plot, :m_l = :mean - :lower, :m_u = :upper - :mean)
+
+    # Create y-axis positions
+    ylim = [0.0, n_keys * row_height + 0.5]
+    ytick_positions = Float64[]
+    ytick_labels = String[]
+
+    pl = plot(ylim = ylim,
+        title = title,
+        ytickfontsize = 8,
+        xlabel = "Extreme value index",
+        legend = :topright,
+    )
+
+    colors = [RGB(0.0, 0.45, 0.70), RGB(0.90, 0.62, 0.0), RGB(0.0, 0.62, 0.45),
+              RGB(0.80, 0.47, 0.65), RGB(0.34, 0.71, 0.91)]
+    markers = [:circle, :square, :diamond, :utriangle, :dtriangle]
+
+    for (q_idx, q_val) in enumerate(qs)
+        df_q = @subset(df_plot, :q .== q_val)
+        sort!(df_q, order(:key, by = x -> findfirst(==(x), keys_unique)))
+        y_positions = [(findfirst(==(k), keys_unique) - 1) * row_height + 1 + (q_idx - 1) * y_spacing
+                       for k in df_q.key]
+
+        scatter!(pl, df_q.mean, y_positions,
+            xerr = (df_q.m_l, df_q.m_u),
+            label = "q = $q_val",
+            color = colors[mod1(q_idx, length(colors))],
+            marker = markers[mod1(q_idx, length(markers))],
+            markerstrokewidth = 0.4,
+            markersize = 3)
+    end
+    # Set y-axis ticks at the center of each key's group
+    for (i, key) in enumerate(keys_unique)
+        y_center = (i - 1) * row_height + 1 + (n_q - 1) * y_spacing / 2
+        push!(ytick_positions, y_center)
+        if show_yticks
+            push!(ytick_labels, string(key))
+        else
+            push!(ytick_labels, "")
+        end
+    end
+
+    plot!(pl, yticks = (ytick_positions, ytick_labels))
+    vline!(pl, [0], colour = :black, linestyle = :dash, label = "")
+    return pl
+end
+
+function plot_EVI_sensitivity_qs(df_EVI)
+	clean_survey_key_names!(df_EVI)
+	df_EVI_ana = @subset(df_EVI, @byrow (:key in rem_lis) == false);
+	df_EVI_hm = @subset(df_EVI_ana, :strat .== "home");
+	df_EVI_nhm = @subset(df_EVI_ana, :strat .== "non-home");
+	pl_nhm = plot_EVI_forest_multi_q(df_EVI_nhm, title = "Non-home contacts")
+	pl_hm = plot_EVI_forest_multi_q(df_EVI_hm, show_yticks=false, title = "Home contacts")
+	pl = plot(pl_nhm, pl_hm, size=(600,650), dpi = 300)
 end
 
 #############################################
@@ -362,11 +436,6 @@ function plot_bar_waic(df_obs, df_res; ytk = nothing, df_EVI = nothing)
 		plot!(pl4, left_margin = adj_m)
 
 		return [pl2, pl4, pl1, pl3]
-		# layout = @layout [a b c d]
-		#return plot(pl1, pl3, pl2, pl4, layout = layout,
-		#	right_margin = 10Plots.mm, size = (1000, 600),
-		#	dpi = 200, fig = :png,
-		#)
 	end
 end
 
@@ -598,4 +667,34 @@ function plot_pdf_ccdf_validate(key)
 	pl3 = plot_pdf_validate(key, "non-home")
 	pl4 = plot_ccdf_validate(key, "non-home")
 	plot(pl1, pl2, pl3, pl4, layout = (2, 2), size = (800, 800), title = key)
+end
+
+function plot_ccdf_poisson_lomax!(
+	pl::Plots.Plot, key::String, strat::String, label::String, color=:black)
+    res = load("../dt_intermediate/$(key)_chns.jld2")["result"]
+    dd = res["dds"][strat]
+    plot_ccdf!(pl, dd, label = label,
+        color = color,
+        markersize = 2.5,
+        markerstrokewidth = 0.0)
+
+    # Plot fitted ZeroInf-PoissonLomax
+    d = get_ZeroInfDist(res["chns_$(strat)"]["ZeroInfPoissonLomax"], "ZeroInfPoissonLomax")
+    plot_ccdf!(pl, d,
+        label = "",
+        color = color,
+        linewidth = 1,
+        linestyle = :dash)
+
+    return pl
+end
+
+function plot_multi_ccdf_poisson_lomax(keys_; kwds...)
+	pl = plot(; xlim=[1, 10_000], ylim=[-4, 0], kwds...)
+	for (i, k) in enumerate(keys_)
+		label = replace(k, "_" => " ") |> transform_comix2
+		plot_ccdf_poisson_lomax!(pl, k, "non-home", label, i)
+	end
+	return pl
+
 end

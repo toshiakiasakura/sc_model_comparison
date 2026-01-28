@@ -22,7 +22,7 @@ end
 @memoize function Distributions.ccdf(
     d::PoissonMixture,
     k::Int64;
-    k_max=10_000
+    k_max=20_000
 )
     if k > k_max
         error("Increase k_max")
