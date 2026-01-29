@@ -22,17 +22,19 @@ end
 @memoize function Distributions.ccdf(
     d::PoissonMixture,
     k::Int64;
-    k_max=10_000
+    k_max=20_000
 )
     if k > k_max
         error("Increase k_max")
 	elseif k == k_max
 		return pdf(d, k)
 	else
-		return ccdf(d, k+1) + pdf(d, k)
+		return Distributions.ccdf(d, k+1; k_max=k_max) + pdf(d, k)
     end
 end
-#Distributions.logccdf(d::PoissonMixture, k::Int64; k_max=10_000) = log(ccdf(d, k; k_max=k_max))
+
+mean100(d::PoissonMixture) = sum(k * pdf(d, k) for k in 0:100)
+var100(d::PoissonMixture) = sum( (k-mean(d))^2 * pdf(d, k) for k in 0:100)
 
 ##### Negative Binomial distribution #####
 Distributions.mean(d::NegBin) = d.m

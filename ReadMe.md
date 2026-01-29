@@ -44,7 +44,6 @@ This software has been tested on:
 
 **Typical install time**: 10-15 minutes (depending on internet speed and container build)
 
-## Demo
 ## Instructions for Use
 ### Running the Full Analysis
 The analysis pipeline consists of several sequential steps:
