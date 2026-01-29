@@ -69,7 +69,7 @@ function get_ZeroInfDist(chn::Chains, key::String)
 	elseif key == "ZeroInfPoissonLomax"
 		return get_ZeroInfPoissonLomax(chn)
 	else
-		error("not applicable: ", model_name)
+		error("not applicable: ", key)
 	end
 end
 
