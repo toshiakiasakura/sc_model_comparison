@@ -592,37 +592,6 @@ function plot_all_deg_and_separate_subplots(df_dds)
         dpi=200)
 end
 
-function plot_all_deg_and_separate_subplots(df_dds)
-    keys = ["CoMix UK", "CoMix2", "Leon 2013 (paper)", "Willem 2012", "Grijalva 2015"]
-    df_dds_tmp = @subset(df_dds, in.(:key, Ref(keys)), :strat .== "non-home")
-
-    xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
-    pl = plot(; xaxis = :log10, ylim = [-5, 0], xlim=[1, 10_000], xticks = xtk)
-    for k in keys
-        dd = @subset(df_dds_tmp, :key .== k) |> DegreeDist
-        plot_ccdf!(pl, dd; label=k, markersize=2.5, markerstrokewidth = 0.0)
-    end
-    #pl = plot_ccdf_across_survey(df_dds_tmp; xtick = xtk)
-    pl1 = plot_all_hm_nhm(df_dds, "CoMix UK")
-    pl2 = plot_all_hm_nhm(df_dds, "CoMix2")
-    pl3 = plot_all_hm_nhm(df_dds, "Grijalva 2015")
-    pl4 = plot_all_hm_nhm(df_dds, "Willem 2012")
-    pl5 = plot_all_hm_nhm(df_dds, "Leon 2013 (paper)")
-
-    xlabel = "Number of contacts per day"
-    plot!(pl, ylabel = "CCDF")
-    plot!(pl3, ylabel = "CCDF", xlabel = xlabel)
-    plot!(pl4, xlabel = xlabel)
-    plot!(pl5, xlabel = xlabel)
-
-    pls = [pl, pl1, pl2, pl3, pl4, pl5]
-    h = []
-    layout = @layout [a{0.66w, 0.66h} [b; c]; [d e] f]
-    plot(pls..., layout = layout,
-        size = (800, 800), right_margin = 5Plots.mm,
-        dpi=200)
-end
-
 function plot_all_hm_nhm(df_dds::DataFrame, key::String; color = 1, kwds...)
 	df_tmp = @subset(df_dds, :key .== key)
 	dd_all = @subset(df_tmp, :strat .== "all") |> DegreeDist
