@@ -39,7 +39,7 @@ var100(d::PoissonMixture) = sum( (k-mean(d))^2 * pdf(d, k) for k in 0:100)
 ##### Negative Binomial distribution #####
 Distributions.mean(d::NegBin) = d.m
 Distributions.cov(d::NegBin) = sqrt(1/d.m + 1/d.m + 1/d.k)
-Distributions.var(d::NegBin) = d.m + d.m^2/d.k
+Distributions.var(d::NegBin) = d.m + d.m*(1+d.m/d.k)
 
 function Distributions.logpdf(d::NegBin, y::Int64)
 	return loggamma(d.k+y) - loggamma(d.k) - loggamma(y+1) +
@@ -141,5 +141,5 @@ function Distributions.logpdf(d::PoissonLomax, k::Int64)
 	int, err = quadgk(u -> integrand(u * k_tmp) * k_tmp, 1e-6, Inf, rtol = 1e-8)
 	return log(int)
 end
-Distributions.cdf(d::PoissonLomax, k::Int64)::Real = 1 - (1+k/d.θ)^(-d.α)
+Distributions.cdf(d::PoissonLomax, k::Int64)::Real = sum(pdf(d, i) for i in 0:k)
 
