@@ -367,6 +367,10 @@ function plot_WAIC_setting(df_dd, df_res)
     df_n_obs[:, :strat] .= "all"
     df_res_tmp = @transform(df_res, :key = :strat);
 
+    # Create df_tab_cum using helper function
+    model_names = get_model_names()
+    df_tab_cum = create_stacked_bar_weights(df_res_tmp, model_names, df_n_obs)
+
     labels_ = ["ZInf-NB", "ZInf-PLN", "ZInf-PLomax"]
     plot_stacked_bar(df_tab_cum, model_names;
         labels = labels_,
