@@ -3,7 +3,10 @@
     "allow": [
       "Bash(ls:*)",
       "Bash(wc:*)",
-      "Bash(git -C /mnt/c/Users/aflub/Desktop/prj_LSHTM_study/prj_sc_model_comparison log --oneline -15)"
+      "Bash(git -C /mnt/c/Users/aflub/Desktop/prj_LSHTM_study/prj_sc_model_comparison log --oneline -15)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh pr create:*)"
     ]
   }
 }
