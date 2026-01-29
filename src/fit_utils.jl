@@ -83,7 +83,7 @@ function calc_waic(dists::Vector{T}, dd::DegreeDist
 		lppd += lppd1 * dd.y[i]
 
 		p_waic1 = ll |> var
-		p_waic = p_waic1 * dd.y[i]
+		p_waic += p_waic1 * dd.y[i]
 	end
 	return -2 * (lppd - p_waic)
 end
