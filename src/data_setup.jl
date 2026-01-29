@@ -42,7 +42,7 @@ function remove_cnt_home_na(df::DataFrame, df_part::DataFrame)
 	ids_rem = df[.~cond, :part_id_d] |> unique
 	println("Number of removing ids: ", length(ids_rem))
 	ids_part = df_part[:, :part_id_d]
-	ids_incl = [id for id in ids_part if (ids_part in ids_rem) == false]
+	ids_incl = [id for id in ids_part if (id in ids_rem) == false]
 	df_part_clean = @subset(df_part, in.(:part_id_d, Ref(ids_incl)))
 	return df_clean, df_part_clean
 end
