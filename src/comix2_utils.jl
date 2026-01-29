@@ -195,6 +195,10 @@ end
 function fit_convoluted_dist(df_dds::DataFrame)
     dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
 
+    # Load fitted chains for priors
+    res = load("../dt_intermediate/CoMix2_chns.jld2")["result"]
+    model_names = get_model_names()
+
     chn_hm = res["chns_home"][model_names[2]]
     chn_nhm = res["chns_non-home"][model_names[3]]
     df_chn_hm = DataFrame(chn_hm);
