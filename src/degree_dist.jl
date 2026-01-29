@@ -82,11 +82,11 @@ end
 plot_ccdf!(pl::Plots.Plot, x::Vector{Int64}; kwds...) = plot_ccdf!(pl, DegreeDist(x); kwds...)
 
 function plot_ccdf(dd::DegreeDist; kwds...)::Plots.Plot
-	y_ccdf = obtain_ccdf(dh)
+	y_ccdf = obtain_ccdf(dd)
 	pl = plot(; xaxis = :log10, xlabel = "log10(k)", ylabel = "log10(ccdf(k))",
 		xlim = [1, 10000],
 	)
-	scatter!(pl, dh.x, log10.(y_ccdf); kwds...)
+	scatter!(pl, dd.x, log10.(y_ccdf); kwds...)
 	return pl
 end
 plot_ccdf(x::Vector{Int64}; kwds...)::Plots.Plot = plot_ccdf(DegreeDist(x); kwds...)
