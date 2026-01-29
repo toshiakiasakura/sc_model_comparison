@@ -141,5 +141,5 @@ function Distributions.logpdf(d::PoissonLomax, k::Int64)
 	int, err = quadgk(u -> integrand(u * k_tmp) * k_tmp, 1e-6, Inf, rtol = 1e-8)
 	return log(int)
 end
-Distributions.cdf(d::PoissonLomax, k::Int64)::Real = 1 - (1+k/d.θ)^(-d.α)
+Distributions.cdf(d::PoissonLomax, k::Int64)::Real = sum(pdf(d, i) for i in 0:k)
 
