@@ -285,6 +285,7 @@ function prep_fmnl_vars(df_res::DataFrame)
 	df_master = read_survey_master_data()
 	add_vis_cols_to_master!(df_master)
 	df_mas = @select(df_master, :key, :group_c, :mode, :cutoff_less90);
+	clean_survey_key_names!(df_mas)
 
 	df_res_nhm = @subset(df_res, :strat .== "non-home")
 	df_ana = prepare_ana_for_fmnl(df_res_nhm)
@@ -371,7 +372,6 @@ function plot_bar_waic_pretty(df_obs::DataFrame, df_res::DataFrame, df_EVI::Data
 	table_styl_annotate!(pls[1], grp_cate, "Group\ncontacts", x_base + 2*dx; dy = dy)
 	table_styl_annotate!(pls[1], df_ana[:, :n_sample], "Sample\nsize", x_base + 3*dx; dy = dy)
 	df_tmp = copy(df_ana)
-	clean_key_names!(df_tmp)
 	table_styl_annotate!(pls[1], df_tmp[:, :key], "Study", x_base + 4*dx - 33)
 	plot!(pls[1], left_margin = 80Plots.mm)
 
@@ -391,7 +391,6 @@ function plot_bar_waic(df_obs, df_res; ytk = nothing, df_EVI = nothing)
 	model_names = get_model_names()
 
 	tab_n_obs = unstack(df_obs, :key, :strat, :n_answer);
-	df_res = @transform(df_res, :key = replace.(:key, "CoMix_uk_internal" => "CoMix_uk"));
 
 	df_res_tmp = @subset(df_res, :strat .== "home")
 	df_tab_cum_hm = create_stacked_bar_weights(df_res_tmp, model_names, tab_n_obs;
