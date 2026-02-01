@@ -693,12 +693,20 @@ function plot_child_panels(df_dds, df_ana, res_EVI)
 
 	df_tab = unstack(df_ana, :key, :model, :weight_waic)
 	df_tab_cum = create_tab_cum(df_tab, model_names)[[2,1], :]
-	pl_bar = plot_stacked_bar(df_tab_cum, model_names)
-	plot!(pl_bar, left_margin = 5Plots.mm, right_margin=0Plots.mm)
+	pl_bar = plot_stacked_bar(df_tab_cum, model_names;
+		legend=(-0.3, -0.40),
+		legend_columns = 3,
+        labels = model_abbr |> values |> collect
+		)
+	ytk = ([2, 1], ["Home", "Non-home"])
+	plot!(pl_bar,
+		left_margin = 5Plots.mm, right_margin=0Plots.mm,
+		bottom_margin=10Plots.mm,
+		yticks=ytk)
 
 	pl_EVI = plot_EVI_across_surveys(res_EVI[[2,1], :];
 		title="")
-	plot!(pl_EVI, ytickfontsize=10)
+	plot!(pl_EVI, ytickfontsize=10, yticks=ytk)
 
 	pos = (-0.5, 0.98)
 	annotate!(pl_bar, pos, text("B", :left, 17, "Helvetica"))
