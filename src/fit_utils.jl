@@ -56,6 +56,10 @@ function summarise_res_one_strat(res::Dict, strat, key)
 	return df_tmp
 end
 
+"""
+Note:
+See `read_master_with_fit_summary` for creating a sequences of data.
+"""
 function create_summary_stat_one_data(key)
 	path = "../dt_intermediate/$(key)_chns.jld2"
 	if isfile(path) == false
@@ -87,16 +91,19 @@ function calc_waic(dists::Vector{T}, dd::DegreeDist
 	return -2 * (lppd - p_waic)
 end
 
-function calc_waic_weights(df_waic::DataFrame, model_names::Vector)
-	mat_w = df_waic[:, model_names] |> Matrix
-	mat_w = mat_w .- minimum(mat_w, dims = 2)
-	mat_w = exp.(-0.5 .* mat_w)
-	mat_w = mat_w ./ sum(mat_w, dims = 2)
-	df_w = DataFrame(mat_w, model_names)
-	df_w[!, :n_answer] = df_waic.n_answer;
-	return df_w
-end
+# TODO: delete it.
+#function calc_waic_weights(df_waic::DataFrame, model_names::Vector)
+#	mat_w = df_waic[:, model_names] |> Matrix
+#	mat_w = mat_w .- minimum(mat_w, dims = 2)
+#	mat_w = exp.(-0.5 .* mat_w)
+#	mat_w = mat_w ./ sum(mat_w, dims = 2)
+#	df_w = DataFrame(mat_w, model_names)
+#	df_w[!, :n_answer] = df_waic.n_answer;
+#	return df_w
+#end
 
+"""Add waic_weight for data frame.
+"""
 function flag_minimum_IC(df_res::DataFrame, ic::Symbol)::DataFrame
 	f_ic = Symbol("fmin_$(ic)")
 	weight_ic = Symbol("weight_$(ic)")
@@ -307,7 +314,6 @@ function prep_fmnl_vars(df_res::DataFrame)
 end
 
 function prepare_ana_for_fmnl(df_mer_nh)
-	df_mer_nh_uni = unique(df_mer_nh, [:key])
 	df_ana = unstack(df_mer_nh, :key, :model, :weight_waic)
 	df_ana = leftjoin(df_ana,
 		unique(df_mer_nh, [:key])[:, [:key, :n_sample]],

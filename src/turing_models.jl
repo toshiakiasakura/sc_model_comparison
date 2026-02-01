@@ -110,6 +110,7 @@ Args:
 - df_ana: DataFrame after `prepare_ana_for_fmnl`
 """
 function one_hot_encoding_multi_vars(df_ana::DataFrame)
+	model_names = get_model_names()
 	df_ana[:, :y_dummy] .= 1
 	f = @formula(y_dummy ~  1 + log10(n_sample) + group_c + mode_cate + cutoff_less90)
 	f = apply_schema(f, schema(f, df_ana))

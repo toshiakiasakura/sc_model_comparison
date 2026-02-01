@@ -407,6 +407,161 @@ function fit_CoMix2_all()
 	return res
 end
 
+###############################
+##### Sample size effect ######
+###############################
+
+"""
+Note:
+See `create_summary_stat_one_data` for a similar function.
+"""
+function create_summary_stat_bootstrap()
+	paths = glob("../dt_intermediate_bootstrap/*.jld2")
+
+	df_all = DataFrame()
+	for path in paths
+		println("Processing: ", path)
+		m = match(r"comix2_(\d+)samples_(\d+)repeat", path)
+		if m === nothing
+			continue
+		end
+		sample_size = parse(Int, m.captures[1])
+		n_repeat = parse(Int, m.captures[2])
+
+		# Load the bootstrap results
+		res_mer = load(path)["result"]
+		# Process each bootstrap iteration
+		for (i, res) in enumerate(res_mer)
+			for strat in ["home", "non-home"]
+				df_tmp = summarise_res_one_strat(res, strat, "CoMix2_bootstrap")
+				df_tmp[!, :sample_size] .= sample_size
+				df_tmp[!, :iteration] .= i
+				df_all = vcat(df_all, df_tmp)
+			end
+		end
+	end
+	return df_all
+end
+
+function obtain_spline_basis(logX; df = 4)
+	@rput logX df
+	R"""
+	library(splines)
+	spline_basis <- ns(logX, df=df)
+	"""
+	@rget spline_basis
+	return spline_basis
+end
+
+function predict_spline(old_logX, new_logX, df = 4)
+	@rput old_logX new_logX df
+	R"""
+	library(splines)
+	require(stats)
+	spline_basis <- ns(logX, df=df)
+	new_spline <- predict(spline_basis, new_logX)
+	"""
+	@rget new_spline
+	return new_spline
+end
+
+function create_spline_basis_sample_size(df_ana::DataFrame; df = 3)
+	logX = log10.(df_ana[:, :n_sample])
+	spline_basis = obtain_spline_basis(logX; df = df)
+	X = hcat(ones(length(logX)), spline_basis)
+	return (X, logX)
+end
+
+function pred_fmnl_sample_size(chn::Chains, original_logX::Vector{Float64};
+	sample_sizes = exp10.(range(log10(90), log10(100_000), length=50)),
+	df = 4)
+
+	n_pred = length(sample_sizes)
+	new_logX = log10.(sample_sizes)
+
+	# Create predictor matrix: intercept + spline basis
+	spline_pred = predict_spline(original_logX, new_logX, df)
+	X_pred = hcat(ones(n_pred), spline_pred)
+	n_x = size(X_pred, 2)
+
+	β1_med, β2_med = get_β_med(chn, n_x)
+	pred_probs = calculate_fmnl_probs(X_pred, β1_med, β2_med)
+
+	df_pred = DataFrame(
+		logX = new_logX,
+		sample_size = sample_sizes
+	)
+	df_pred[!, :y1] = pred_probs[:, 1]
+	df_pred[!, :y2] = pred_probs[:, 2]
+	df_pred[!, :y3] = pred_probs[:, 3]
+	return df_pred
+end
+
+function fit_pred_df_sample_size_empirical(df_res::DataFrame, DF::Int64)
+	df_ana = prep_fmnl_vars(df_res);
+	# Create spline basis for sample size
+	X_spline, logX_original = create_spline_basis_sample_size(df_ana; df = DF)
+	pred, Y, x_names = one_hot_encoding_multi_vars(df_ana);
+	chn1 = sample(model_fmnl(X_spline, Y), NUTS(), 2000; progress = false)
+	df_pred = pred_fmnl_sample_size(chn1, logX_original; df = DF);
+	return df_pred
+end
+
+"""
+Note:
+- Data is from `../dt_intermediate_bootstrap/comix2_waic_weights.csv`
+"""
+function fit_pred_df_sample_size_boot(df_boot, DF)
+	df_boot_tab = unstack(df_boot, :key, :model, :weight_waic)
+	df_boot_tab = leftjoin(df_boot_tab,
+		unique(df_boot[:, [:key, :sample_size]]), on=:key)
+
+	logX_original = log10.(df_boot_tab[:, :sample_size])
+	X_spline = obtain_spline_basis(logX_original; df=DF)
+	X_spline = hcat(ones(length(logX_original)), X_spline)
+	Y = df_boot_tab[:, 2:4] |> Matrix
+	chn2 = sample(model_fmnl(X_spline, Y), NUTS(), 2000; progress = false)
+	df_pred_boot = pred_fmnl_sample_size(chn2, logX_original; df=DF);
+	return df_pred_boot
+end
+
+function plot_sample_size_and_best_model(df_pred, df_mer_nh, df_pred_boot, df_boot)
+	xticks_ = ([1, 2, 3, 4, 5], ["10", "100", "1000", "10,000", "100,000"])
+	pl1 = plot(xlabel = "", ylabel = "WAIC weight",
+		xticks = xticks_, legend=(0.8, 0.5))
+	colors = [7, 6, 13]
+	colors_reshape = reshape(colors, 1, :)
+	model_names = get_model_names()
+	for i in 1:3
+		plot!(pl1, df_pred[:, :logX], df_pred[:, Symbol("y$(i)")],
+			label = model_abbr[model_names[i]],
+			color = colors[i], lw = 2.0)
+	end
+	@with df_mer_nh scatter!(pl1, log10.(:n_sample), :weight_waic, group = :model_abbr,
+		colour = colors_reshape, label = "",
+		markerstrokewidth=0.4)
+
+	pl2 = plot(xlabel = "sample size", ylabel = "WAIC weight",
+		xticks = xticks_, legend = nothing)
+	for i in 1:3
+		model_name = model_names[i]
+		plot!(pl2, df_pred_boot[:, :logX], df_pred_boot[:, Symbol("y$(i)")],
+			label = "$(model_name), bootstrap",
+			color = colors[i], lw = 2)
+	end
+	# Add jitter to x-positions for each model to avoid overlap
+	offset_scale = 0.05
+	for (i, model_name) in enumerate(model_names)
+		df_model = @subset(df_boot, :model .== model_name)
+		offset = (i - 2) * offset_scale
+		scatter!(pl2, log10.(df_model[:, :n_sample]) .+ offset, df_model[:, :weight_waic],
+			color = colors[i], label = "", alpha = 0.4,
+			markersize = 3, markerstrokewidth = 0.4)
+	end
+
+	plot(pl1, pl2, layout = (2, 1), size = (600, 500))
+end
+
 ######################################
 ###### Setting specific analysis #####
 ######################################
