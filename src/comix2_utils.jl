@@ -562,6 +562,152 @@ function plot_sample_size_and_best_model(df_pred, df_mer_nh, df_pred_boot, df_bo
 	plot(pl1, pl2, layout = (2, 1), size = (600, 500))
 end
 
+#################################################
+###### Age- and sex-disaggregated analaysis #####
+#################################################
+
+function read_clean_comix2_age_sex_stratified()
+	df, df_part = read_comix2_df_and_df_part();
+	clean_age_bins!(df_part; age_col = :part_age)
+	add_sampled_ages!(df_part; age_col = :part_age, new_col = :part_age_cont)
+	add_age_groups!(df_part; age_col=:part_age_cont, new_col = :part_age_grp)
+	df = innerjoin(df, df_part, on = :part_id);
+	standardise_cnt_home_values!(df);
+	@rename!(df, :part_id_d = :part_id)
+	return(df, df_part)
+end
+
+function sample_age_from_bin(age_bin::AbstractString)
+	# Parse regular bins like "18-29"
+	parts = split(age_bin, "-")
+	if length(parts) == 2
+		lower = parse(Int, strip(parts[1]))
+		upper = parse(Int, strip(parts[2]))
+		return rand(lower:upper)
+	end
+	return parse(Int, age_bin)
+end
+
+function add_sampled_ages!(df::DataFrame; age_col = :part_age, new_col = :part_age_cont)
+	@transform!(df,
+		$new_col = sample_age_from_bin.(df[:, age_col]));
+end
+
+function clean_age_bins!(df::DataFrame; age_col)
+	@subset!(df, @byrow !($(age_col) ∈ ["NA", "Prefer not to answer"]))
+	@transform!(df,
+		$age_col = replace.(
+			df[:, age_col],
+			"Under 1" => "0-0",
+		)
+	);
+end
+
+function add_age_groups!(df::DataFrame; age_col = :part_age_cont, new_col = :part_age_grp)
+	breaks = [0, 18, 30, 40, 50, 60, 70, 121]
+	labels = ["0-17", "18-29", "30-39", "40-49", "50-59", "60-69", "70-120"]
+	df[!, new_col] = cut(df[:, age_col], breaks; labels = labels);
+	nothing
+end
+
+function create_stratified_dds(df::DataFrame; key=:part_age_grp)
+	df_adult_deg = degree_dist_for_all_home_non_home(df; key=key);
+	gdf = groupby(df_adult_deg, key)
+	dds_dic = Dict("home" => Dict(), "non-home" => Dict())
+	for (k, g) in zip(keys(gdf), gdf)
+		k = string(k[1])
+		g_hm = @subset(g, :strat .== "home")
+		g_nhm = @subset(g, :strat .== "non-home")
+		dds_dic["home"][k] = DegreeDist(g_hm[:, :cnt]; include_zero=false)
+		dds_dic["non-home"][k] = DegreeDist(g_nhm[:, :cnt]; include_zero=false)
+	end
+	return dds_dic
+end
+
+function plot_age_sex_hm_nhm_degree(df::DataFrame)
+	dds_age = create_stratified_dds(df; key=:part_age_grp)
+	dds_gender = create_stratified_dds(df; key=:part_gender)
+	age_keys = keys(dds_age["home"]) |> collect |> sort
+	gender_keys = keys(dds_gender["home"]) |> collect
+
+	xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
+	kwds = (xaxis = :log10, ylim = [-5, 0.1], xlim=[1, 10_000], xticks = xtk,
+		xtickfontsize=9, ytickfontsize=9)
+	ccdf_kwds = (markersize=1.2, markerstrokewidth = 0.0, linewidth=0.5)
+
+	# Age
+	pl_age_hm = plot(;legendtitle="Age", ylabel="CCDF", title="Home",
+		left_margin=5Plots.mm, top_margin=2Plots.mm, kwds...)
+	pl_age_nhm = plot(;legendtitle="Age", title="Non-home",
+		legend=(0.15, 0.6), kwds...)
+	for k in age_keys
+		plot_ccdf!(pl_age_hm, dds_age["home"][k]; label=k, ccdf_kwds...)
+		plot_ccdf!(pl_age_nhm, dds_age["non-home"][k]; label=k, ccdf_kwds...)
+	end
+
+	# Gender
+	pl_gender_hm = plot(;legendtitle="Gender",
+		xlabel="Number of contacts per day", ylabel="CCDF", kwds...)
+	pl_gender_nhm = plot(;legendtitle="Gender",
+		xlabel="Number of contacts per day", kwds...)
+	for k in gender_keys
+		plot_ccdf!(pl_gender_hm, dds_gender["home"][k]; label=k, ccdf_kwds...)
+		plot_ccdf!(pl_gender_nhm, dds_gender["non-home"][k]; label=k, ccdf_kwds...)
+	end
+
+	pos = (-0.1, 1.12)
+	annotate!(pl_age_hm, pos, text("A", :left, 12, "Helvetica"))
+	annotate!(pl_age_nhm, pos, text("B", :left, 12, "Helvetica"))
+	annotate!(pl_gender_hm, pos, text("C", :left, 12, "Helvetica"))
+	annotate!(pl_gender_nhm, pos, text("D", :left, 12, "Helvetica"))
+	return plot(pl_age_hm, pl_age_nhm, pl_gender_hm, pl_gender_nhm,
+		layout=(2,2), dpi=300, )
+end
+
+"""
+- `df_deg`: created from `degree_dist_for_all_home_non_home`
+"""
+function create_df_dds(df_deg::DataFrame, n_part::Int64)
+	df_dds = DataFrame()
+	for strat in ["all", "home", "non-home"]
+		df_tmp = @pipe @subset(df_deg, :strat .== strat)[:, :cnt] |>
+			DegreeDist(_, n_part) |>
+			dd_to_df |>
+			@transform(_, :strat = strat)
+		df_dds = vcat(df_dds, df_tmp)
+	end
+	df_dds[:, :key] .= "CoMix2 Child";
+	return(df_dds)
+end
+
+function plot_child_panels(df_dds, df_ana, res_EVI)
+	pl1 = plot_all_hm_nhm(df_dds , "CoMix2 Child";
+		panel_name="A", ytk_digit=6, annotate_disp=false)
+	xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
+	kwds = (xaxis = :log10, ylim = [-5, 0.1], xlim=[1, 10_000], xticks = xtk,
+		xtickfontsize=11, ytickfontsize=11, legendfontsize=10)
+	plot!(pl1; legend = (0.7, 0.8),
+		xlabel = "Number of contacts per day", ylabel="CCDF", kwds...)
+	pos = (-0.25, 0.98)
+	annotate!(pl1, pos, text("A", :left, 17, "Helvetica"))
+
+	df_tab = unstack(df_ana, :key, :model, :weight_waic)
+	df_tab_cum = create_tab_cum(df_tab, model_names)[[2,1], :]
+	pl_bar = plot_stacked_bar(df_tab_cum, model_names)
+	plot!(pl_bar, left_margin = 5Plots.mm, right_margin=0Plots.mm)
+
+	pl_EVI = plot_EVI_across_surveys(res_EVI[[2,1], :];
+		title="")
+	plot!(pl_EVI, ytickfontsize=10)
+
+	pos = (-0.5, 0.98)
+	annotate!(pl_bar, pos, text("B", :left, 17, "Helvetica"))
+	annotate!(pl_EVI, pos, text("C", :left, 17, "Helvetica"))
+
+	layout = @layout [a{0.6w} [b; c]]
+	return plot(pl1, pl_bar, pl_EVI, layout=layout)
+end
+
 ######################################
 ###### Setting specific analysis #####
 ######################################

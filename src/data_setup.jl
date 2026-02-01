@@ -72,18 +72,18 @@ function standardise_cnt_home_values!(df::DataFrame)
 	)
 end
 
-function degree_dist_for_all_home_non_home(df::DataFrame)
-	df_all = @pipe combine(@groupby(df, [:key, :part_id_d]), nrow => :cnt) |>
+function degree_dist_for_all_home_non_home(df::DataFrame; key=:key)
+	df_all = @pipe combine(@groupby(df, [key, :part_id_d]), nrow => :cnt) |>
 				   @transform(_, :strat = "all")
 	# Note: this removed missing in cnt_home.
 	if Set(df[:, :cnt_home]) != Set(["true", "false"])
 		println("cnt_home contains missing")
 	end
 	df_hm = @pipe @subset(df, :cnt_home .== "true") |>
-				  combine(@groupby(_, [:key, :part_id_d]), nrow => :cnt) |>
+				  combine(@groupby(_, [key, :part_id_d]), nrow => :cnt) |>
 				  @transform(_, :strat = "home")
 	df_nhm = @pipe @subset(df, :cnt_home .== "false") |>
-				   combine(@groupby(_, [:key, :part_id_d]), nrow => :cnt) |>
+				   combine(@groupby(_, [key, :part_id_d]), nrow => :cnt) |>
 				   @transform(_, :strat = "non-home")
 	return vcat(df_all, df_hm, df_nhm)
 end
@@ -477,12 +477,17 @@ end
 ##### CoMix2 data   #####
 #########################
 
-function read_comix2_dds()
+function read_comix2_df_and_df_part()
 	df_master = read_survey_master_data();
 	key = "CoMix2"
 	r_survey = @subset(df_master, :key .== key)[1, :];
 
 	df, df_part = read_raw_sc_data(r_survey);
+	return(df, df_part)
+end
+
+function read_comix2_dds()
+	df, df_part = read_comix2_df_and_df_part()
 	@transform!(df_part, :country = map(x -> x[1:2], :part_id));
 	df_part = filter_adult_cate(df_part; col = :part_age)
 	df = innerjoin(df, df_part, on = :part_id)
@@ -491,10 +496,7 @@ function read_comix2_dds()
 end
 
 function read_comix2_stratified_dds()
-	df_master = read_survey_master_data();
-	key = "CoMix2"
-	r_survey = @subset(df_master, :key .== key)[1, :];
-	df, df_part = read_raw_sc_data(r_survey);
+	df, df_part = read_comix2_df_and_df_part()
 	@transform!(df_part, :country = map(x -> x[1:2], :part_id));
 
 	df_dd_mer = DataFrame()
