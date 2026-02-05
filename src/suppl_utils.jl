@@ -229,9 +229,9 @@ end
 function plot_validation_PLN(df_res_PLN, μ_true, σ_true)
     df_p1 = unstack(df_res_PLN, :iter, :model, :param1)
     df_p2 = unstack(df_res_PLN, :iter, :model, :param2)
-    p1_max = (df_p1[:, :PLN_hierarchical] |> maximum) + 1
-    p2_max = (df_p2[:, :PLN_hierarchical] |> maximum) + 1
-    pl1 = plot(xlabel="", ylabel="Estimates from Numerical",
+    p1_max = (df_p1[:, :PLN_hierarchical] |> maximum) + 0.5
+    p2_max = (df_p2[:, :PLN_hierarchical] |> maximum) + 0.5
+    pl1 = plot(xlabel="", ylabel="Estimates from numerical",
         xlim=[0, p1_max], ylim=[0, p1_max])
     pl2 = plot(xlabel="",
         xlim=[0, p2_max], ylim=[0, p2_max])
@@ -239,13 +239,16 @@ function plot_validation_PLN(df_res_PLN, μ_true, σ_true)
     kwds_scatter = (markerstrokewidth= 0.5, legendfontsize=8)
     kwds_true = (ls=:dash, color=:green, label="")
     scatter!(pl1, df_p1[:, :PLN_hierarchical], df_p1[:, :PLN_numerical];
-        label="PLN: μ", kwds_scatter...)
+        label="", kwds_scatter...)
     plot!(pl1, [0.0, p1_max], [0.0, p1_max], ls=:solid, color=:black, label="")
     hv_plot!(pl1, μ_true; kwds_true...)
     scatter!(pl2, df_p2[:, :PLN_hierarchical], df_p2[:, :PLN_numerical];
-        label="PLN: σ", kwds_scatter...)
+        label="", kwds_scatter...)
     plot!(pl2, [0.0, p2_max], [0.0, p2_max], ls=:solid, color=:black, label="")
     hv_plot!(pl2, σ_true; kwds_true...)
+
+	annotate!(pl1, (0.1, 0.9), text("PLN: μ", :left, 10, "Helvetica"))
+	annotate!(pl2, (0.1, 0.9), text("PLN: σ", :left, 10, "Helvetica"))
     return (pl1, pl2)
 end
 
@@ -254,7 +257,7 @@ function plot_validation_PLomax(df_res_PLomax, α_true, β_true)
     df_p2 = unstack(df_res_PLomax, :iter, :model, :param2)
     p1_max = (df_p1[:, :PLomax_hierarchical] |> maximum) + 1
     p2_max = (df_p2[:, :PLomax_hierarchical] |> maximum) + 1
-    pl1 = plot(xlabel="Estimates from hierarchical", ylabel="Estimates from Numerical",
+    pl1 = plot(xlabel="Estimates from hierarchical", ylabel="Estimates from numerical",
         xlim=[0, p1_max], ylim=[0, p1_max])
     pl2 = plot(xlabel="Estimates from hierarchical",
         xlim=[0, p2_max], ylim=[0, p2_max])
@@ -262,12 +265,15 @@ function plot_validation_PLomax(df_res_PLomax, α_true, β_true)
     kwds_scatter = (markerstrokewidth= 0.5, legendfontsize=8)
     kwds_true = (ls=:dash, color=:green, label="")
     scatter!(pl1, df_p1[:, :PLomax_hierarchical], df_p1[:, :PLomax_numerical];
-        label="PLomax: α", kwds_scatter...)
+        label="", kwds_scatter...)
     plot!(pl1, [0.0, p1_max], [0.0, p1_max], ls=:solid, color=:black, label="")
     hv_plot!(pl1, α_true; kwds_true...)
     scatter!(pl2, df_p2[:, :PLomax_hierarchical], df_p2[:, :PLomax_numerical];
-        label="PLomax: β", kwds_scatter...)
+        label="", kwds_scatter...)
     plot!(pl2, [0.0, p2_max], [0.0, p2_max], ls=:solid, color=:black, label="")
     hv_plot!(pl2, β_true; kwds_true...)
+
+	annotate!(pl1, (0.1, 0.9), text("PLomax: α", :left, 10, "Helvetica"))
+	annotate!(pl2, (0.1, 0.9), text("PLomax: β", :left, 10, "Helvetica"))
     return (pl1, pl2)
 end
