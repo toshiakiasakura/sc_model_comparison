@@ -143,3 +143,27 @@ function Distributions.logpdf(d::PoissonLomax, k::Int64)
 end
 Distributions.cdf(d::PoissonLomax, k::Int64)::Real = sum(pdf(d, i) for i in 0:k)
 
+
+#####################################
+###### Mixture distributions ########
+#####################################
+struct Lomax <: ContinuousUnivariateDistribution
+	α::Real # shape
+	θ::Real # scale
+end
+Distributions.rand(d::Lomax) = (1 / rand() ^ (1/d.α) - 1) * d.θ
+Distributions.rand(rng::AbstractRNG, d::Lomax) = rand(rng)
+Distributions.minimum(d::Lomax) = 0.0
+Distributions.maximum(d::Lomax) = Inf
+
+function Distributions.logpdf(d::Lomax, x::Real)::Real
+	@unpack α, θ = d
+	if x < 0
+		return -Inf
+	else
+		return log(α) - log(θ) - (α+1)*log(1+x/θ)
+	end
+end
+Distributions.pdf(d::Lomax, x::Real) = exp(logpdf(d, x))
+Distributions.ccdf(d::Lomax, x::Real) = (1 + x/d.θ)^(-d.α)
+Distributions.cdf(d::Lomax, x::Real) = 1 - ccdf(d, x)

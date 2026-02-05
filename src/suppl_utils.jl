@@ -1,4 +1,3 @@
-
 function read_master_with_fit_summary(; update_data = false)
 	df_dds = CSV.read("../dt_surveys_master/master_dds.csv", DataFrame);
 	df_obs = @pipe groupby(df_dds, [:key, :strat]) |>
@@ -158,4 +157,117 @@ function plot_validation_sample_vs_estimated(df_pos::DataFrame;
     annotate!(pls[1], pos, text("A", :left, 18, "Helvetica"))
     annotate!(pls[2], pos, text("B", :left, 18, "Helvetica"))
     plot(pls..., layout = (1, 2), size = (800, 500), legend = :topleft, format = :png)
+end
+
+###########################################
+###### Validation of estimation methods ###
+###########################################
+
+function validation_PLN(d_true_PLN::PoissonLogNormal, n_sim)::DataFrame
+    df_res = Vector{DataFrame}(undef, 2 * n_sim)
+    Threads.@threads for ind in 1:n_sim
+        data = rand(d_true_PLN, 100)
+        # Hierarchical PoissonLogNormal
+        model = model_hierarchical_PoissonLogNormal(data)
+        chn = fit_model_with_forward_mode(model, 2000; progress=false)
+        μ_obs, log_σ = extract_chain_info(chn)[1:2, "mean"]
+        μ_ln, σ_ln = PoissonLogNormal_convert(μ_obs, log_σ)
+        df_res[2 * ind - 1] = DataFrame(
+            param1 = μ_ln, param2 = σ_ln,
+            model="PLN_hierarchical", iter=ind
+        )
+
+        # Numerical PoissonLogNormal
+        model = model_PoissonLogNormal(data |> DegreeDist)
+        chn = fit_model_with_forward_mode(model, 2000; progress=false)
+        μ_obs, log_σ = extract_chain_info(chn)[1:2, "mean"]
+        μ_ln, σ_ln = PoissonLogNormal_convert(μ_obs, log_σ)
+        df_res[2 * ind] = DataFrame(
+            param1 = μ_ln, param2 = σ_ln,
+            model="PLN_numerical", iter=ind
+        )
+    end
+    return vcat(df_res...)
+end
+
+function validation_PLomax(d_true_PLomax::PoissonLomax, n_sim;
+        n_sample=100)::DataFrame
+    df_res = Vector{DataFrame}(undef, 2 * n_sim)
+    Threads.@threads for ind in 1:n_sim
+        data = rand(d_true_PLomax, n_sample)
+
+        # Hierarchical PoissonLomax
+        model = model_hierarchical_PoissonLomax(data)
+        chn = fit_model_with_forward_mode(model, 2000; progress=false)
+        log_α, log_β = extract_chain_info(chn)[1:2, "mean"]
+        α = exp(log_α)
+        β = exp(log_β)
+        df_res[2 * ind - 1] = DataFrame(
+            param1 = α, param2 = β,
+            model="PLomax_hierarchical", iter=ind
+        )
+
+        # Numerical PoissonLomax
+        model = model_PoissonLomax(data |> DegreeDist)
+        chn = fit_model_with_forward_mode(model, 2000; progress=false)
+        log_α, log_β = extract_chain_info(chn)[1:2, "mean"]
+        α = exp(log_α)
+        β = exp(log_β)
+        df_res[2 * ind] = DataFrame(
+            param1 = α, param2 = β,
+            model="PLomax_numerical", iter=ind
+        )
+    end
+    return vcat(df_res...)
+end
+
+function hv_plot!(pl::Plots.Plot, v; kwds...)
+    plot!(pl, [0.0, v], [v, v]; kwds...)
+    plot!(pl, [v, v], [0.0, v]; kwds...)
+end
+
+function plot_validation_PLN(df_res_PLN, μ_true, σ_true)
+    df_p1 = unstack(df_res_PLN, :iter, :model, :param1)
+    df_p2 = unstack(df_res_PLN, :iter, :model, :param2)
+    p1_max = (df_p1[:, :PLN_hierarchical] |> maximum) + 1
+    p2_max = (df_p2[:, :PLN_hierarchical] |> maximum) + 1
+    pl1 = plot(xlabel="", ylabel="Estimates from Numerical",
+        xlim=[0, p1_max], ylim=[0, p1_max])
+    pl2 = plot(xlabel="",
+        xlim=[0, p2_max], ylim=[0, p2_max])
+
+    kwds_scatter = (markerstrokewidth= 0.5, legendfontsize=8)
+    kwds_true = (ls=:dash, color=:green, label="")
+    scatter!(pl1, df_p1[:, :PLN_hierarchical], df_p1[:, :PLN_numerical];
+        label="PLN: μ", kwds_scatter...)
+    plot!(pl1, [0.0, p1_max], [0.0, p1_max], ls=:solid, color=:black, label="")
+    hv_plot!(pl1, μ_true; kwds_true...)
+    scatter!(pl2, df_p2[:, :PLN_hierarchical], df_p2[:, :PLN_numerical];
+        label="PLN: σ", kwds_scatter...)
+    plot!(pl2, [0.0, p2_max], [0.0, p2_max], ls=:solid, color=:black, label="")
+    hv_plot!(pl2, σ_true; kwds_true...)
+    return (pl1, pl2)
+end
+
+function plot_validation_PLomax(df_res_PLomax, α_true, β_true)
+    df_p1 = unstack(df_res_PLomax, :iter, :model, :param1)
+    df_p2 = unstack(df_res_PLomax, :iter, :model, :param2)
+    p1_max = (df_p1[:, :PLomax_hierarchical] |> maximum) + 1
+    p2_max = (df_p2[:, :PLomax_hierarchical] |> maximum) + 1
+    pl1 = plot(xlabel="Estimates from hierarchical", ylabel="Estimates from Numerical",
+        xlim=[0, p1_max], ylim=[0, p1_max])
+    pl2 = plot(xlabel="Estimates from hierarchical",
+        xlim=[0, p2_max], ylim=[0, p2_max])
+
+    kwds_scatter = (markerstrokewidth= 0.5, legendfontsize=8)
+    kwds_true = (ls=:dash, color=:green, label="")
+    scatter!(pl1, df_p1[:, :PLomax_hierarchical], df_p1[:, :PLomax_numerical];
+        label="PLomax: α", kwds_scatter...)
+    plot!(pl1, [0.0, p1_max], [0.0, p1_max], ls=:solid, color=:black, label="")
+    hv_plot!(pl1, α_true; kwds_true...)
+    scatter!(pl2, df_p2[:, :PLomax_hierarchical], df_p2[:, :PLomax_numerical];
+        label="PLomax: β", kwds_scatter...)
+    plot!(pl2, [0.0, p2_max], [0.0, p2_max], ls=:solid, color=:black, label="")
+    hv_plot!(pl2, β_true; kwds_true...)
+    return (pl1, pl2)
 end

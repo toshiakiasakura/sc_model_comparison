@@ -701,5 +701,4 @@ function plot_multi_ccdf_poisson_lomax(keys_; kwds...)
 		plot_ccdf_poisson_lomax!(pl, k, "non-home", label, i)
 	end
 	return pl
-
 end
