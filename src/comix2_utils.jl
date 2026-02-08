@@ -316,7 +316,6 @@ function fit_convoluted_dist(df_dds::DataFrame)
 	model = model_ZeroInfConvDist(dd_all, dd_hm, prior_dic)
 	chn = sample(model, NUTS(), 2000; progress = true)
 	jldsave("../dt_intermediate/CoMix2_convoluted_chns.jld2", result = chn)
-
 end
 
 function plot_conv_fit()
