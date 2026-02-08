@@ -144,6 +144,108 @@ end
 Distributions.cdf(d::PoissonLomax, k::Int64)::Real = sum(pdf(d, i) for i in 0:k)
 
 
+###### Double Pareto lognormal (dPlN) continuous distribution #####
+# Reed & Jorgensen (2004)
+struct DPlN <: ContinuousUnivariateDistribution
+	α::Real # right tail exponent (controls upper power-law tail: x^{-α-1})
+	β::Real # left tail exponent (controls lower power-law tail: x^{β-1})
+	ν::Real # location (mode of lognormal body)
+	τ::Real # scale (std dev of lognormal body)
+end
+Distributions.minimum(d::DPlN) = 0.0
+Distributions.maximum(d::DPlN) = Inf
+
+function Distributions.logpdf(d::DPlN, x::Real)::Real
+	@unpack α, β, ν, τ = d
+	if x <= 0
+		return -Inf
+	end
+	logx = log(x)
+	log_common = log(α) + log(β) - log(α + β)
+	log_comp1 = log_common + (-α - 1) * logx + α * ν + α^2 * τ^2 / 2 +
+	            logcdf(Normal(), (logx - ν - α * τ^2) / τ)
+	log_comp2 = log_common + (β - 1) * logx - β * ν + β^2 * τ^2 / 2 +
+	            logcdf(Normal(), (logx - ν + β * τ^2) / τ)
+	return logaddexp(log_comp1, log_comp2)
+end
+Distributions.pdf(d::DPlN, x::Real) = exp(logpdf(d, x))
+
+function Distributions.rand(d::DPlN)
+	@unpack α, β, ν, τ = d
+	# Generative process: X = exp(Y - W1 + W2)
+	# where Y ~ N(ν,τ²), W1 ~ Exp(rate=α), W2 ~ Exp(rate=β)
+	Y = rand(Normal(ν, τ))
+	W1 = rand(Exponential(1 / α))
+	W2 = rand(Exponential(1 / β))
+	return exp(Y - W1 + W2)
+end
+
+function Distributions.mean(d::DPlN)
+	@unpack α, β, ν, τ = d
+	# E[X] = αβ/((α-1)(β+1)) * exp(ν + τ²/2) for α > 1
+	α > 1 ? α * β / ((α - 1) * (β + 1)) * exp(ν + τ^2 / 2) : NaN
+end
+
+###### Poisson-double Pareto lognormal distribution #####
+Base.@kwdef struct PoissonDPlN <: PoissonMixture
+	α::Real # right tail exponent
+	β::Real # left tail exponent
+	ν::Real # location
+	τ::Real # scale
+end
+
+function Distributions.mean(d::PoissonDPlN)
+	@unpack α, β, ν, τ = d
+	mean(DPlN(α, β, ν, τ))
+end
+
+function Distributions.var(d::PoissonDPlN)
+	@unpack α, β, ν, τ = d
+	# Var[K] = E[λ] + Var[λ] = E[λ] + E[λ²] - E[λ]²
+	# E[X^r] = αβ/((α-r)(β+r)) * exp(rν + r²τ²/2)
+	if α <= 1
+		return NaN
+	elseif α <= 2
+		return Inf
+	else
+		m1 = mean(d)
+		m2 = α * β / ((α - 2) * (β + 2)) * exp(2 * ν + 2 * τ^2)
+		return m1 + m2 - m1^2
+	end
+end
+
+function Distributions.cov(d::PoissonDPlN)
+	@unpack α, β, ν, τ = d
+	if α <= 1
+		return NaN
+	elseif α <= 2
+		return Inf
+	else
+		m1 = mean(d)
+		m2 = α * β / ((α - 2) * (β + 2)) * exp(2 * ν + 2 * τ^2)
+		return sqrt(1 / m1 + (m2 - m1^2) / m1^2)
+	end
+end
+
+function Distributions.rand(d::PoissonDPlN, n::Int64 = 1)
+	dpln = DPlN(d.α, d.β, d.ν, d.τ)
+	return [rand(Poisson(rand(dpln))) for _ in 1:n]
+end
+Distributions.rand(d::PoissonDPlN) = rand(d, 1)[1]
+
+function Distributions.logpdf(d::PoissonDPlN, k::Int64)
+	dpln = DPlN(d.α, d.β, d.ν, d.τ)
+	function integrand(λ)
+		l_int = k * log(λ) - λ - loggamma(k + 1) + logpdf(dpln, λ)
+		return exp(l_int)
+	end
+	# Avoid the integrand to be 0.
+	k_tmp = k == 0 ? 1 : k
+	int, err = quadgk(u -> integrand(u * k_tmp) * k_tmp, 1e-6, Inf, rtol = 1e-8)
+	return log(int)
+end
+Distributions.cdf(d::PoissonDPlN, k::Int64)::Real = sum(pdf(d, i) for i in 0:k)
+
 #####################################
 ###### Mixture distributions ########
 #####################################
