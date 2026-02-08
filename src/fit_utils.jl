@@ -38,7 +38,11 @@ function summarise_res_one_strat(res::Dict, strat, key)
 		mean_ = mean(dist)
 		mean_set = mean.(dists)
 		cond = isnan.(mean_set)
-		if any(cond) == true
+		if (any(cond) == true) & (all(cond) == true)
+			println("All NaN: $key, strat: $strat, model: $model_name")
+			mean_l = NaN
+			mean_u = NaN
+		elseif any(cond) == true
 			println("NaN presence: $key, strat: $strat, model: $model_name")
 			mean_l, mean_u = quantile(mean_set[.!cond], [0.025, 0.975])
 		else
