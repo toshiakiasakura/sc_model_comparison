@@ -71,6 +71,51 @@ end
 end
 
 
+###########################################
+###### Validation of estimation methods ###
+###########################################
+@model function model_PoissonLogNormal(dd::DegreeDist)
+	μ_obs_ln ~ Normal(0, 1.0)
+	log_σ_ln ~ Normal(0, 1.0)
+	μ_ln, σ_ln = PoissonLogNormal_convert(μ_obs_ln, log_σ_ln)
+
+	dist = PoissonLogNormal(μ_ln, σ_ln)
+	ll = calculate_loglikelihood(dd, dist)
+	Turing.@addlogprob! ll
+end
+
+@model function model_PoissonLomax(dd::DegreeDist)
+	log_α_lo ~ Normal(0, 1.0)
+	log_β_lo ~ Normal(0, 2.0)
+	α = exp(log_α_lo)
+	β = exp(log_β_lo)
+
+	dist = PoissonLomax(α, β)
+	ll = calculate_loglikelihood(dd, dist)
+	Turing.@addlogprob! ll
+end
+
+@model function model_hierarchical_PoissonLogNormal(x::Vector{Int64})
+	μ_obs_ln ~ Normal(0, 1.0)
+	log_σ_ln ~ Normal(0, 1.0)
+	μ_ln, σ_ln = PoissonLogNormal_convert(μ_obs_ln, log_σ_ln)
+	λ ~ filldist(LogNormal(μ_ln, σ_ln), length(x))
+	for i in eachindex(x)
+		x[i] ~ Poisson(λ[i])
+	end
+end
+
+@model function model_hierarchical_PoissonLomax(x::Vector{Int64})
+	log_α_lo ~ Normal(0, 1.0)
+	log_β_lo ~ Normal(0, 2.0)
+	α = exp(log_α_lo)
+	β = exp(log_β_lo)
+	λ ~ filldist(Lomax(α, β), length(x))
+	for i in eachindex(x)
+		x[i] ~ Poisson(λ[i])
+	end
+end
+
 ##################################################
 ###### Fractional multinomial distributions ######
 ##################################################
@@ -110,6 +155,7 @@ Args:
 - df_ana: DataFrame after `prepare_ana_for_fmnl`
 """
 function one_hot_encoding_multi_vars(df_ana::DataFrame)
+	model_names = get_model_names()
 	df_ana[:, :y_dummy] .= 1
 	f = @formula(y_dummy ~  1 + log10(n_sample) + group_c + mode_cate + cutoff_less90)
 	f = apply_schema(f, schema(f, df_ana))

@@ -14,14 +14,14 @@ function get_CoMix2_fitted_dists()
 end
 
 function get_best_ZInf_mean(strat::String)
-    dists_hm, dists_nhm = get_CoMix2_fitted_dists();
-    m = strat == "home" ? mean(dists_hm[2]) : mean(dists_nhm[3])
+	dists_hm, dists_nhm = get_CoMix2_fitted_dists();
+	m = strat == "home" ? mean(dists_hm[2]) : mean(dists_nhm[3])
 	return m
 end
 
 function get_ZInf_means(strat::String)
-    dists_hm, dists_nhm = get_CoMix2_fitted_dists();
-    ms = strat == "home" ? mean.(dists_hm) : mean.(dists_nhm)
+	dists_hm, dists_nhm = get_CoMix2_fitted_dists();
+	ms = strat == "home" ? mean.(dists_hm) : mean.(dists_nhm)
 	return ms
 end
 
@@ -168,7 +168,7 @@ function plot_coverage_prob(df_sum::DataFrame, strat)
 					   :sample_size = string.(:sample_size))
 	pl = plot(; xlabel = "Number of samples per simulation",
 		ylabel = "Coverage probability (%)", xlabelfontsize = 11, ylabelfontsize = 12,
-        ylim=[0, 105],
+		ylim = [0, 105],
 	)
 	plot!(pl,
 		df_cov[:, :sample_size], df_cov[:, :cov_prob], group = df_cov[:, :tp],
@@ -189,11 +189,11 @@ function plot_simulated_sample_mean(df_mer::DataFrame, strat::String; color = 1)
 	tps = ["Bootstrap", "ZInf-NB", "ZInf-PLN", "ZInf-PLomax"]
 	ms = get_ZInf_means(strat)
 
-    dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
-    dd = strat == "home" ? dd_hm : dd_nhm
+	dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
+	dd = strat == "home" ? dd_hm : dd_nhm
 	ms = vcat([mean(dd)], ms)
 
-    ylim = strat == "home" ? [0, 3] : [0, 10]
+	ylim = strat == "home" ? [0, 3] : [0, 10]
 	for (i, tp) in enumerate(tps)
 		df_tmp = @subset(df_mer, :tp .== tp)
 		ylbl = i == 1 ? "Sample mean of simulated data" : ""
@@ -238,13 +238,13 @@ function plot_estimated_means(df_sum::DataFrame, strat::String)
 	df_sum_vis[!, :sample_size] = string.(df_sum_vis[:, :sample_size])
 	df_sum_vis = @subset(df_sum_vis, :tp .!= "Sample mean")
 
-    ylim = strat == "home" ? [0, 3] : [0, 10]
+	ylim = strat == "home" ? [0, 3] : [0, 10]
 	pl = plot_mean(df_sum_vis, m_PLomax;
 		order = order,
 		ylabel = "Estimated means",
 		color = [7 6 13],
 		title = "", xlabelfontsize = 12, ylabelfontsize = 12,
-        ylim = ylim)
+		ylim = ylim)
 	return pl
 end
 
@@ -269,18 +269,18 @@ function plot_mean(df_vis::DataFrame, h_m::Real;
 end
 
 function plot_bootstrap_panels(df_mer, df_sum, strat)
-    df_mer[!, :sample_size] = string.(df_mer[:, :sample_size])
-    pl1 = plot_simulated_sample_mean(df_mer, strat)
-    pl2 = plot_estimated_means(df_sum, strat);
-    pl3 = plot_coverage_prob(df_sum, strat);
+	df_mer[!, :sample_size] = string.(df_mer[:, :sample_size])
+	pl1 = plot_simulated_sample_mean(df_mer, strat)
+	pl2 = plot_estimated_means(df_sum, strat);
+	pl3 = plot_coverage_prob(df_sum, strat);
 
-    annotate!(pl2, (-0.15, 1.07), text("B", :left, 18, "Helvetica"))
-    annotate!(pl3, (-0.27, 1.07), text("C", :left, 18, "Helvetica"))
-    plot!(pl2, left_margin=5Plots.mm)
+	annotate!(pl2, (-0.15, 1.07), text("B", :left, 18, "Helvetica"))
+	annotate!(pl3, (-0.27, 1.07), text("C", :left, 18, "Helvetica"))
+	plot!(pl2, left_margin = 5Plots.mm)
 
-    layout = @layout [a; b c{0.4w}]
-    pl = plot(pl1, pl2, pl3,  layout=layout, size=(800, 600))
-    pl
+	layout = @layout [a; b c{0.4w}]
+	pl = plot(pl1, pl2, pl3, layout = layout, size = (800, 600))
+	pl
 end
 
 ###############################
@@ -316,7 +316,6 @@ function fit_convoluted_dist(df_dds::DataFrame)
 	model = model_ZeroInfConvDist(dd_all, dd_hm, prior_dic)
 	chn = sample(model, NUTS(), 2000; progress = true)
 	jldsave("../dt_intermediate/CoMix2_convoluted_chns.jld2", result = chn)
-
 end
 
 function plot_conv_fit()
@@ -405,6 +404,319 @@ function fit_CoMix2_all()
 		res["chns_all"][get_dist_name_from_model(model_func)] = chn
 	end
 	return res
+end
+
+###############################
+##### Sample size effect ######
+###############################
+
+"""
+Note:
+See `create_summary_stat_one_data` for a similar function.
+"""
+function create_summary_stat_bootstrap()
+	paths = glob("../dt_intermediate_bootstrap/*.jld2")
+
+	df_all = DataFrame()
+	for path in paths
+		println("Processing: ", path)
+		m = match(r"comix2_(\d+)samples_(\d+)repeat", path)
+		if m === nothing
+			continue
+		end
+		sample_size = parse(Int, m.captures[1])
+		n_repeat = parse(Int, m.captures[2])
+
+		# Load the bootstrap results
+		res_mer = load(path)["result"]
+		# Process each bootstrap iteration
+		for (i, res) in enumerate(res_mer)
+			for strat in ["home", "non-home"]
+				df_tmp = summarise_res_one_strat(res, strat, "CoMix2_bootstrap")
+				df_tmp[!, :sample_size] .= sample_size
+				df_tmp[!, :iteration] .= i
+				df_all = vcat(df_all, df_tmp)
+			end
+		end
+	end
+	return df_all
+end
+
+function obtain_spline_basis(logX; df = 4)
+	@rput logX df
+	R"""
+	library(splines)
+	spline_basis <- ns(logX, df=df)
+	"""
+	@rget spline_basis
+	return spline_basis
+end
+
+function predict_spline(old_logX, new_logX, df = 4)
+	@rput old_logX new_logX df
+	R"""
+	library(splines)
+	require(stats)
+	spline_basis <- ns(logX, df=df)
+	new_spline <- predict(spline_basis, new_logX)
+	"""
+	@rget new_spline
+	return new_spline
+end
+
+function create_spline_basis_sample_size(df_ana::DataFrame; df = 3)
+	logX = log10.(df_ana[:, :n_sample])
+	spline_basis = obtain_spline_basis(logX; df = df)
+	X = hcat(ones(length(logX)), spline_basis)
+	return (X, logX)
+end
+
+function pred_fmnl_sample_size(chn::Chains, original_logX::Vector{Float64};
+	sample_sizes = exp10.(range(log10(90), log10(100_000), length = 50)),
+	df = 4)
+
+	n_pred = length(sample_sizes)
+	new_logX = log10.(sample_sizes)
+
+	# Create predictor matrix: intercept + spline basis
+	spline_pred = predict_spline(original_logX, new_logX, df)
+	X_pred = hcat(ones(n_pred), spline_pred)
+	n_x = size(X_pred, 2)
+
+	β1_med, β2_med = get_β_med(chn, n_x)
+	pred_probs = calculate_fmnl_probs(X_pred, β1_med, β2_med)
+
+	df_pred = DataFrame(
+		logX = new_logX,
+		sample_size = sample_sizes,
+	)
+	df_pred[!, :y1] = pred_probs[:, 1]
+	df_pred[!, :y2] = pred_probs[:, 2]
+	df_pred[!, :y3] = pred_probs[:, 3]
+	return df_pred
+end
+
+function fit_pred_df_sample_size_empirical(df_res::DataFrame, DF::Int64)
+	df_ana = prep_fmnl_vars(df_res);
+	# Create spline basis for sample size
+	X_spline, logX_original = create_spline_basis_sample_size(df_ana; df = DF)
+	pred, Y, x_names = one_hot_encoding_multi_vars(df_ana);
+	chn1 = sample(model_fmnl(X_spline, Y), NUTS(), 2000; progress = false)
+	df_pred = pred_fmnl_sample_size(chn1, logX_original; df = DF);
+	return df_pred
+end
+
+"""
+Note:
+- Data is from `../dt_intermediate_bootstrap/comix2_waic_weights.csv`
+"""
+function fit_pred_df_sample_size_boot(df_boot, DF)
+	df_boot_tab = unstack(df_boot, :key, :model, :weight_waic)
+	df_boot_tab = leftjoin(df_boot_tab,
+		unique(df_boot[:, [:key, :sample_size]]), on = :key)
+
+	logX_original = log10.(df_boot_tab[:, :sample_size])
+	X_spline = obtain_spline_basis(logX_original; df = DF)
+	X_spline = hcat(ones(length(logX_original)), X_spline)
+	Y = df_boot_tab[:, 2:4] |> Matrix
+	chn2 = sample(model_fmnl(X_spline, Y), NUTS(), 2000; progress = false)
+	df_pred_boot = pred_fmnl_sample_size(chn2, logX_original; df = DF);
+	return df_pred_boot
+end
+
+function plot_sample_size_and_best_model(df_pred, df_mer_nh, df_pred_boot, df_boot)
+	xticks_ = ([1, 2, 3, 4, 5], ["10", "100", "1000", "10,000", "100,000"])
+	pl1 = plot(xlabel = "", ylabel = "WAIC weight",
+		xticks = xticks_, legend = (0.8, 0.5))
+	colors = [7, 6, 13]
+	colors_reshape = reshape(colors, 1, :)
+	model_names = get_model_names()
+	for i in 1:3
+		plot!(pl1, df_pred[:, :logX], df_pred[:, Symbol("y$(i)")],
+			label = model_abbr[model_names[i]],
+			color = colors[i], lw = 2.0)
+	end
+	@with df_mer_nh scatter!(pl1, log10.(:n_sample), :weight_waic, group = :model_abbr,
+		colour = colors_reshape, label = "",
+		markerstrokewidth = 0.4)
+
+	pl2 = plot(xlabel = "sample size", ylabel = "WAIC weight",
+		xticks = xticks_, legend = nothing)
+	for i in 1:3
+		model_name = model_names[i]
+		plot!(pl2, df_pred_boot[:, :logX], df_pred_boot[:, Symbol("y$(i)")],
+			label = "$(model_name), bootstrap",
+			color = colors[i], lw = 2)
+	end
+	# Add jitter to x-positions for each model to avoid overlap
+	offset_scale = 0.05
+	for (i, model_name) in enumerate(model_names)
+		df_model = @subset(df_boot, :model .== model_name)
+		offset = (i - 2) * offset_scale
+		scatter!(pl2, log10.(df_model[:, :n_sample]) .+ offset, df_model[:, :weight_waic],
+			color = colors[i], label = "", alpha = 0.4,
+			markersize = 3, markerstrokewidth = 0.4)
+	end
+
+	plot(pl1, pl2, layout = (2, 1), size = (600, 500))
+end
+
+#################################################
+###### Age- and sex-disaggregated analaysis #####
+#################################################
+
+function read_clean_comix2_age_sex_stratified()
+	Random.seed!(123)
+	df, df_part = read_comix2_df_and_df_part();
+	clean_age_bins!(df_part; age_col = :part_age)
+	add_sampled_ages!(df_part; age_col = :part_age, new_col = :part_age_cont)
+	add_age_groups!(df_part; age_col = :part_age_cont, new_col = :part_age_grp)
+	df = innerjoin(df, df_part, on = :part_id);
+
+	@transform!(df, :cnt_age_est_bin = string.(:cnt_age_est_min, "-", :cnt_age_est_max))
+	add_sampled_ages!(df; age_col = :cnt_age_est_bin, new_col = :cnt_age_cont)
+	standardise_cnt_home_values!(df);
+	@rename!(df, :part_id_d = :part_id)
+	return (df, df_part)
+end
+
+function sample_age_from_bin(age_bin::AbstractString)
+	# Parse regular bins like "18-29"
+	parts = split(age_bin, "-")
+	if length(parts) == 2
+		lower = parse(Int, strip(parts[1]))
+		upper = parse(Int, strip(parts[2]))
+		return rand(lower:upper)
+	end
+	return parse(Int, age_bin)
+end
+
+function add_sampled_ages!(df::DataFrame; age_col = :part_age, new_col = :part_age_cont)
+	@transform!(df,
+		$new_col = sample_age_from_bin.(df[:, age_col]));
+end
+
+function clean_age_bins!(df::DataFrame; age_col)
+	@subset!(df, @byrow !($(age_col) ∈ ["NA", "Prefer not to answer"]))
+	@transform!(df,
+		$age_col = replace.(
+			df[:, age_col],
+			"Under 1" => "0-0",
+		)
+	);
+end
+
+function add_age_groups!(df::DataFrame; age_col = :part_age_cont, new_col = :part_age_grp)
+	breaks = [0, 18, 30, 40, 50, 60, 70, 121]
+	labels = ["0-17", "18-29", "30-39", "40-49", "50-59", "60-69", "70-120"]
+	df[!, new_col] = cut(df[:, age_col], breaks; labels = labels);
+	nothing
+end
+
+function create_stratified_dds(df::DataFrame; key = :part_age_grp)
+	df_adult_deg = degree_dist_for_all_home_non_home(df; key = key);
+	gdf = groupby(df_adult_deg, key)
+	dds_dic = Dict("home" => Dict(), "non-home" => Dict())
+	for (k, g) in zip(keys(gdf), gdf)
+		k = string(k[1])
+		g_hm = @subset(g, :strat .== "home")
+		g_nhm = @subset(g, :strat .== "non-home")
+		dds_dic["home"][k] = DegreeDist(g_hm[:, :cnt]; include_zero = false)
+		dds_dic["non-home"][k] = DegreeDist(g_nhm[:, :cnt]; include_zero = false)
+	end
+	return dds_dic
+end
+
+function plot_age_sex_hm_nhm_degree(df::DataFrame)
+	dds_age = create_stratified_dds(df; key = :part_age_grp)
+	dds_gender = create_stratified_dds(df; key = :part_gender)
+	age_keys = keys(dds_age["home"]) |> collect |> sort
+	gender_keys = keys(dds_gender["home"]) |> collect
+
+	xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
+	kwds = (xaxis = :log10, ylim = [-5, 0.1], xlim = [1, 10_000], xticks = xtk,
+		xtickfontsize = 9, ytickfontsize = 9)
+	ccdf_kwds = (markersize = 1.2, markerstrokewidth = 0.0, linewidth = 0.5)
+
+	# Age
+	pl_age_hm = plot(; legendtitle = "Age", ylabel = "CCDF", title = "Home",
+		left_margin = 5Plots.mm, top_margin = 2Plots.mm, kwds...)
+	pl_age_nhm = plot(; legendtitle = "Age", title = "Non-home",
+		legend = (0.15, 0.6), kwds...)
+	for k in age_keys
+		plot_ccdf!(pl_age_hm, dds_age["home"][k]; label = k, ccdf_kwds...)
+		plot_ccdf!(pl_age_nhm, dds_age["non-home"][k]; label = k, ccdf_kwds...)
+	end
+
+	# Gender
+	pl_gender_hm = plot(; legendtitle = "Gender",
+		xlabel = "Number of contacts per day", ylabel = "CCDF", kwds...)
+	pl_gender_nhm = plot(; legendtitle = "Gender",
+		xlabel = "Number of contacts per day", kwds...)
+	for k in gender_keys
+		plot_ccdf!(pl_gender_hm, dds_gender["home"][k]; label = k, ccdf_kwds...)
+		plot_ccdf!(pl_gender_nhm, dds_gender["non-home"][k]; label = k, ccdf_kwds...)
+	end
+
+	pos = (-0.1, 1.12)
+	annotate!(pl_age_hm, pos, text("A", :left, 12, "Helvetica"))
+	annotate!(pl_age_nhm, pos, text("B", :left, 12, "Helvetica"))
+	annotate!(pl_gender_hm, pos, text("C", :left, 12, "Helvetica"))
+	annotate!(pl_gender_nhm, pos, text("D", :left, 12, "Helvetica"))
+	return plot(pl_age_hm, pl_age_nhm, pl_gender_hm, pl_gender_nhm,
+		layout = (2, 2), dpi = 300)
+end
+
+"""
+- `df_deg`: created from `degree_dist_for_all_home_non_home`
+"""
+function create_df_dds(df_deg::DataFrame, n_part::Int64)
+	df_dds = DataFrame()
+	for strat in ["all", "home", "non-home"]
+		df_tmp = @pipe @subset(df_deg, :strat .== strat)[:, :cnt] |>
+					   DegreeDist(_, n_part) |>
+					   dd_to_df |>
+					   @transform(_, :strat = strat)
+		df_dds = vcat(df_dds, df_tmp)
+	end
+	df_dds[:, :key] .= "CoMix2 Child";
+	return (df_dds)
+end
+
+function plot_child_panels(df_dds, df_ana, res_EVI)
+	pl1 = plot_all_hm_nhm(df_dds, "CoMix2 Child";
+		panel_name = "A", ytk_digit = 6, annotate_disp = false)
+	xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
+	kwds = (xaxis = :log10, ylim = [-5, 0.1], xlim = [1, 10_000], xticks = xtk,
+		xtickfontsize = 11, ytickfontsize = 11, legendfontsize = 10)
+	plot!(pl1; legend = (0.7, 0.8),
+		xlabel = "Number of contacts per day", ylabel = "CCDF", kwds...)
+	pos = (-0.25, 0.98)
+	annotate!(pl1, pos, text("A", :left, 17, "Helvetica"))
+
+	df_tab = unstack(df_ana, :key, :model, :weight_waic)
+	df_tab_cum = create_tab_cum(df_tab, model_names)[[2, 1], :]
+	pl_bar = plot_stacked_bar(df_tab_cum, model_names;
+		legend = (-0.3, -0.40),
+		legend_columns = 3,
+		labels = model_abbr |> values |> collect,
+	)
+	ytk = ([2, 1], ["Home", "Non-home"])
+	plot!(pl_bar,
+		left_margin = 5Plots.mm, right_margin = 0Plots.mm,
+		bottom_margin = 10Plots.mm,
+		yticks = ytk)
+
+	pl_EVI = plot_EVI_across_surveys(res_EVI[[2, 1], :];
+		title = "")
+	plot!(pl_EVI, ytickfontsize = 10, yticks = ytk)
+
+	pos = (-0.5, 0.98)
+	annotate!(pl_bar, pos, text("B", :left, 17, "Helvetica"))
+	annotate!(pl_EVI, pos, text("C", :left, 17, "Helvetica"))
+
+	layout = @layout [a{0.6w} [b; c]]
+	return plot(pl1, pl_bar, pl_EVI, layout = layout)
 end
 
 ######################################
@@ -503,4 +815,206 @@ function plot_WAIC_setting(df_dd, df_res)
 		legend = (0, -0.15), #-0.22),
 		bottom_margin = 15Plots.mm,
 	)
+end
+
+function prepare_block_degree_dist(df::DataFrame, df_part::DataFrame)::Dict
+	block_configs = [
+		(label = "Child-Child", part_cond = :<, cnt_cond = :<, key = "CoMix2 Child-Child"),
+		(label = "Child-Adult", part_cond = :<, cnt_cond = :>=, key = "CoMix2 Child-Adult"),
+		(label = "Adult-Child", part_cond = :>=, cnt_cond = :<, key = "CoMix2 Adult-Child"),
+		(label = "Adult-Adult", part_cond = :>=, cnt_cond = :>=, key = "CoMix2 Adult-Adult"),
+	]
+	age_filter(col, op) = op == :>= ? (col .>= 18) : (col .< 18)
+
+	block_results = Dict()
+	for cfg in block_configs
+		df_block = @subset(df,
+			age_filter(:part_age_cont, cfg.part_cond),
+			age_filter(:cnt_age_cont, cfg.cnt_cond)
+		)
+		df_block_part = @subset(df_part, age_filter(:part_age_cont, cfg.part_cond))
+		n_part = df_block_part |> nrow
+
+		df_block[:, :key] .= cfg.key
+		df_block_deg = degree_dist_for_all_home_non_home(df_block; key = :key)
+
+		# Create df_dds with proper zero-inflation using n_part
+		df_dds_block = DataFrame()
+		for strat in ["all", "home", "non-home"]
+			df_tmp = @pipe @subset(df_block_deg, :strat .== strat)[:, :cnt] |>
+						   DegreeDist(_, n_part) |>
+						   dd_to_df |>
+						   @transform(_, :strat = strat)
+			df_dds_block = vcat(df_dds_block, df_tmp)
+		end
+		df_dds_block[:, :key] .= cfg.key
+
+		block_results[cfg.label] = (
+			df_block = df_block,
+			df_block_part = df_block_part,
+			n_part = n_part,
+			df_dds = df_dds_block,
+		)
+		println("$(cfg.label): n_contacts=$(nrow(df_block)), n_participants=$(n_part)")
+	end
+	return block_results
+end
+
+function fit_block_dds_models(block_res::Dict)
+	labels = keys(block_res) |> collect
+	for lab in labels
+		blk = block_res[lab]
+		dds = Dict(
+			"home" => @subset(blk.df_dds, :strat .== "home") |> DegreeDist,
+			"non-home" => @subset(blk.df_dds, :strat .== "non-home") |> DegreeDist,
+		)
+		res = fit_hm_nhm_dds(dds)
+		jldsave("../dt_intermediate/$(lab)_chns.jld2", result = res)
+		println("Finished fitting: $lab → $(lab)_chns.jld2")
+	end
+end
+
+function fit_block_dds_EVI(block_res::Dict)
+	res_EVI_mer = DataFrame()
+	labels = keys(block_res) |> collect
+	for lab in labels
+		blk = block_res[lab]
+		dds = Dict(
+			"home" => @subset(blk.df_dds, :strat .== "home") |> DegreeDist,
+			"non-home" => @subset(blk.df_dds, :strat .== "non-home") |> DegreeDist,
+		)
+		res1 = @pipe EVI_estimate_for_qs(dds["home"], qs = [0.98]) |>
+					 @transform(_, :key = "home")
+		res2 = @pipe EVI_estimate_for_qs(dds["non-home"], qs = [0.98]) |>
+					 @transform(_, :key = "non-home")
+		res_EVI = vcat(res1, res2)
+		res_EVI = @transform(res_EVI, :m_l = :mean - :lower, :m_u = :upper - :mean)
+		res_EVI[!, :block] .= lab
+		res_EVI_mer = vcat(res_EVI_mer, res_EVI)
+	end
+	return res_EVI_mer
+end
+
+function extract_alpha_values_from_block(block_res::Dict)::DataFrame
+	labels = keys(block_res) |> collect
+	df_alpha = DataFrame(block = String[], strat = String[], alpha = Float64[])
+	for label in labels
+		path = "../dt_intermediate/CoMix2_$(label)_chns.jld2"
+		res = load(path)["result"]["chns_non-home"]["ZeroInfPoissonLomax"]
+		d_nhome = get_ZeroInfDist(res, "ZeroInfPoissonLomax")
+		push!(df_alpha, (block = label, strat = "non-home", alpha = d_nhome.d.α))
+	end
+	df_alpha
+end
+
+function extract_summary_stat(block_res::Dict)
+	block_df_ana = DataFrame()
+	labels = keys(block_res) |> collect
+	for label in labels
+		path = "../dt_intermediate/CoMix2_$(label)_chns.jld2"
+		res = load(path)["result"]
+		df_res = vcat(
+			summarise_res_one_strat(res, "home", "CoMix2_$(label)"),
+			summarise_res_one_strat(res, "non-home", "CoMix2_$(label)"))
+		df_ana = flag_minimum_IC(df_res, :waic)
+		@transform!(df_ana, :key = :strat)
+		df_ana[:, :label] .= label
+		block_df_ana = vcat(block_df_ana, df_ana)
+		println("Loaded fitted results for $label")
+	end
+	return block_df_ana
+end
+
+function create_block_dds(block_res::Dict)
+	block_labels = keys(block_res) |> collect
+	block_dds = Dict()
+	for label in block_labels
+		blk = block_res[label]
+		df_dds_blk = blk.df_dds
+		block_dds[label] = Dict(
+			"home"     => @subset(df_dds_blk, :strat .== "home") |> DegreeDist,
+			"non-home" => @subset(df_dds_blk, :strat .== "non-home") |> DegreeDist,
+		)
+	end
+	return block_dds
+end
+
+function make_waic_bar(strat, block_labels, block_df_ana; legend = true)
+	block_labels = block_labels[end:-1:begin]
+	ytk_bar     = (1:length(block_labels), block_labels)
+	model_names = get_model_names()
+	labels_abbr = model_abbr |> values |> collect
+
+	df_tab_all = DataFrame()
+	for label in block_labels
+		df_strat = @subset(block_df_ana, :key .== strat, :label .== label)
+		df_wide = unstack(df_strat, :key, :model, :weight_waic)
+		df_wide[!, :key] .= label
+		df_tab_all = vcat(df_tab_all, df_wide; cols = :union)
+	end
+	df_tab_cum = create_tab_cum(df_tab_all, model_names)
+	pl = plot_stacked_bar(df_tab_cum, model_names;
+		labels = labels_abbr, legend_columns = 3,
+		legend = legend,
+		right_margin = 0Plots.mm, left_margin = 5Plots.mm,
+		title = "",  #strat == "home" ? "Home" : "Non-home",
+		yticks = ytk_bar)
+	return pl
+end
+
+function make_evi_panel(strat, block_labels, res_EVI_all, title_str)
+	block_labels = block_labels[end:-1:begin]
+	df_strat = @subset(res_EVI_all, :key .== strat)
+	# Reorder to match block_labels order
+	df_plot = DataFrame()
+	for label in block_labels
+		row = @subset(df_strat, :block .== label)
+		df_plot = vcat(df_plot, row)
+	end
+	df_plot[!, :key] = df_plot[:, :block]
+	pl = plot_EVI_across_surveys(df_plot; title = title_str)
+	plot!(pl, ytickfontsize = 9)
+	return pl
+end
+
+function plot_block_ana_panels(block_res::Dict, block_df_ana::DataFrame)
+	block_labels = ["Child-Child", "Child-Adult", "Adult-Child", "Adult-Adult"]
+	block_df_ana[:, :label] |> unique
+	block_dds = create_block_dds(block_res)
+
+	##### Panel A/B: CCDF overlaying 4 blocks, separated by Home / Non-home #####
+	xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
+	ccdf_kwds = (markersize = 1.2, markerstrokewidth = 0.0, linewidth = 0.5)
+	ax_kwds = (xaxis = :log10, ylim = [-5, 0.1], xlim = [1, 10_000], xticks = xtk,
+		xtickfontsize = 9, ytickfontsize = 9)
+
+	pl_hm = plot(; legendtitle = "Block", ylabel = "CCDF", title = "Home",
+		left_margin = 5Plots.mm, top_margin = 2Plots.mm, ax_kwds...)
+	pl_nhm = plot(; legendtitle = "Block", title = "Non-home",
+		xlabel = "Number of contacts per day", ax_kwds...)
+
+	for label in block_labels
+		plot_ccdf!(pl_hm, block_dds[label]["home"]; label = label, ccdf_kwds...)
+		plot_ccdf!(pl_nhm, block_dds[label]["non-home"]; label = label, ccdf_kwds...)
+	end
+
+	pl_waic_hm  = make_waic_bar("home", block_labels, block_df_ana; legend = (0.1, -0.3))
+	pl_waic_nhm = make_waic_bar("non-home", block_labels, block_df_ana; legend = (0.1, -0.3))
+	pl_evi_hm  = make_evi_panel("home", block_labels, res_EVI, "")
+	pl_evi_nhm = make_evi_panel("non-home", block_labels, res_EVI, "")
+
+	pos = (-0.3, 1.12)
+	fontsize= 16
+	annotate!(pl_hm, pos, text("A", :left, fontsize, "Helvetica"))
+	annotate!(pl_nhm, pos, text("B", :left, fontsize, "Helvetica"))
+	annotate!(pl_waic_hm, pos, text("C", :left, fontsize, "Helvetica"))
+	annotate!(pl_waic_nhm, pos, text("D", :left, fontsize, "Helvetica"))
+	annotate!(pl_evi_hm, pos, text("E", :left, fontsize, "Helvetica"))
+	annotate!(pl_evi_nhm, pos, text("F", :left, fontsize, "Helvetica"))
+
+	layout = @layout [a b; c d; e f]
+	pl_block = plot(pl_hm, pl_nhm, pl_waic_hm, pl_waic_nhm, pl_evi_hm, pl_evi_nhm,
+		layout = layout, size = (800, 900), dpi = 300,
+		left_margin = 5Plots.mm, bottom_margin = 5Plots.mm)
+	return pl_block
 end

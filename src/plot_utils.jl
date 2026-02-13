@@ -43,7 +43,9 @@ function plot_all_deg_and_separate_subplots(df_dds)
         dpi=300)
 end
 
-function plot_all_hm_nhm(df_dds::DataFrame, key::String; panel_name = "", color = 1, kwds...)
+function plot_all_hm_nhm(df_dds::DataFrame, key::String;
+        panel_name = "", color = 1, ytk_digit = 2, annotate_disp = true,
+        kwds...)
 	df_tmp = @subset(df_dds, :key .== key)
 	dd_all = @subset(df_tmp, :strat .== "all") |> DegreeDist
 	dd_hm = @subset(df_tmp, :strat .== "home") |> DegreeDist
@@ -55,13 +57,15 @@ function plot_all_hm_nhm(df_dds::DataFrame, key::String; panel_name = "", color 
 		legend = (0.1, 0.2),
 		xticks = ([1, 10, 100], [L"1", L"10", L"10^{2}"]),
 	)
-	kwds1 = (markersize = 2.5, markerstrokewidth = 0, lw = 1.5, ytk_digit=2)
-	kwds2 = (markersize = 2.5, markerstrokewidth = 0, ytk_digit=2)
+	kwds1 = (markersize = 2.5, markerstrokewidth = 0, lw = 1.5, ytk_digit=ytk_digit)
+	kwds2 = (markersize = 2.5, markerstrokewidth = 0, ytk_digit=ytk_digit)
 	plot_ccdf!(pl, dd_all; color = 14, ls = :solid, label = "All", kwds1...)
 	plot_ccdf!(pl, dd_hm; color = 9, ls = :solid, label = "Home", kwds2...)
 	plot_ccdf!(pl, dd_nhm; color = 16, ls = :solid, label = "Non-Home", kwds2...)
-	annotate!(pl, (0.8, 0.9), text(key, :black, 10, "Helvetica"))
-	annotate!(pl, (-0.10, 1.08), text(panel_name, :black, 16, "Helvetica"))
+    if annotate_disp == true
+        annotate!(pl, (0.8, 0.9), text(key, :black, 10, "Helvetica"))
+        annotate!(pl, (-0.10, 1.08), text(panel_name, :black, 16, "Helvetica"))
+    end
 	plot!(pl; kwds...)
 	pl
 end

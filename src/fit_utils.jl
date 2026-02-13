@@ -38,7 +38,11 @@ function summarise_res_one_strat(res::Dict, strat, key)
 		mean_ = mean(dist)
 		mean_set = mean.(dists)
 		cond = isnan.(mean_set)
-		if any(cond) == true
+		if (any(cond) == true) & (all(cond) == true)
+			println("All NaN: $key, strat: $strat, model: $model_name")
+			mean_l = NaN
+			mean_u = NaN
+		elseif any(cond) == true
 			println("NaN presence: $key, strat: $strat, model: $model_name")
 			mean_l, mean_u = quantile(mean_set[.!cond], [0.025, 0.975])
 		else
@@ -56,8 +60,12 @@ function summarise_res_one_strat(res::Dict, strat, key)
 	return df_tmp
 end
 
-function create_summary_stat_one_data(key)
-	path = "../dt_intermediate/$(key)_chns.jld2"
+"""
+Note:
+See `read_master_with_fit_summary` for creating a sequences of data.
+"""
+function create_summary_stat_one_data(key; dir_="../dt_intermediate")
+	path = "$(dir_)/$(key)_chns.jld2"
 	if isfile(path) == false
 		return DataFrame()
 	end
@@ -87,16 +95,19 @@ function calc_waic(dists::Vector{T}, dd::DegreeDist
 	return -2 * (lppd - p_waic)
 end
 
-function calc_waic_weights(df_waic::DataFrame, model_names::Vector)
-	mat_w = df_waic[:, model_names] |> Matrix
-	mat_w = mat_w .- minimum(mat_w, dims = 2)
-	mat_w = exp.(-0.5 .* mat_w)
-	mat_w = mat_w ./ sum(mat_w, dims = 2)
-	df_w = DataFrame(mat_w, model_names)
-	df_w[!, :n_answer] = df_waic.n_answer;
-	return df_w
-end
+# TODO: delete it.
+#function calc_waic_weights(df_waic::DataFrame, model_names::Vector)
+#	mat_w = df_waic[:, model_names] |> Matrix
+#	mat_w = mat_w .- minimum(mat_w, dims = 2)
+#	mat_w = exp.(-0.5 .* mat_w)
+#	mat_w = mat_w ./ sum(mat_w, dims = 2)
+#	df_w = DataFrame(mat_w, model_names)
+#	df_w[!, :n_answer] = df_waic.n_answer;
+#	return df_w
+#end
 
+"""Add waic_weight for data frame.
+"""
 function flag_minimum_IC(df_res::DataFrame, ic::Symbol)::DataFrame
 	f_ic = Symbol("fmin_$(ic)")
 	weight_ic = Symbol("weight_$(ic)")
@@ -285,6 +296,7 @@ function prep_fmnl_vars(df_res::DataFrame)
 	df_master = read_survey_master_data()
 	add_vis_cols_to_master!(df_master)
 	df_mas = @select(df_master, :key, :group_c, :mode, :cutoff_less90);
+	clean_survey_key_names!(df_mas)
 
 	df_res_nhm = @subset(df_res, :strat .== "non-home")
 	df_ana = prepare_ana_for_fmnl(df_res_nhm)
@@ -306,7 +318,6 @@ function prep_fmnl_vars(df_res::DataFrame)
 end
 
 function prepare_ana_for_fmnl(df_mer_nh)
-	df_mer_nh_uni = unique(df_mer_nh, [:key])
 	df_ana = unstack(df_mer_nh, :key, :model, :weight_waic)
 	df_ana = leftjoin(df_ana,
 		unique(df_mer_nh, [:key])[:, [:key, :n_sample]],
@@ -371,7 +382,6 @@ function plot_bar_waic_pretty(df_obs::DataFrame, df_res::DataFrame, df_EVI::Data
 	table_styl_annotate!(pls[1], grp_cate, "Group\ncontacts", x_base + 2*dx; dy = dy)
 	table_styl_annotate!(pls[1], df_ana[:, :n_sample], "Sample\nsize", x_base + 3*dx; dy = dy)
 	df_tmp = copy(df_ana)
-	clean_key_names!(df_tmp)
 	table_styl_annotate!(pls[1], df_tmp[:, :key], "Study", x_base + 4*dx - 33)
 	plot!(pls[1], left_margin = 80Plots.mm)
 
@@ -391,7 +401,6 @@ function plot_bar_waic(df_obs, df_res; ytk = nothing, df_EVI = nothing)
 	model_names = get_model_names()
 
 	tab_n_obs = unstack(df_obs, :key, :strat, :n_answer);
-	df_res = @transform(df_res, :key = replace.(:key, "CoMix_uk_internal" => "CoMix_uk"));
 
 	df_res_tmp = @subset(df_res, :strat .== "home")
 	df_tab_cum_hm = create_stacked_bar_weights(df_res_tmp, model_names, tab_n_obs;
@@ -581,10 +590,10 @@ end
 Args:
 - df_dds: Merged dds DataFrame.
 """
-function fit_surveys(df_dds::DataFrame)
+function fit_surveys(df_dds::DataFrame; dir_ = "../dt_intermediate")
 	keys = df_dds.key |> unique
 	for k in keys
-		path = "../dt_intermediate/$(k)_chns.jld2"
+		path = "$(dir_)/$(k)_chns.jld2"
 		if isfile(path) == true
 			println("Path present: ", path)
 			continue
@@ -696,5 +705,4 @@ function plot_multi_ccdf_poisson_lomax(keys_; kwds...)
 		plot_ccdf_poisson_lomax!(pl, k, "non-home", label, i)
 	end
 	return pl
-
 end

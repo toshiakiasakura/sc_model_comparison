@@ -6,7 +6,12 @@
       "Bash(git -C /mnt/c/Users/aflub/Desktop/prj_LSHTM_study/prj_sc_model_comparison log --oneline -15)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(gh pr create:*)"
+      "Bash(gh pr create:*)",
+      "Bash(pdftotext:*)",
+      "Bash(python3:*)",
+      "WebFetch(domain:www.math.uvic.ca)",
+      "WebFetch(domain:royalsocietypublishing.org)",
+      "WebFetch(domain:docs.scipy.org)"
     ]
   }
 }
