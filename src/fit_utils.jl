@@ -64,8 +64,8 @@ end
 Note:
 See `read_master_with_fit_summary` for creating a sequences of data.
 """
-function create_summary_stat_one_data(key)
-	path = "../dt_intermediate/$(key)_chns.jld2"
+function create_summary_stat_one_data(key; dir_="../dt_intermediate")
+	path = "$(dir_)/$(key)_chns.jld2"
 	if isfile(path) == false
 		return DataFrame()
 	end
@@ -590,10 +590,10 @@ end
 Args:
 - df_dds: Merged dds DataFrame.
 """
-function fit_surveys(df_dds::DataFrame)
+function fit_surveys(df_dds::DataFrame; dir_ = "../dt_intermediate")
 	keys = df_dds.key |> unique
 	for k in keys
-		path = "../dt_intermediate/$(k)_chns.jld2"
+		path = "$(dir_)/$(k)_chns.jld2"
 		if isfile(path) == true
 			println("Path present: ", path)
 			continue
