@@ -11,7 +11,8 @@
       "Bash(python3:*)",
       "WebFetch(domain:www.math.uvic.ca)",
       "WebFetch(domain:royalsocietypublishing.org)",
-      "WebFetch(domain:docs.scipy.org)"
+      "WebFetch(domain:docs.scipy.org)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }

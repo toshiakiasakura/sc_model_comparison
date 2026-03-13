@@ -2,10 +2,15 @@
     "name": "sc_model_comparison",
     "build": {
         "dockerfile": "Dockerfile",
-        "context": ".."
+        "context": "..",
+        "args": {
+            "CLAUDE_CODE_VERSION": "latest"
+        }
     },
     "mounts": [
-        "source=${localWorkspaceFolder},target=/workdir,type=bind,consistency=cached"
+        "source=${localWorkspaceFolder},target=/workdir,type=bind,consistency=cached",
+        // Persist Claude Code config and auth across container rebuilds
+        "source=sc-model-claude-config-${devcontainerId},target=/home/jovyan/.claude,type=volume"
     ],
     "customizations": {
         "vscode": {
@@ -18,6 +23,7 @@
                 "jupyter.jupyterServerType": "local"  // Ensures Jupyter uses local server
             },
             "extensions": [
+                "anthropic.claude-code",
                 "julialang.language-julia",
                 "0h7z.vscode-julia-format",
                 "ms-toolsai.jupyter",
@@ -32,6 +38,10 @@
                 "ms-azuretools.vscode-docker"
             ]
         }
+    },
+    "remoteEnv": {
+        // Pass your ANTHROPIC_API_KEY from the host environment
+        "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
     },
     "forwardPorts": [
         8888 // Port for Jupyter Notebook
