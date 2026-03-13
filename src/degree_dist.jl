@@ -14,8 +14,12 @@ end
 function DegreeDist(cnt::Vector{Int64}, n_part::Int64; include_zero = true)::DegreeDist
 	n_cnt1more = length(cnt)
 	dd = DegreeDist(cnt; include_zero = include_zero)
+	n_zero = n_part - n_cnt1more
+	if n_zero < 0
+		error("More participants with contacts than total participants n_cnt1more=$n_cnt1more and n_part=$n_part")
+	end
 	insert!(dd.x, 1, 0)
-	insert!(dd.y, 1, n_part - n_cnt1more)
+	insert!(dd.y, 1, n_zero)
 	return dd
 end
 
@@ -25,7 +29,6 @@ function dd_to_df(dd::DegreeDist, strat::String)::DataFrame
 	df[!, :strat] .= strat
 	return df
 end
-dd_to_line_vec(dd::DegreeDist)::Vector = vcat([fill(x, y) for (x, y) in zip(dd.x, dd.y)]...)
 
 function DegreeDist(df::DataFrame)::DegreeDist
 	if "x" in names(df) && "y" in names(df)

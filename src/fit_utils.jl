@@ -153,21 +153,36 @@ function plot_mean_excess_function(x_raw::Vector{Int64})
 	plot(qs, mef)
 end
 
-function obtain_peak_over_threshold_values(x_raw::Vector{Int64}, q::Float64)
-	q_v = quantile(x_raw, q)
-	x_thres = x_raw[x_raw .> q_v]
-	x = x_thres .- q_v
-	return x
+function obtain_peak_over_threshold_values(dd::DegreeDist, q_v::Float64)
+	x_vals = Float64[]
+	for (x, y) in zip(dd.x, dd.y)
+		if x > q_v
+			append!(x_vals, fill(Float64(x) - q_v, y))
+		end
+	end
+	return x_vals
 end
 
 function fit_GP_to_q(dd::DegreeDist, q::Float64)::DataFrameRow
-	x = dd_to_line_vec(dd)
-	q_v = quantile(x, q)
-	x = obtain_peak_over_threshold_values(x, q)
-	chn = fit_model_GP(x, model_GeneralizedPareto; n_samples = 2000)
-	res = extract_chain_info(chn)
-	m, l, h = res[2, [:mean, :lower, :upper]]
-	return DataFrame(q = q, q_v = q_v, mean = m, lower = l, upper = h)[1, :]
+	q_v = quantile(dd.x, weights(dd.y), q)
+	x = obtain_peak_over_threshold_values(dd, q_v)
+	if isempty(x)
+		@warn "Empty exceedances" q=q q_v=q_v dd_max=maximum(dd) dd_n=sum(dd)
+		return DataFrame(q = q, q_v = q_v, mean = NaN, lower = NaN, upper = NaN)[1, :]
+	end
+	if all(x .== 0.0) || length(unique(x)) == 1
+		@warn "Degenerate exceedances (constant values)" q=q q_v=q_v n_exc=length(x) unique_vals=unique(x)
+		return DataFrame(q = q, q_v = q_v, mean = NaN, lower = NaN, upper = NaN)[1, :]
+	end
+	try
+		chn = fit_model_GP(x, model_GeneralizedPareto; n_samples = 2000)
+		res = extract_chain_info(chn)
+		m, l, h = res[2, [:mean, :lower, :upper]]
+		return DataFrame(q = q, q_v = q_v, mean = m, lower = l, upper = h)[1, :]
+	catch e
+		@warn "fit_model_GP failed" q=q q_v=q_v n_exc=length(x) unique_n=length(unique(x)) min_x=minimum(x) max_x=maximum(x) exception=e
+		return DataFrame(q = q, q_v = q_v, mean = NaN, lower = NaN, upper = NaN)[1, :]
+	end
 end
 
 function EVI_estimate_for_qs(dd::DegreeDist;
@@ -182,6 +197,7 @@ end
 
 function collect_estimates_across_studies(df_dd::DataFrame, keys_;
 	strat = "non-home", kwds...)
+	qs = get(kwds, :qs, [0.95, 0.97, 0.99, 0.995, 0.999])
 	res_sum = DataFrame()
 	for k in keys_
 		dd = @subset(df_dd, :key .== k, :strat .== strat) |> DegreeDist

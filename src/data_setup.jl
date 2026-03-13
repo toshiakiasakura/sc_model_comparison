@@ -38,9 +38,10 @@ end
 """
 function remove_cnt_home_na(df::DataFrame, df_part::DataFrame)
 	cond = in.(df[:, :cnt_home], Ref(["true", "false"]))
-	df_clean = df[cond, :]
 	ids_rem = df[.~cond, :part_id_d] |> unique
 	println("Number of removing ids: ", length(ids_rem))
+	# Remove ALL contacts from participants with any NA cnt_home
+	df_clean = @subset(df[cond, :], .!in.(:part_id_d, Ref(ids_rem)))
 	ids_part = df_part[:, :part_id_d]
 	ids_incl = [id for id in ids_part if (id in ids_rem) == false]
 	df_part_clean = @subset(df_part, in.(:part_id_d, Ref(ids_incl)))
@@ -127,28 +128,29 @@ function create_df_dd(df::DataFrame, df_part::DataFrame, key::String)
 	return (df_dd, df_part)
 end
 
-"""For dataframe with two-day answers
-"""
-function duplicate_df_part(df_part::DataFrame)
-	df_tmp1 = copy(df_part)
-	df_tmp2 = copy(df_part)
-	@transform!(df_tmp1, :part_id_d = string.(:part_id) .* "_1")
-	@transform!(df_tmp2, :part_id_d = string.(:part_id) .* "_2")
-	df_part_new = vcat(df_tmp1, df_tmp2);
-	return df_part_new
+"""Expand df_part for multi-day surveys using actual day identifiers from contact data."""
+function expand_df_part_for_days(df_part::DataFrame, days)
+	dfs = [begin
+		tmp = copy(df_part)
+		@transform!(tmp, :part_id_d = string.(:part_id) .* "_" .* string(d))
+		tmp
+	end for d in sort(unique(days))]
+	return vcat(dfs...)
 end
 
 function create_part_id_d_middle_number(df::DataFrame, df_part::DataFrame)
-	df_part = duplicate_df_part(df_part)
-	df[!, :part_id_d] = @. string(df[:, :part_id], "_", get_middle_number(df[:, :cont_id]))
+	days = get_middle_number.(df[:, :cont_id])
+	df[!, :part_id_d] = @. string(df[:, :part_id], "_", days)
+	df_part = expand_df_part_for_days(df_part, days)
 	return (df, df_part)
 end
 
 function create_part_id_d_studyDay(df::DataFrame, df_part::DataFrame, r_survey)
-	df_part = duplicate_df_part(df_part)
 	df_cnt_extra = CSV.read(string(DIR_SURVEY, r_survey.file_contact_extra), DataFrame)
 	df = leftjoin(df, df_cnt_extra, on = :cont_id);
 	df[!, :part_id_d] = @with df string.(:part_id, "_", :studyDay)
+	days = df[:, :studyDay]
+	df_part = expand_df_part_for_days(df_part, days)
 	return (df, df_part)
 end
 
