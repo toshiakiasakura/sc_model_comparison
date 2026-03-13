@@ -17,5 +17,7 @@ USER root
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y --no-install-recommends nodejs && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+    npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION} && \
+    mkdir -p /home/jovyan/.julia /home/jovyan/.claude && \
+    chown jovyan:users /home/jovyan/.julia /home/jovyan/.claude
 USER jovyan

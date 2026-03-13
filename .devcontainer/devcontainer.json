@@ -9,8 +9,10 @@
     },
     "mounts": [
         "source=${localWorkspaceFolder},target=/workdir,type=bind,consistency=cached",
-        // Persist Claude Code config and auth across container rebuilds
-        "source=sc-model-claude-config-${devcontainerId},target=/home/jovyan/.claude,type=volume"
+        // Persist Claude Code settings across container rebuilds
+        "source=sc-model-claude-config-1,target=/home/jovyan/.claude,type=volume",
+        // Julia depot in a named volume (WSL2 filesystem) for fast I/O; populated from .julia-depot on first run
+        "source=sc-model-julia-depot,target=/home/jovyan/.julia,type=volume"
     ],
     "customizations": {
         "vscode": {
@@ -51,6 +53,8 @@
     "workspaceFolder": "/workdir",
     "shutdownAction": "stopContainer",
     "containerEnv": {
-        "JULIA_NUM_THREADS": "12"
+        "JULIA_NUM_THREADS": "12",
+        "JULIA_DEPOT_PATH": "/home/jovyan/.julia:/opt/julia",
+        "CLAUDE_CONFIG_DIR": "/workdir/.claude"
     }
 }
