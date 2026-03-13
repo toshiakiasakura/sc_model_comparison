@@ -416,61 +416,37 @@ end
 ##### CoMix UK data #####
 #########################
 
-function read_comix_uk_dds()
-	df_comix, df_part = read_comix_uk_contact_adult_2021Jul_2022Mar();
-	return get_df_dd_single(df_comix, df_part, "CoMix_uk_internal")
+function read_comix_uk_public_with_dates()
+	df = CSV.read("../dt_surveys/comix_uk_contact_common.csv", DataFrame)
+	df_sday = CSV.read("../dt_surveys/comix_uk_sday.csv", DataFrame)
+	df_sday[!, :date] = Date.(2000 .+ df_sday.year, df_sday.month, df_sday.day)
+	df = leftjoin(df, df_sday[:, [:part_id, :date]], on = :part_id)
+	return (df, df_sday)
 end
 
-function read_comix_uk_contact_adult_2021Jul_2022Mar()
-	function filter_date(df)
-		return @subset(df, Date(2021, 7, 1) .<= :date .< Date(2022, 4, 1))
-	end
-	df_comix = read_comix_uk_contact() |> filter_date
-	df_comix = standardise_comix_uk_to_socialmixer_data(df_comix)
-	df_part = CSV.read("../dt_comix_no_public/part_uk.csv", DataFrame) |>
-			  filter_date
-	# Standardise columns.
-	df_part = @select(df_part,
-		:part_id = :part_wave_uid,
-		:part_age = :part_age_group,
-		:part_gender = :part_gender_nb)
-	df_part[:, :hh_id] .= "NA"
+function read_comix_uk_dds()
+	df, df_part = read_comix_uk_contact_adult_2021Jul_2022Feb()
+	return get_df_dd_single(df, df_part, "CoMix_uk")
+end
+
+function read_comix_uk_contact_adult_2021Jul_2022Feb()
+	df, df_sday = read_comix_uk_public_with_dates()
+
+	# Date filter: July 2021 to Feb 2022
+	filter_date(d) = Date(2021, 7, 1) <= d < Date(2022, 3, 1)
+	df = @subset(df, filter_date.(:date))
+
+	# Read participant data + join dates
+	df_part = CSV.read("../dt_surveys/comix_uk_participant_common.csv", DataFrame)
+	df_part = leftjoin(df_part, df_sday[:, [:part_id, :date]], on = :part_id)
+	df_part = @subset(df_part, filter_date.(:date))
+
+	# Adult filter
 	df_part = filter_adult_cate(df_part, col = :part_age)
 
-	# Include >=18 by innerjoin.
-	df_comix = innerjoin(df_comix, df_part, on = :part_id)
-	return (df_comix, df_part)
-end
-
-function read_comix_uk_contact()
-	df_comix = CSV.read("../dt_comix_no_public/contacts_uk.csv", DataFrame)
-	df_comix[!, :year_month] = convert_date_to_year_month.(df_comix.date)
-	df_comix[!, :year_q] = convert_date_to_quarter.(df_comix.date)
-	return df_comix
-end
-
-function standardise_comix_uk_to_socialmixer_data(df_comix; skip_select = false)
-	if skip_select == false
-		df_new = @select(df_comix, :part_wave_uid, :cnt_household, :cnt_home, :cnt_work)
-	else
-		df_new = @select(df_comix, Not(:part_id))
-	end
-	@rename!(df_new,
-		:part_id = :part_wave_uid,
-		:cnt_hh = :cnt_household,
-		:cnt_home = :cnt_home,
-		:cnt_work = :cnt_work,
-	)
-	@transform!(df_new,
-		:key = "CoMix_uk_internal",
-		# TODO: this is a temporal filling.
-		:cnt_school = "NA",
-		:cnt_transport = "NA",
-		:cnt_leisure = "NA",
-		:cnt_otherplace = "NA",
-		:cont_id = "NA",
-	)
-	return df_new
+	# Inner join to keep only adult contacts
+	df = innerjoin(df, df_part[:, [:part_id]], on = :part_id)
+	return (df, df_part)
 end
 
 #########################
@@ -487,6 +463,7 @@ function read_comix2_df_and_df_part()
 end
 
 function read_comix2_dds()
+	key = "CoMix2"
 	df, df_part = read_comix2_df_and_df_part()
 	@transform!(df_part, :country = map(x -> x[1:2], :part_id));
 	df_part = filter_adult_cate(df_part; col = :part_age)
@@ -496,6 +473,7 @@ function read_comix2_dds()
 end
 
 function read_comix2_stratified_dds()
+	key = "CoMix2"
 	df, df_part = read_comix2_df_and_df_part()
 	@transform!(df_part, :country = map(x -> x[1:2], :part_id));
 
@@ -566,7 +544,7 @@ end
 function clean_survey_key_names!(df_dds::DataFrame)
 	df_dds[!, :key] = replace(df_dds[:, :key], "CoMix2" => "CoMix2 All")
 	@transform!(df_dds, :key = replace.(:key,
-		"CoMix_uk_internal" => "CoMix UK",  # TODO: update CoMix_uk_internal to CoMix UK.
+		"CoMix_uk" => "CoMix UK",
 		"post" => "(paper)",
 		"paper" => "(paper)",
 		"online" => "(online)",
