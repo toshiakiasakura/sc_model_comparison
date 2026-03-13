@@ -114,6 +114,7 @@ The software expects standardized survey data files with the following formats:
 - **JLD2 files** (`*_chns.jld2`): Serialized Julia objects containing fitted model chains, posterior distributions, and degree distributions
 
 #### Bootstrap Results (`dt_intermediate_bootstrap/`)
+This files are not uploaded due to a file size.
 - **JLD2 files** (`comix2_*samples_*repeat.jld2`): Bootstrap resampling results
 - **CSV files** (`comix2_waic_weights.csv`): Model weights and comparison statistics
 
