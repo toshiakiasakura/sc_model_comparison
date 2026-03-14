@@ -330,10 +330,6 @@ function plot_conv_fit()
 	dists_nhm = [get_ZeroInfDist(chns_nhm[m], m) for m in model_names]
 	conv_dist = get_ZeroInfConvDist(chn_conv, dd_hm);
 
-	# TODO: replace it
-	# m = model_names[3]
-	#chn = load("../dt_intermediate/CoMix2_chns_all.jld2")["result"]["chns_all"][m]
-	#dist_all = get_ZeroInfDist(chn, m)
 	chn = load("../dt_intermediate/CoMix2_chns_all.jld2")["result"]
 	dist_all = get_ZeroInfDist(chn, model_names[3])
 

@@ -173,7 +173,9 @@ function get_β_med(chn::Chains, n_x::Int)
 	return (β1_med, β2_med)
 end
 
-# TODO: df_obs is needed
+"""
+Note: df_obs should be loaded in the jupyter notebook.
+"""
 function pred_fmnl_multi_vars(chn::Chains, pred::Matrix)
 	n_x = size(pred, 2)
 	β1_med, β2_med = get_β_med(chn, n_x)

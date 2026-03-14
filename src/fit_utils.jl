@@ -95,17 +95,6 @@ function calc_waic(dists::Vector{T}, dd::DegreeDist
 	return -2 * (lppd - p_waic)
 end
 
-# TODO: delete it.
-#function calc_waic_weights(df_waic::DataFrame, model_names::Vector)
-#	mat_w = df_waic[:, model_names] |> Matrix
-#	mat_w = mat_w .- minimum(mat_w, dims = 2)
-#	mat_w = exp.(-0.5 .* mat_w)
-#	mat_w = mat_w ./ sum(mat_w, dims = 2)
-#	df_w = DataFrame(mat_w, model_names)
-#	df_w[!, :n_answer] = df_waic.n_answer;
-#	return df_w
-#end
-
 """Add waic_weight for data frame.
 """
 function flag_minimum_IC(df_res::DataFrame, ic::Symbol)::DataFrame
@@ -318,7 +307,6 @@ function prep_fmnl_vars(df_res::DataFrame)
 	df_ana = prepare_ana_for_fmnl(df_res_nhm)
 	df_ana = leftjoin(df_ana, df_mas, on = :key);
 
-	# TODO: check it.
 	@transform!(df_ana,
 		:mode = replace.(:mode, "OP" => "NA", "PI" => "P"),
 		:cutoff_less90 = replace.(:cutoff_less90, "Yes" => "c-Yes", "No" => "c-No"))
