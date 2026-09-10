@@ -1,10 +1,12 @@
-FROM quay.io/jupyter/datascience-notebook:x86_64-julia-1.11.1
-# julia-1.7.3 is required for Turing.jl
+# Multi-arch tag: resolves to the native image (amd64 or arm64) of the host.
+# Do not pin the x86_64- tag: on Apple Silicon it runs under Rosetta, where
+# multi-threaded Julia (JULIA_NUM_THREADS > 1) segfaults during GC.
+FROM quay.io/jupyter/datascience-notebook:julia-1.11.1
 
 WORKDIR /workdir
 EXPOSE 8888
 
-RUN JULIA_PROJECT=/workdir
+ENV JULIA_PROJECT=/workdir
 ENV DEVCONTAINER=TRUE
 
 # TODO: Activate checkpoint and install packages.
