@@ -96,6 +96,15 @@ function parse_bootstrap_estimated_data(paths, strat, M_lis)
 	df_sum
 end
 
+# x position on a log10 scale, with 0 placed one decade to the left of 1.
+log10_pos_with_zero(k::Integer) = k == 0 ? -1.0 : log10(k)
+
+function plot_ccdf_with_zero!(pl::Plots.Plot, d::UnivariateDistribution; kwds...)
+	k = [0, (1:9)..., (10:10:90)..., (100:100:900)..., (1000:1000:9000)..., 10_000]
+	ccdf.(d, k[end:-1:begin]) # To avoid the repetition errors. Create cache.
+	plot!(pl, log10_pos_with_zero.(k), log10.(ccdf.(d, k)); kwds...)
+end
+
 function plot_illustrative_dist_comparison()
 	# Base distributions inferred from the fitted distributions.
 	d_negbin = NegBin(4.0, 0.169)
@@ -130,14 +139,14 @@ function plot_illustrative_dist_comparison()
 	plot_pdf!(pl1, d_lomax; conv_log10 = false, label = "Poisson-Lomax")
 	annotate!(pl1, pos, text("A", :left, 18, "Helvetica"))
 
-	xtk = ([1, 10, 100, 1000], [L"1", L"10", L"10^{2}", L"10^{3}"])
+	xtk = ([-1, 0, 1, 2, 3], [L"0", L"1", L"10", L"10^{2}", L"10^{3}"])
 	ytk = ([-5, -4, -3, -2, -1, 0],
 		[L"10^{-5}", L"10^{-4}", L"10^{-3}", L"10^{-2}", L"10^{-1}", L"10^{0}"])
-	pl2 = plot(xlim = [1, 5_000], ylim = [-5, 0], ylabel = "CCDF",
+	pl2 = plot(xlim = [-1, log10(5_000)], ylim = [-5, 0], ylabel = "CCDF",
 		xlabel = "Number of contacts per day", xticks = xtk, yticks = ytk)
-	plot_ccdf!(pl2, d_negbin; conv_log10 = false, label = "Negative binomial")
-	plot_ccdf!(pl2, d_lognormal; conv_log10 = false, label = "Poisson-lognormal")
-	plot_ccdf!(pl2, d_lomax; conv_log10 = false, label = "Poisson-Lomax")
+	plot_ccdf_with_zero!(pl2, d_negbin; label = "Negative binomial")
+	plot_ccdf_with_zero!(pl2, d_lognormal; label = "Poisson-lognormal")
+	plot_ccdf_with_zero!(pl2, d_lomax; label = "Poisson-Lomax")
 	annotate!(pl2, pos, text("B", :left, 18, "Helvetica"))
 
 	pl3 = plot(ylim = [0, 20], ylabel = "Sample means of 1000 simulated contacts")
