@@ -68,7 +68,7 @@ See also `turing_utils.jl` which contains
 - `plot_single_setting`
 - `plot_multiple_settings`
 """
-function plot_ccdf!(pl::Plots.Plot, dd::DegreeDist; ytk_digit = 6, kwds...)
+function plot_ccdf!(pl::Plots.Plot, dd::DegreeDist; ytk_digit = 6, marker = :circle, kwds...)
 	if dd.include_zero == true
 		dd = deepcopy(dd)
 		dd.x = dd.x[2:end]
@@ -79,7 +79,7 @@ function plot_ccdf!(pl::Plots.Plot, dd::DegreeDist; ytk_digit = 6, kwds...)
 	ytk = (
 		[0, -1, -2, -3, -4, -5][ind_incl],
 		[L"1", L"10^{-1}", L"10^{-2}", L"10^{-3}", L"10^{-4}", L"10^{-5}"][ind_incl])
-	plot!(pl, dd.x, log10.(y_ccdf); marker = :circle, yticks = ytk,
+	plot!(pl, dd.x, log10.(y_ccdf); marker = marker, yticks = ytk,
 		kwds...)
 end
 plot_ccdf!(pl::Plots.Plot, x::Vector{Int64}; kwds...) = plot_ccdf!(pl, DegreeDist(x); kwds...)

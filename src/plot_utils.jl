@@ -4,16 +4,25 @@
 
 function plot_ccdf_across_surveys(
     df_dds::DataFrame, keys, strat::String, txt::String;
-    ano_pos = (-0.12, 1.03), fontsize=16, kwds...)
+    ano_pos = (-0.12, 1.03), fontsize=16, bg_keys = String[], kwds...)
     df_tmp = @subset(df_dds, :strat .== strat)
 
     xtk = ([1, 10, 100, 1000, 10_000], [L"1", L"10", L"10^{2}", L"10^{3}", L"10^{4}"])
     pl = plot(; xaxis = :log10, ylim = [-5, 0], xlim=[1, 10_000], xticks = xtk,
         kwds...)
-    for k in keys
+    # Background surveys in grey, drawn first so highlighted ones stay on top
+    bg_kwds = (color = :grey, alpha = 0.5, lw = 0.8)
+    for k in bg_keys
         dd = @subset(df_tmp, :key .== k) |> DegreeDist
-        plot_ccdf!(pl, dd; label=k, markersize=2.5, markerstrokewidth = 0.0)
+        plot_ccdf!(pl, dd; marker = :none, label = "", bg_kwds...)
     end
+    # Explicit palette index keeps colours independent of the grey series
+    for (i, k) in enumerate(keys)
+        dd = @subset(df_tmp, :key .== k) |> DegreeDist
+        plot_ccdf!(pl, dd; label=k, color=i, markersize=2.5, markerstrokewidth = 0.0)
+    end
+    # Dummy series so "Others" appears last in the legend
+    isempty(bg_keys) || plot!(pl, [NaN], [NaN]; label = "Others", bg_kwds...)
     annotate!(pl, ano_pos, text(txt, :black, fontsize, "Helvetica"))
     pl
 end
@@ -21,7 +30,8 @@ end
 function plot_all_deg_and_separate_subplots(df_dds)
     keys = ["CoMix UK", "CoMix2 All", "Danon 2013 (paper)", "Willem 2012", "Grijalva 2015"]
 
-    pl = plot_ccdf_across_surveys(df_dds, keys, "all", "A")
+    bg_keys = setdiff(unique(@subset(df_dds, :strat .== "all").key), keys)
+    pl = plot_ccdf_across_surveys(df_dds, keys, "all", "A"; bg_keys = bg_keys)
     pl1 = plot_all_hm_nhm(df_dds, "CoMix UK"; panel_name="B")
     pl2 = plot_all_hm_nhm(df_dds, "CoMix2 All"; panel_name="C")
     pl3 = plot_all_hm_nhm(df_dds, "Grijalva 2015"; panel_name="D")
