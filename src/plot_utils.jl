@@ -94,7 +94,7 @@ function plot_ccdf_across_surveys_with_different_setting(df_dds::DataFrame)
     ]
     small_keys = [
         "Melegaro 2017", "Hens 2009", "Zhang 2019", "Horby 2011",
-        "Kassteele 2017", "Wirya 2020", "Grijalva 2015",
+        "Kassteele 2017", "Mahikul 2020", "Grijalva 2015",
     ]
     po_keys = [
         "Danon 2013 (paper)", "Danon 2013 (online)",
