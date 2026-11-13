@@ -378,7 +378,6 @@ function plot_conv_fit()
 	default_plot_setting()
 	# Best models, as used for the convolution in `fit_convoluted_dist`.
 	i_best_hm, i_best_nhm = 2, 3
-	i_best_all = get_CoMix2_all_best_index()
 	xlab = "Number of contacts per day"
 	kwds_font = (labelfontsize = 13, legendfontsize = 11)
 	kwds_pdf = (ylim = [-5, 0], xlim = [0, 50], xlabel = xlab,
@@ -389,8 +388,8 @@ function plot_conv_fit()
 		plot_setting(dd_hm, dists_hm, i_best_hm, plot_ccdf!; kwds_ccdf...),
 		plot_setting(dd_nhm, dists_nhm, i_best_nhm, plot_pdf!; kwds_pdf...),
 		plot_setting(dd_nhm, dists_nhm, i_best_nhm, plot_ccdf!; kwds_ccdf...),
-		plot_conv(dd_all, dists_all, i_best_all, df_grid, plot_pdf!; kwds_pdf...),
-		plot_conv(dd_all, dists_all, i_best_all, df_grid, plot_ccdf!; kwds_ccdf...),
+		plot_conv(dd_all, dists_all, df_grid, plot_pdf!; kwds_pdf...),
+		plot_conv(dd_all, dists_all, df_grid, plot_ccdf!; kwds_ccdf...),
 	]
 	# Panel letters as left-aligned titles and settings as centred plot titles,
 	# since annotations placed outside the axes are clipped when each panel is
@@ -494,7 +493,7 @@ Args:
   a draw of the non-home parameters, then the pointwise median), not the
   refitted `model_ZeroInfConvDist`.
 """
-function plot_conv(dd_all, dists_all, i_best::Int64, df_grid::DataFrame,
+function plot_conv(dd_all, dists_all, df_grid::DataFrame,
 	plot_func!; kwds...)
 	colors = [7, 6, 13]
 	kwds_obs = (markersize = 2.5, markerstrokewidth = 0.0)
@@ -503,8 +502,7 @@ function plot_conv(dd_all, dists_all, i_best::Int64, df_grid::DataFrame,
 	pl = plot(; kwds...)
 	plot_func!(pl, dd_all, color = :black, label = "Observed"; kwds_obs...)
 	for (i, (m, dist)) in enumerate(zip(get_model_names(), dists_all))
-		label = model_abbr[m] * (i == i_best ? " (best)" : "")
-		plot_func!(pl, dist, color = colors[i], label = label; kwds_fit...)
+		plot_func!(pl, dist, color = colors[i], label = model_abbr[m]; kwds_fit...)
 	end
 	# Solid, so it is not confused with the dashed ZInf-NB curve
 	plot_conv_nofit_curve!(pl, df_grid, plot_func!; band = false,
