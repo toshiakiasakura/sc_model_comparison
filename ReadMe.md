@@ -1,5 +1,5 @@
-# Survey design matters for capturing heterogeneity in social contacts: from exponential to scale-free
-
+# Heavy-tail properties of social contact distributions and their implications for estimation of contact rates
+ 
 This repository contains code and data for analyzing social contact survey data and comparing different statistical models to capture heterogeneity in contact patterns.
 
 ## System Requirements
