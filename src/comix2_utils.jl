@@ -510,17 +510,6 @@ function plot_conv(dd_all, dists_all, df_grid::DataFrame,
 	return pl
 end
 
-"""Index (in `get_model_names()` order) of the lowest-WAIC model fitted to the
-CoMix2 "all contacts" data in `CoMix2_all_chns.jld2`.
-"""
-function get_CoMix2_all_best_index()
-	dd_all, _, _ = get_comix2_dd_all_hm_nhm()
-	chns = load("../dt_intermediate/CoMix2_all_chns.jld2")["res"]["chns_all"]
-	waics = [calc_waic(get_vec_ZeroInfDist_from_chn(chns[m], m), dd_all)
-		for m in get_model_names()]
-	return argmin(waics)
-end
-
 function fit_CoMix2_all()
 	dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
 	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
