@@ -641,7 +641,12 @@ function fit_surveys(df_dds::DataFrame; dir_ = "../dt_intermediate", refit_stale
 		println("Start fitting: $k")
 		res = fit_hm_nhm_dds(dds)
 		println("Finished fitting: $k")
+		flush(stdout)
 		jldsave(path, result = res)
+		# @memoize caches are keyed on fresh distribution objects and never hit
+		# across surveys; without this they grow by several GB per survey.
+		Memoization.empty_all_caches!()
+		GC.gc()
 	end
 end
 
@@ -685,7 +690,7 @@ when any chain is refitted.
 
 Returns: (key, strat, model) of chains still unconverged after the longest run.
 """
-function refit_unconverged!(key::String; dir_ = "../dt_intermediate",
+function refit_unconverged!(key::AbstractString; dir_ = "../dt_intermediate",
 	n_samples = [4000, 8000])
 	path = "$(dir_)/$(key)_chns.jld2"
 	res = load(path)["result"]
@@ -710,6 +715,8 @@ function refit_unconverged!(key::String; dir_ = "../dt_intermediate",
 		converged || push!(failing, (key, strat, name))
 	end
 	updated && jldsave(path, result = res)
+	Memoization.empty_all_caches!()
+	GC.gc()
 	return failing
 end
 
