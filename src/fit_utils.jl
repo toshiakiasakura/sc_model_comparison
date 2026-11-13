@@ -52,7 +52,7 @@ function summarise_res_one_strat(res::Dict, strat, key)
 		r = DataFrame(key = key, strat = strat, model = model_name,
 			n_sample = n_sample,
 			mean_raw = mean_raw, mean = mean_, mean_l = mean_l, mean_u = mean_u,
-			waic = waic_,
+			waic = waic_, converged = is_chains_converged(chn),
 		)
 
 		df_tmp = vcat(df_tmp, r)
@@ -86,7 +86,9 @@ function calc_waic(dists::Vector{T}, dd::DegreeDist
 	for i in 1:length(dd.x)
 		ll = logpdf.(dists, dd.x[i])
 
-		lppd1 = ll .|> exp |> mean |> log
+		# log(mean(exp.(ll))) via logsumexp: exp underflows to 0 when every draw
+		# assigns a tiny likelihood to an extreme count, giving an Inf WAIC.
+		lppd1 = logsumexp(ll) - log(length(ll))
 		lppd += lppd1 * dd.y[i]
 
 		p_waic1 = ll |> var
@@ -94,17 +96,6 @@ function calc_waic(dists::Vector{T}, dd::DegreeDist
 	end
 	return -2 * (lppd - p_waic)
 end
-
-# TODO: delete it.
-#function calc_waic_weights(df_waic::DataFrame, model_names::Vector)
-#	mat_w = df_waic[:, model_names] |> Matrix
-#	mat_w = mat_w .- minimum(mat_w, dims = 2)
-#	mat_w = exp.(-0.5 .* mat_w)
-#	mat_w = mat_w ./ sum(mat_w, dims = 2)
-#	df_w = DataFrame(mat_w, model_names)
-#	df_w[!, :n_answer] = df_waic.n_answer;
-#	return df_w
-#end
 
 """Add waic_weight for data frame.
 """
@@ -153,25 +144,42 @@ function plot_mean_excess_function(x_raw::Vector{Int64})
 	plot(qs, mef)
 end
 
-function obtain_peak_over_threshold_values(x_raw::Vector{Int64}, q::Float64)
-	q_v = quantile(x_raw, q)
-	x_thres = x_raw[x_raw .> q_v]
-	x = x_thres .- q_v
-	return x
+function obtain_peak_over_threshold_values(dd::DegreeDist, q_v::Float64)
+	x_vals = Float64[]
+	for (x, y) in zip(dd.x, dd.y)
+		if x > q_v
+			append!(x_vals, fill(Float64(x) - q_v, y))
+		end
+	end
+	return x_vals
 end
 
 function fit_GP_to_q(dd::DegreeDist, q::Float64)::DataFrameRow
-	x = dd_to_line_vec(dd)
-	q_v = quantile(x, q)
-	x = obtain_peak_over_threshold_values(x, q)
-	chn = fit_model_GP(x, model_GeneralizedPareto; n_samples = 2000)
-	res = extract_chain_info(chn)
-	m, l, h = res[2, [:mean, :lower, :upper]]
-	return DataFrame(q = q, q_v = q_v, mean = m, lower = l, upper = h)[1, :]
+	q_v = quantile(dd.x, weights(dd.y), q)
+	x = obtain_peak_over_threshold_values(dd, q_v)
+	if isempty(x)
+		@warn "Empty exceedances" q=q q_v=q_v dd_max=maximum(dd) dd_n=sum(dd)
+		return DataFrame(q = q, q_v = q_v, mean = NaN, lower = NaN, upper = NaN)[1, :]
+	end
+	if all(x .== 0.0) || length(unique(x)) == 1
+		@warn "Degenerate exceedances (constant values)" q=q q_v=q_v n_exc=length(x) unique_vals=unique(x)
+		return DataFrame(q = q, q_v = q_v, mean = NaN, lower = NaN, upper = NaN)[1, :]
+	end
+	try
+		chn = fit_model_GP(x, model_GeneralizedPareto; n_samples = 2000)
+		res = extract_chain_info(chn)
+		m, l, h = res[2, [:mean, :lower, :upper]]
+		return DataFrame(q = q, q_v = q_v, mean = m, lower = l, upper = h)[1, :]
+	catch e
+		@warn "fit_model_GP failed" q=q q_v=q_v n_exc=length(x) unique_n=length(unique(x)) min_x=minimum(x) max_x=maximum(x) exception=e
+		return DataFrame(q = q, q_v = q_v, mean = NaN, lower = NaN, upper = NaN)[1, :]
+	end
 end
 
-function EVI_estimate_for_qs(dd::DegreeDist;
-	qs = [0.95, 0.97, 0.99, 0.995, 0.999])::DataFrame
+# Thresholds (quantiles) used for the EVI; 0.98 is the main analysis.
+const EVI_QS = [0.95, 0.97, 0.98]
+
+function EVI_estimate_for_qs(dd::DegreeDist; qs = EVI_QS)::DataFrame
 	res = DataFrame()
 	for q in qs
 		r = fit_GP_to_q(dd, q)
@@ -181,11 +189,11 @@ function EVI_estimate_for_qs(dd::DegreeDist;
 end
 
 function collect_estimates_across_studies(df_dd::DataFrame, keys_;
-	strat = "non-home", kwds...)
+	strat = "non-home", qs = EVI_QS)
 	res_sum = DataFrame()
 	for k in keys_
 		dd = @subset(df_dd, :key .== k, :strat .== strat) |> DegreeDist
-		res = EVI_estimate_for_qs(dd; kwds...)
+		res = EVI_estimate_for_qs(dd; qs = qs)
 		res[!, :key] .= k
 		res_sum = vcat(res_sum, res)
 	end
@@ -252,12 +260,13 @@ function plot_EVI_forest_multi_q(df_EVI::DataFrame;
     for (q_idx, q_val) in enumerate(qs)
         df_q = @subset(df_plot, :q .== q_val)
         sort!(df_q, order(:key, by = x -> findfirst(==(x), keys_unique)))
-        y_positions = [(findfirst(==(k), keys_unique) - 1) * row_height + 1 + (q_idx - 1) * y_spacing
+        # Smallest p on top within each group, matching the legend order.
+        y_positions = [(findfirst(==(k), keys_unique) - 1) * row_height + 1 + (n_q - q_idx) * y_spacing
                        for k in df_q.key]
 
         scatter!(pl, df_q.mean, y_positions,
             xerr = (df_q.m_l, df_q.m_u),
-            label = "q = $q_val",
+            label = "p = $q_val",
             color = colors[mod1(q_idx, length(colors))],
             marker = markers[mod1(q_idx, length(markers))],
             markerstrokewidth = 0.4,
@@ -284,9 +293,9 @@ function plot_EVI_sensitivity_qs(df_EVI)
 	df_EVI_ana = @subset(df_EVI, @byrow (:key in rem_lis) == false);
 	df_EVI_hm = @subset(df_EVI_ana, :strat .== "home");
 	df_EVI_nhm = @subset(df_EVI_ana, :strat .== "non-home");
-	pl_nhm = plot_EVI_forest_multi_q(df_EVI_nhm, title = "Non-home contacts")
-	pl_hm = plot_EVI_forest_multi_q(df_EVI_hm, show_yticks=false, title = "Home contacts")
-	pl = plot(pl_nhm, pl_hm, size=(600,650), dpi = 300)
+	pl_hm = plot_EVI_forest_multi_q(df_EVI_hm, title = "Home contacts")
+	pl_nhm = plot_EVI_forest_multi_q(df_EVI_nhm, show_yticks=false, title = "Non-home contacts")
+	pl = plot(pl_hm, pl_nhm, size=(600,650), dpi = 300)
 end
 
 #############################################
@@ -302,7 +311,6 @@ function prep_fmnl_vars(df_res::DataFrame)
 	df_ana = prepare_ana_for_fmnl(df_res_nhm)
 	df_ana = leftjoin(df_ana, df_mas, on = :key);
 
-	# TODO: check it.
 	@transform!(df_ana,
 		:mode = replace.(:mode, "OP" => "NA", "PI" => "P"),
 		:cutoff_less90 = replace.(:cutoff_less90, "Yes" => "c-Yes", "No" => "c-No"))
@@ -362,14 +370,21 @@ function create_stacked_bar_weights(df_ana::DataFrame, models, df_n_obs::DataFra
 	df_tab_cum
 end
 
+"""Sort `df_ana` in the row order of the WAIC bar panels
+(`create_stacked_bar_weights` sorts by the number of "all" answers in `df_obs`).
+"""
+function sort_ana_by_n_all(df_ana::DataFrame, df_obs::DataFrame)::DataFrame
+	df_n_all = @pipe unstack(df_obs, :key, :strat, :n_answer) |> _[:, [:key, :all]]
+	return @pipe leftjoin(df_ana, df_n_all, on = :key) |> sort(_, :all)
+end
+
 function plot_bar_waic_pretty(df_obs::DataFrame, df_res::DataFrame, df_EVI::DataFrame)
-	df_ana = prep_fmnl_vars(df_res)
-	sort!(df_ana, :n_sample)
+	df_ana = sort_ana_by_n_all(prep_fmnl_vars(df_res), df_obs)
 
 	ytk = ["" for _ in 1:nrow(df_ana)];  #df_ana[:, :key];
 	pls = plot_bar_waic(df_obs, df_res, ytk = ytk, df_EVI = df_EVI)
-	annotate!(pls[1], (1.0, 1.04), text("Non-home contacts", :black, :left, :center, 12, "Helvetica"))
-	annotate!(pls[3], (1.0, 1.04), text("Home contacts", :black, :left, :center, 12, "Helvetica"))
+	annotate!(pls[1], (1.0, 1.04), text("Home contacts", :black, :left, :center, 12, "Helvetica"))
+	annotate!(pls[3], (1.0, 1.04), text("Non-home contacts", :black, :left, :center, 12, "Helvetica"))
 
 	x_base = -37.0
 	dx = -36
@@ -383,7 +398,7 @@ function plot_bar_waic_pretty(df_obs::DataFrame, df_res::DataFrame, df_EVI::Data
 	table_styl_annotate!(pls[1], df_ana[:, :n_sample], "Sample\nsize", x_base + 3*dx; dy = dy)
 	df_tmp = copy(df_ana)
 	table_styl_annotate!(pls[1], df_tmp[:, :key], "Study", x_base + 4*dx - 33)
-	plot!(pls[1], left_margin = 80Plots.mm)
+	plot!(pls[1], left_margin = 86Plots.mm)
 
 	annotate!(pls[1], x_base*5 - 20, nrow(df_ana) + 3.0, text("A", :black, :left, :center, 18, "Helvetica"))
 	annotate!(pls[1], (0.1, 1.1), text("B", :black, :left, :center, 18, "Helvetica"))
@@ -392,7 +407,7 @@ function plot_bar_waic_pretty(df_obs::DataFrame, df_res::DataFrame, df_EVI::Data
 	return plot(pls..., layout = layout,
 		right_margin = 5.0Plots.mm,
 		top_margin = 15.0Plots.mm,
-		size = (1000, 600),
+		size = (1150, 600),
 		dpi = 200, fig = :png,
 	)
 end
@@ -439,12 +454,21 @@ function plot_bar_waic(df_obs, df_res; ytk = nothing, df_EVI = nothing)
 		pl3 = plot_EVI_across_surveys(df_EVI_hm; col_ytick = "empty", title = "") #"Home contacts")
 		pl4 = plot_EVI_across_surveys(df_EVI_nhm; col_ytick = "empty", title = "") #"Non-home contacts")
 
+		# Home (pl1, pl3) is placed first, non-home (pl2, pl4) second.
+		# Study names for the non-home bar panel, drawn as left-aligned annotations
+		# (tick labels are right-aligned in Plots.jl). Tick marks are kept with empty labels.
+		x_lab = -72.0
+		for (i, key) in enumerate(df_tab_cum_nhm[:, :key])
+			annotate!(pl2, x_lab, i, text(key, :black, :left, :vcenter, 8, "Helvetica"))
+		end
+		plot!(pl2, left_margin = 18.0Plots.mm)
+		plot!(pl1, legend = (0.6, -0.15), bottom_margin = 15Plots.mm)
+
 		adj_m = -9.0Plots.mm
-		plot!(pl1, left_margin = adj_m)
 		plot!(pl3, left_margin = adj_m)
 		plot!(pl4, left_margin = adj_m)
 
-		return [pl2, pl4, pl1, pl3]
+		return [pl1, pl3, pl2, pl4]
 	end
 end
 
@@ -520,13 +544,18 @@ end
 """
 Args:
 - chn_res: DataFrame from `extract_chain_info`, removing constant terms.
-	first n_β should be for ZInf-NB over ZInf-PLomax.
+	first n_β should be for ZInf-NB over ZInf-PLomax (ZInf-PLomax is the reference
+	category of `model_fmnl`). Signs are flipped so that log ratios are plotted
+	as ZInf-PLomax over ZInf-NB / ZInf-PLN.
 """
 function forestplot_fmnl_multi_vars(chn_res::DataFrame, x_names::Vector; yticks = true)
 	n_β = nrow(chn_res) ÷ 2
-	est = chn_res[1:end, :median]
-	xerr_l = chn_res[1:end, :xerr_l]
-	xerr_u = chn_res[1:end, :xerr_u]
+	# Flip the sign: log(w_PLomax / w_other) = -log(w_other / w_PLomax).
+	# Error bars span the 95% HPD interval (:lower, :upper) around the median,
+	# so the flipped interval is [-upper, -lower].
+	est = -chn_res[1:end, :median]
+	xerr_l = chn_res[1:end, :upper] .- chn_res[1:end, :median]
+	xerr_u = chn_res[1:end, :median] .- chn_res[1:end, :lower]
 
 	yvals = [1, 3, 5, 6, 8]
 	ytk_ind = [
@@ -545,19 +574,19 @@ function forestplot_fmnl_multi_vars(chn_res::DataFrame, x_names::Vector; yticks 
 	dy = 0.15
 	pl = plot(xlabel = "Log ratio", yticks = ytk, ylim = [0.5, n_β + 4 + 0.5])
 	if yticks==true
-		[annotate!(pl, -9.3, y,
+		[annotate!(pl, -8.8, y,
 			text(ytk_cate[i], :black, :right, 9, "Helvetica"))
 		 for (i, y) in enumerate([2, 4, 7, 9])]
 	end
 	inds = 1:n_β
 	plot!(pl, est[inds], yvals .- dy, xerr = (xerr_l[inds], xerr_u[inds]),
 		seriestype = :scatter, markershape = :square,
-		label = " ZInf-NB over ZInf-PLomax",
+		label = " ZInf-PLomax over ZInf-NB",
 	)
 	inds = (n_β+1):(2*n_β)
 	plot!(pl, est[inds], yvals .+ dy, xerr = (xerr_l[inds], xerr_u[inds]),
 		seriestype = :scatter, markershape = :square,
-		label = " ZInf-PLN over ZInf-PLomax",
+		label = " ZInf-PLomax over ZInf-PLN",
 	)
 	vline!(pl, [0], color = :black, ls = :dash, label = false, z_order = 1, alpha = 0.5)
 	plot!(pl, size = (400, 300), grid = false,
@@ -572,7 +601,7 @@ function plot_meta_reg(chn_res, chn_res_multi)
 
 	xtk = [-6.0, -3.0, 0.0, 3.0, 6.0]
 	xtk = (xtk, xtk)
-	kwds = (xlim = [-8.0, 6.5], xticks = xtk, titlefontsize = 12,
+	kwds = (xlim = [-7.5, 7.5], xticks = xtk, titlefontsize = 12,
 		ytickfontsize = 9, xtickfontsize = 9)
 	plot!(pl1; legend_columns = 2, top_margin = 5Plots.mm, left_margin = 7Plots.mm,
 		legendfontsize = 9, kwds...)
@@ -589,17 +618,22 @@ end
 """
 Args:
 - df_dds: Merged dds DataFrame.
+- refit_stale: refit (and overwrite) saved fits whose degree distributions differ
+	from `df_dds` (see `is_fit_stale`). Otherwise existing files are skipped.
 """
-function fit_surveys(df_dds::DataFrame; dir_ = "../dt_intermediate")
+function fit_surveys(df_dds::DataFrame; dir_ = "../dt_intermediate", refit_stale = false)
 	keys = df_dds.key |> unique
 	for k in keys
 		path = "$(dir_)/$(k)_chns.jld2"
+		df_tmp = @subset(df_dds, :key .== k)
 		if isfile(path) == true
-			println("Path present: ", path)
-			continue
+			if (refit_stale == false) || (is_fit_stale(path, df_tmp) == false)
+				println("Path present: ", path)
+				continue
+			end
+			println("Stale fit (data changed), refitting: ", path)
 		end
 
-		df_tmp = @subset(df_dds, :key .== k)
 		dds = Dict(
 			"home" => @subset(df_tmp, :strat .== "home") |> DegreeDist,
 			"non-home" => @subset(df_tmp, :strat .== "non-home") |> DegreeDist,
@@ -607,7 +641,12 @@ function fit_surveys(df_dds::DataFrame; dir_ = "../dt_intermediate")
 		println("Start fitting: $k")
 		res = fit_hm_nhm_dds(dds)
 		println("Finished fitting: $k")
+		flush(stdout)
 		jldsave(path, result = res)
+		# @memoize caches are keyed on fresh distribution objects and never hit
+		# across surveys; without this they grow by several GB per survey.
+		Memoization.empty_all_caches!()
+		GC.gc()
 	end
 end
 
@@ -630,6 +669,57 @@ function fit_hm_nhm_dds(dds::Dict)
 	return res
 end
 
+"""True when the home or non-home degree distribution stored in a fit file
+differs from the one in `df_tmp` (rows of master_dds for one key).
+"""
+function is_fit_stale(path::String, df_tmp::DataFrame)::Bool
+	dds = load(path)["result"]["dds"]
+	for strat in ["home", "non-home"]
+		dd_new = @subset(df_tmp, :strat .== strat) |> DegreeDist
+		dd_old = dds[strat]
+		i_new, i_old = sortperm(dd_new.x), sortperm(dd_old.x)
+		same = (dd_new.x[i_new] == dd_old.x[i_old]) && (dd_new.y[i_new] == dd_old.y[i_old])
+		same || return true
+	end
+	return false
+end
+
+"""Refit chains of a saved fit that fail `is_chains_converged`, with more draws
+(`n_samples`, tried in order until the chain converges). The file is overwritten
+when any chain is refitted.
+
+Returns: (key, strat, model) of chains still unconverged after the longest run.
+"""
+function refit_unconverged!(key::AbstractString; dir_ = "../dt_intermediate",
+	n_samples = [4000, 8000])
+	path = "$(dir_)/$(key)_chns.jld2"
+	res = load(path)["result"]
+	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
+		model_ZeroInfPoissonLomax]
+	updated = false
+	failing = []
+	for strat in ["home", "non-home"], model_func in models
+		name = get_dist_name_from_model(model_func)
+		is_chains_converged(res["chns_$strat"][name]) && continue
+		model = model_func(res["dds"][strat])
+		med, _ = get_median_parms_from_model(model)
+		converged = false
+		for n in n_samples
+			println("Refitting unconverged chain: $key, $strat, $name with $n draws")
+			chn = fit_model_with_forward_mode(model, n; iparms = med, progress = false)
+			res["chns_$strat"][name] = chn
+			updated = true
+			converged = is_chains_converged(chn)
+			converged && break
+		end
+		converged || push!(failing, (key, strat, name))
+	end
+	updated && jldsave(path, result = res)
+	Memoization.empty_all_caches!()
+	GC.gc()
+	return failing
+end
+
 """This function returns a median value of each model parameter
 using a pathfinder for fast computation.
 
@@ -637,7 +727,25 @@ Args:
 - model: A Turing model after sampling with data supplied.
 """
 function get_median_parms_from_model(model)
-	chn = pathfinder(model; ndraws = 1000).draws_transformed
+	# Pathfinder only supplies NUTS's starting point, so a failure here is not
+	# fatal. Its LBFGS line search can hit a non-finite value on an unlucky
+	# dataset (AssertionError in LineSearches.secant2!); under the
+	# Threads.@threads loops in fit_hm_nhm_dds that aborts every fit in flight.
+	# Fall back to NUTS's own initialisation (iparms = Dict()) rather than
+	# dropping the dataset: discarding it would condition results on the
+	# datasets Pathfinder happens to converge on, which would bias the
+	# bootstrap coverage estimates.
+	local res
+	try
+		res = pathfinder(model; ndraws = 1000)
+	catch e
+		if e isa InterruptException
+			rethrow()
+		end
+		@warn "pathfinder failed; falling back to NUTS default init" exception = (e, catch_backtrace())
+		return (Dict(), nothing)
+	end
+	chn = res.draws_transformed
 	median_params = Dict(p => median(chn[p]) for p in names(chn, :parameters))
 	return (median_params, chn)
 end

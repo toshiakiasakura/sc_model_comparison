@@ -34,17 +34,18 @@ function filter_adult_cate(df_part::DataFrame; col = :part_age_group)
 	return @subset(df_part, in.($col, Ref(adult_age)))
 end
 
-"""Remove contacts and part id from those with cnt_home is NA.
+"""Participant-day ids (`part_id_d`) with at least one contact whose cnt_home is NA.
+
+These participant-days stay in "all", which does not need cnt_home, and are
+excluded from "home" and "non-home" (see `add_zero_counts_to_df_deg`), since
+their split between the two settings is unknown.
 """
-function remove_cnt_home_na(df::DataFrame, df_part::DataFrame)
+function ids_with_cnt_home_na(df::DataFrame)
 	cond = in.(df[:, :cnt_home], Ref(["true", "false"]))
-	df_clean = df[cond, :]
-	ids_rem = df[.~cond, :part_id_d] |> unique
-	println("Number of removing ids: ", length(ids_rem))
-	ids_part = df_part[:, :part_id_d]
-	ids_incl = [id for id in ids_part if (id in ids_rem) == false]
-	df_part_clean = @subset(df_part, in.(:part_id_d, Ref(ids_incl)))
-	return df_clean, df_part_clean
+	ids_na = df[.~cond, :part_id_d] |> unique
+	println("Number of participant-days with NA cnt_home (excluded from home/non-home): ",
+		length(ids_na))
+	return ids_na
 end
 
 """This function is prepared to rename part_id to part_uid.
@@ -88,15 +89,27 @@ function degree_dist_for_all_home_non_home(df::DataFrame; key=:key)
 	return vcat(df_all, df_hm, df_nhm)
 end
 
-function add_zero_counts_to_df_deg(df_deg::DataFrame, df_part::DataFrame)
-	n_part = df_part[:, :part_id_d] |> unique |> length
+"""
+Args:
+- ids_excl_hm_nhm: participant-days dropped from "home" and "non-home" only
+	(e.g. from `ids_with_cnt_home_na`); they are kept in "all".
+"""
+function add_zero_counts_to_df_deg(df_deg::DataFrame, df_part::DataFrame;
+	ids_excl_hm_nhm = [])
+	ids_part = df_part[:, :part_id_d] |> unique
+	ids_excl = Set(ids_excl_hm_nhm)
+	n_part = length(ids_part)
+	n_part_hm_nhm = n_part - count(in(ids_excl), ids_part)
 
-	df_dd = vcat([
-		@pipe @subset(df_deg, :strat .== st)[:, :cnt] |>
-			  DegreeDist(_, n_part) |>
-			  dd_to_df(_, st)
-		for st in ["all", "home", "non-home"]
-	]...)
+	df_dd = vcat([begin
+		df_st = @subset(df_deg, :strat .== st)
+		n = n_part
+		if st != "all"
+			df_st = @subset(df_st, .!in.(:part_id_d, Ref(ids_excl)))
+			n = n_part_hm_nhm
+		end
+		DegreeDist(Vector{Int64}(df_st[:, :cnt]), n) |> (dd -> dd_to_df(dd, st))
+	end for st in ["all", "home", "non-home"]]...)
 	return df_dd
 end
 
@@ -109,46 +122,49 @@ Args:
 function get_df_dd_single(df::DataFrame, df_part::DataFrame, key::String)
 	standardise_cnt_home_values!(df)
 	rename_part_id_to_uid!(df, df_part)
-	df, df_part = remove_cnt_home_na(df, df_part)
-	df_dd, df_part = create_df_dd(df, df_part, key)
+	ids_na = ids_with_cnt_home_na(df)
+	df_dd, df_part = create_df_dd(df, df_part, key; ids_excl_hm_nhm = ids_na)
 	return (df_dd, df_part)
 end
 
 """
 Args:
 - df: part_id_d (unique for each contact answer) is included.
+- ids_excl_hm_nhm: see `add_zero_counts_to_df_deg`.
 """
-function create_df_dd(df::DataFrame, df_part::DataFrame, key::String)
+function create_df_dd(df::DataFrame, df_part::DataFrame, key::String;
+	ids_excl_hm_nhm = [])
 	df[:, :key] .= key
 	df_deg = degree_dist_for_all_home_non_home(df)
-	df_dd = add_zero_counts_to_df_deg(df_deg, df_part) # for no group contacts
+	df_dd = add_zero_counts_to_df_deg(df_deg, df_part; ids_excl_hm_nhm = ids_excl_hm_nhm)
 	df_dd[:, :key] .= key
 	df_part[:, :key] .= key
 	return (df_dd, df_part)
 end
 
-"""For dataframe with two-day answers
-"""
-function duplicate_df_part(df_part::DataFrame)
-	df_tmp1 = copy(df_part)
-	df_tmp2 = copy(df_part)
-	@transform!(df_tmp1, :part_id_d = string.(:part_id) .* "_1")
-	@transform!(df_tmp2, :part_id_d = string.(:part_id) .* "_2")
-	df_part_new = vcat(df_tmp1, df_tmp2);
-	return df_part_new
+"""Expand df_part for multi-day surveys using actual day identifiers from contact data."""
+function expand_df_part_for_days(df_part::DataFrame, days)
+	dfs = [begin
+		tmp = copy(df_part)
+		@transform!(tmp, :part_id_d = string.(:part_id) .* "_" .* string(d))
+		tmp
+	end for d in sort(unique(days))]
+	return vcat(dfs...)
 end
 
 function create_part_id_d_middle_number(df::DataFrame, df_part::DataFrame)
-	df_part = duplicate_df_part(df_part)
-	df[!, :part_id_d] = @. string(df[:, :part_id], "_", get_middle_number(df[:, :cont_id]))
+	days = get_middle_number.(df[:, :cont_id])
+	df[!, :part_id_d] = @. string(df[:, :part_id], "_", days)
+	df_part = expand_df_part_for_days(df_part, days)
 	return (df, df_part)
 end
 
 function create_part_id_d_studyDay(df::DataFrame, df_part::DataFrame, r_survey)
-	df_part = duplicate_df_part(df_part)
 	df_cnt_extra = CSV.read(string(DIR_SURVEY, r_survey.file_contact_extra), DataFrame)
 	df = leftjoin(df, df_cnt_extra, on = :cont_id);
 	df[!, :part_id_d] = @with df string.(:part_id, "_", :studyDay)
+	days = df[:, :studyDay]
+	df_part = expand_df_part_for_days(df_part, days)
 	return (df, df_part)
 end
 
@@ -187,6 +203,7 @@ function read_dd_single_survey(df_master::DataFrame, key::String)
 end
 
 function read_dd_two_day_survey(df_master::DataFrame, key::String)
+	key == "Beraud_2015" && return read_Beraud_2015_dds() # two waves x two days
 	r_survey = @subset(df_master, :key .== key)[1, :]
 	df, df_part = read_raw_sc_data(r_survey);
 	df, df_part = filter_adult_cont_and_innerjoin(df, df_part);
@@ -194,15 +211,88 @@ function read_dd_two_day_survey(df_master::DataFrame, key::String)
 
 	if key in ["Melegaro_2017"]
 		df, df_part = create_part_id_d_studyDay(df, df_part, r_survey);
-	elseif key in ["Hens_2009", "Beraud_2015"]
+	elseif key in ["Hens_2009"]
 		df, df_part = create_part_id_d_middle_number(df, df_part);
 	else
 		error("Key not recognised for two-day survey: ", key)
 	end
-	df, df_part = remove_cnt_home_na(df, df_part)
+	ids_na = ids_with_cnt_home_na(df)
 
-	df_dd, df_part = create_df_dd(df, df_part, key)
+	df_dd, df_part = create_df_dd(df, df_part, key; ids_excl_hm_nhm = ids_na)
 	return (df_dd, df_part)
+end
+
+#########################
+##### Beraud_2015    #####
+#########################
+
+"""Beraud_2015 has two survey waves with two consecutive diary days each,
+and 278 participants answered both waves. `cont_id` is `part_wave_day_n`,
+so a participant-day is identified by part_id, wave and studyDay,
+and participant-days are taken from the sday file.
+
+Supplementary professional contacts (SPC): participants with more than 20
+daily professional contacts did not record them in the diary but gave
+the number (`work_contacts_nr`). Following Béraud et al. (2015),
+SPC are added to non-home contacts on weekdays only. 999 is treated as missing.
+"""
+function read_Beraud_2015_dds()
+	key = "Beraud_2015"
+	df_master = read_survey_master_data()
+	r_survey = @subset(df_master, :key .== key)[1, :]
+	df, df_part = read_raw_sc_data(r_survey)
+	df, df_part = filter_adult_cont_and_innerjoin(df, df_part)
+	standardise_cnt_home_values!(df)
+
+	parts = split.(df[:, :cont_id], '_')
+	df[!, :part_id_d] = [join(p[1:3], "_") for p in parts]
+	path_sday = replace(r_survey.file_contact_common, "contact_common" => "sday")
+	df_sday = CSV.read(string(DIR_SURVEY, path_sday), DataFrame)
+	@transform!(df_sday, :part_id_d = string.(:part_id, "_", :wave, "_", :studyDay))
+	df_part = innerjoin(df_part,
+		@select(df_sday, :part_id, :part_id_d, :wave, :year, :month, :day),
+		on = :part_id)
+	ids_na = ids_with_cnt_home_na(df)
+
+	df[:, :key] .= key
+	df_deg = degree_dist_for_all_home_non_home(df)
+	df_deg = add_professional_counts_to_Beraud_2015(df_deg, df_part, r_survey)
+	df_dd = add_zero_counts_to_df_deg(df_deg, df_part; ids_excl_hm_nhm = ids_na)
+	df_dd[:, :key] .= key
+	df_part[:, :key] .= key
+	return (df_dd, df_part)
+end
+
+function add_professional_counts_to_Beraud_2015(df_deg::DataFrame, df_part::DataFrame, r_survey)
+	path = replace(r_survey.file_contact_common, "contact_common" => "participant_extra")
+	df_extra = CSV.read(string(DIR_SURVEY, path), DataFrame; missingstring = ["", "NA"])
+	df_extra = @subset(df_extra,
+		coalesce.(:more20ContactPro .== 1, false),
+		coalesce.(:work_contacts_nr .!= 999, false))
+	df_spc = innerjoin(df_part, @select(df_extra, :part_id, :wave, :spc = :work_contacts_nr),
+		on = [:part_id, :wave])
+	df_spc = @subset(df_spc, dayofweek.(Date.(:year, :month, :day)) .<= 5) # Mon-Fri
+	println("Number of participant-days with SPC: ", nrow(df_spc))
+
+	df_add = DataFrame(part_id_d = df_spc[:, :part_id_d], n_add = Int.(df_spc[:, :spc]))
+	return add_extra_counts(df_deg, df_add, r_survey.key)
+end
+
+"""Add counts reported outside the contact diary (e.g. Beraud_2015 professional
+contacts, Zhang_2019 group contacts) to the "all" and "non-home" degrees.
+
+Args:
+- df_add: columns `part_id_d` and `n_add`, one row per participant-day.
+	Outer-joined, so participant-days without any diary contact in a setting
+	get a row instead of being counted as zero by `add_zero_counts_to_df_deg`.
+"""
+function add_extra_counts(df_deg::DataFrame, df_add::DataFrame, key::String)
+	df_add = vcat([DataFrame(part_id_d = df_add[:, :part_id_d], n_add = df_add[:, :n_add], strat = st)
+		for st in ["all", "non-home"]]...)
+	df_deg = outerjoin(df_deg, df_add, on = [:part_id_d, :strat])
+	@transform!(df_deg, :cnt = coalesce.(:cnt, 0) .+ coalesce.(:n_add, 0))
+	df_deg[!, :key] .= key
+	return @select(df_deg, Not(:n_add))
 end
 
 #################################
@@ -278,26 +368,28 @@ function read_Zhang_2019_dds(; fil_survey_mode = false)
 	df, df_part = filter_adult_cont_and_innerjoin(df, df_part)
 	standardise_cnt_home_values!(df)
 	rename_part_id_to_uid!(df, df_part)
-	df, df_part = remove_cnt_home_na(df, df_part)
+	ids_na = ids_with_cnt_home_na(df)
 
 	df[:, :key] .= key
 	df_deg = degree_dist_for_all_home_non_home(df)
-	df_deg = add_group_counts_to_Zhang_2019(df_deg, r_survey)
-	df_dd = add_zero_counts_to_df_deg(df_deg, df_part) # for no group contacts
+	df_deg = add_group_counts_to_Zhang_2019(df_deg, df_part, r_survey)
+	df_dd = add_zero_counts_to_df_deg(df_deg, df_part; ids_excl_hm_nhm = ids_na)
 	df_dd[:, :key] .= key
 	df_part[:, :key] .= key
 	return (df_dd, df_part)
 end
 
-function add_group_counts_to_Zhang_2019(df_deg::DataFrame, r_survey)
-	df_part_extra = @pipe CSV.read(string(DIR_SURVEY, r_survey.file_part_extra), DataFrame)
-	df_part_extra = @select(df_part_extra, :part_id_d = :part_id, :group_n)
-
-	df_deg_tmp = leftjoin(df_deg, df_part_extra, on = :part_id_d)
-	@transform!(df_deg_tmp, @byrow :group_n = :strat != "home" ? :group_n : 0)
-	@transform!(df_deg_tmp, :cnt = :cnt .+ :group_n)
-	df_deg_tmp = @select(df_deg_tmp, Not(:group_n))
-	return df_deg_tmp
+"""Group contacts (`group_n`) are added to "all" and "non-home".
+Starts from the participant table, so participants whose only non-home contacts
+are group contacts are not counted as zero.
+"""
+function add_group_counts_to_Zhang_2019(df_deg::DataFrame, df_part::DataFrame, r_survey)
+	df_part_extra = CSV.read(string(DIR_SURVEY, r_survey.file_part_extra), DataFrame)
+	df_grp = @select(df_part_extra, :part_id_d = :part_id, :n_add = :group_n)
+	df_grp = innerjoin(df_grp, unique(df_part[:, [:part_id_d]]), on = :part_id_d)
+	df_grp = @subset(df_grp, coalesce.(:n_add, 0) .> 0)
+	println("Number of participants with group contacts: ", nrow(df_grp))
+	return add_extra_counts(df_deg, df_grp, r_survey.key)
 end
 
 #########################
@@ -363,7 +455,7 @@ function read_danon_2013_part(; fil_adult = false)
 end
 
 function standardise_danon_2013_to_socialmixer_data(df::DataFrame)::DataFrame
-	df_new = @select(df, :part_id_d, :C_Wheres_1)
+	df_new = @select(df, :part_id_d, :C_Wheres_1, :C_Number)
 	@rename!(df_new,
 		:cnt_home = :C_Wheres_1,
 	)
@@ -383,7 +475,11 @@ end
 
 function danon_degree_dist_for_all_hm_nhm(df::DataFrame, df_part::DataFrame)
 	df_hm = @subset(df, :cnt_home .== 1)
-	df_hm = combine(groupby(df_hm, :part_id_d), nrow => :cnt)
+	# A contact row can be a group (C_Number people), and P_total_contacts counts
+	# people, so home is counted in people too. Rows coded -1/0 count as one
+	# contact, which reproduces P_total_contacts best (99.9% of adults).
+	n_people(x) = sum(max.(coalesce.(x, 1), 1))
+	df_hm = combine(groupby(df_hm, :part_id_d), :C_Number => n_people => :cnt)
 
 	# Note: since some of the total contacts are missing, those participants
 	#     were removed from all and non-home.
@@ -416,61 +512,37 @@ end
 ##### CoMix UK data #####
 #########################
 
-function read_comix_uk_dds()
-	df_comix, df_part = read_comix_uk_contact_adult_2021Jul_2022Mar();
-	return get_df_dd_single(df_comix, df_part, "CoMix_uk_internal")
+function read_comix_uk_public_with_dates()
+	df = CSV.read("../dt_surveys/comix_uk_contact_common.csv", DataFrame)
+	df_sday = CSV.read("../dt_surveys/comix_uk_sday.csv", DataFrame)
+	df_sday[!, :date] = Date.(2000 .+ df_sday.year, df_sday.month, df_sday.day)
+	df = leftjoin(df, df_sday[:, [:part_id, :date]], on = :part_id)
+	return (df, df_sday)
 end
 
-function read_comix_uk_contact_adult_2021Jul_2022Mar()
-	function filter_date(df)
-		return @subset(df, Date(2021, 7, 1) .<= :date .< Date(2022, 4, 1))
-	end
-	df_comix = read_comix_uk_contact() |> filter_date
-	df_comix = standardise_comix_uk_to_socialmixer_data(df_comix)
-	df_part = CSV.read("../dt_comix_no_public/part_uk.csv", DataFrame) |>
-			  filter_date
-	# Standardise columns.
-	df_part = @select(df_part,
-		:part_id = :part_wave_uid,
-		:part_age = :part_age_group,
-		:part_gender = :part_gender_nb)
-	df_part[:, :hh_id] .= "NA"
+function read_comix_uk_dds()
+	df, df_part = read_comix_uk_contact_adult_2021Jul_2022Feb()
+	return get_df_dd_single(df, df_part, "CoMix_uk")
+end
+
+function read_comix_uk_contact_adult_2021Jul_2022Feb()
+	df, df_sday = read_comix_uk_public_with_dates()
+
+	# Date filter: July 2021 to Feb 2022
+	filter_date(d) = Date(2021, 7, 1) <= d < Date(2022, 3, 1)
+	df = @subset(df, filter_date.(:date))
+
+	# Read participant data + join dates
+	df_part = CSV.read("../dt_surveys/comix_uk_participant_common.csv", DataFrame)
+	df_part = leftjoin(df_part, df_sday[:, [:part_id, :date]], on = :part_id)
+	df_part = @subset(df_part, filter_date.(:date))
+
+	# Adult filter
 	df_part = filter_adult_cate(df_part, col = :part_age)
 
-	# Include >=18 by innerjoin.
-	df_comix = innerjoin(df_comix, df_part, on = :part_id)
-	return (df_comix, df_part)
-end
-
-function read_comix_uk_contact()
-	df_comix = CSV.read("../dt_comix_no_public/contacts_uk.csv", DataFrame)
-	df_comix[!, :year_month] = convert_date_to_year_month.(df_comix.date)
-	df_comix[!, :year_q] = convert_date_to_quarter.(df_comix.date)
-	return df_comix
-end
-
-function standardise_comix_uk_to_socialmixer_data(df_comix; skip_select = false)
-	if skip_select == false
-		df_new = @select(df_comix, :part_wave_uid, :cnt_household, :cnt_home, :cnt_work)
-	else
-		df_new = @select(df_comix, Not(:part_id))
-	end
-	@rename!(df_new,
-		:part_id = :part_wave_uid,
-		:cnt_hh = :cnt_household,
-		:cnt_home = :cnt_home,
-		:cnt_work = :cnt_work,
-	)
-	@transform!(df_new,
-		:key = "CoMix_uk_internal",
-		# TODO: this is a temporal filling.
-		:cnt_school = "NA",
-		:cnt_transport = "NA",
-		:cnt_leisure = "NA",
-		:cnt_otherplace = "NA",
-		:cont_id = "NA",
-	)
-	return df_new
+	# Inner join to keep only adult contacts
+	df = innerjoin(df, df_part[:, [:part_id]], on = :part_id)
+	return (df, df_part)
 end
 
 #########################
@@ -487,6 +559,7 @@ function read_comix2_df_and_df_part()
 end
 
 function read_comix2_dds()
+	key = "CoMix2"
 	df, df_part = read_comix2_df_and_df_part()
 	@transform!(df_part, :country = map(x -> x[1:2], :part_id));
 	df_part = filter_adult_cate(df_part; col = :part_age)
@@ -496,6 +569,7 @@ function read_comix2_dds()
 end
 
 function read_comix2_stratified_dds()
+	key = "CoMix2"
 	df, df_part = read_comix2_df_and_df_part()
 	@transform!(df_part, :country = map(x -> x[1:2], :part_id));
 
@@ -566,7 +640,7 @@ end
 function clean_survey_key_names!(df_dds::DataFrame)
 	df_dds[!, :key] = replace(df_dds[:, :key], "CoMix2" => "CoMix2 All")
 	@transform!(df_dds, :key = replace.(:key,
-		"CoMix_uk_internal" => "CoMix UK",  # TODO: update CoMix_uk_internal to CoMix UK.
+		"CoMix_uk" => "CoMix UK",
 		"post" => "(paper)",
 		"paper" => "(paper)",
 		"online" => "(online)",

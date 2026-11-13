@@ -1,8 +1,9 @@
 ###################################
 ###### ZeroInf fitting models #####
 ###################################
-function fit_model_with_forward_mode(model, n_sample; iparms = Dict(), progress = true)
-	Random.seed!(1236)
+function fit_model_with_forward_mode(model, n_sample; iparms = Dict(), progress = true,
+	seed = 1236)
+	Random.seed!(seed)
 	sampler = NUTS()
 	@time chn = sample(model, sampler, n_sample;
 		progress = progress, initial_params = NamedTuple(iparms))
@@ -173,7 +174,9 @@ function get_β_med(chn::Chains, n_x::Int)
 	return (β1_med, β2_med)
 end
 
-# TODO: df_obs is needed
+"""
+Note: df_obs should be loaded in the jupyter notebook.
+"""
 function pred_fmnl_multi_vars(chn::Chains, pred::Matrix)
 	n_x = size(pred, 2)
 	β1_med, β2_med = get_β_med(chn, n_x)

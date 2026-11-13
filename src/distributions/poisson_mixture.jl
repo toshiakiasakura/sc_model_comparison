@@ -19,6 +19,13 @@ Base.@kwdef struct PoissonLomax <: PoissonMixture
 	θ::Real # scale
 end
 
+# Memoized because logpdf of a PoissonMixture is a numerical integral, and the
+# ccdf below evaluates every k in the tail.
+@memoize Distributions.pdf(d::PoissonMixture, k::Int64) = exp(logpdf(d, k))
+
+# Summed iteratively from k_max downward. The previous recursive form used one
+# stack frame per integer and overflowed the stack for heavy-tailed fits; the
+# accumulation order here is unchanged, so the result is identical.
 @memoize function Distributions.ccdf(
     d::PoissonMixture,
     k::Int64;
@@ -26,11 +33,12 @@ end
 )
     if k > k_max
         error("Increase k_max")
-	elseif k == k_max
-		return pdf(d, k)
-	else
-		return Distributions.ccdf(d, k+1; k_max=k_max) + pdf(d, k)
     end
+	s = pdf(d, k_max)
+	for j in (k_max-1):-1:k
+		s += pdf(d, j)
+	end
+	return s
 end
 
 mean100(d::PoissonMixture) = sum(k * pdf(d, k) for k in 0:100)

@@ -14,8 +14,12 @@ end
 function DegreeDist(cnt::Vector{Int64}, n_part::Int64; include_zero = true)::DegreeDist
 	n_cnt1more = length(cnt)
 	dd = DegreeDist(cnt; include_zero = include_zero)
+	n_zero = n_part - n_cnt1more
+	if n_zero < 0
+		error("More participants with contacts than total participants n_cnt1more=$n_cnt1more and n_part=$n_part")
+	end
 	insert!(dd.x, 1, 0)
-	insert!(dd.y, 1, n_part - n_cnt1more)
+	insert!(dd.y, 1, n_zero)
 	return dd
 end
 
@@ -25,7 +29,6 @@ function dd_to_df(dd::DegreeDist, strat::String)::DataFrame
 	df[!, :strat] .= strat
 	return df
 end
-dd_to_line_vec(dd::DegreeDist)::Vector = vcat([fill(x, y) for (x, y) in zip(dd.x, dd.y)]...)
 
 function DegreeDist(df::DataFrame)::DegreeDist
 	if "x" in names(df) && "y" in names(df)
@@ -65,7 +68,7 @@ See also `turing_utils.jl` which contains
 - `plot_single_setting`
 - `plot_multiple_settings`
 """
-function plot_ccdf!(pl::Plots.Plot, dd::DegreeDist; ytk_digit = 6, kwds...)
+function plot_ccdf!(pl::Plots.Plot, dd::DegreeDist; ytk_digit = 6, marker = :circle, kwds...)
 	if dd.include_zero == true
 		dd = deepcopy(dd)
 		dd.x = dd.x[2:end]
@@ -76,7 +79,7 @@ function plot_ccdf!(pl::Plots.Plot, dd::DegreeDist; ytk_digit = 6, kwds...)
 	ytk = (
 		[0, -1, -2, -3, -4, -5][ind_incl],
 		[L"1", L"10^{-1}", L"10^{-2}", L"10^{-3}", L"10^{-4}", L"10^{-5}"][ind_incl])
-	plot!(pl, dd.x, log10.(y_ccdf); marker = :circle, yticks = ytk,
+	plot!(pl, dd.x, log10.(y_ccdf); marker = marker, yticks = ytk,
 		kwds...)
 end
 plot_ccdf!(pl::Plots.Plot, x::Vector{Int64}; kwds...) = plot_ccdf!(pl, DegreeDist(x); kwds...)

@@ -25,7 +25,8 @@ function get_ZInf_means(strat::String)
 	return ms
 end
 
-function simulate_and_take_sample_mean(strat)
+function simulate_and_take_sample_mean(strat; seed = 1234)
+	Random.seed!(seed)
 	dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
 	dists_hm, dists_nhm = get_CoMix2_fitted_dists();
 
@@ -49,22 +50,57 @@ function simulate_and_take_sample_mean(strat)
 	return df_mer
 end
 
+# Path of the bootstrap fits for sample size `M` and `rep` repeats. Lowercase
+# "comix2_" is required: create_summary_stat_bootstrap matches these names with a
+# case-sensitive regex, and silently skips files it cannot match.
+bootstrap_path(M, rep) =
+	"../dt_intermediate_bootstrap/comix2_$(M)samples_$(rep)repeat.jld2"
+
 # Fit data bootstrapped from fitted distribution with three models.
-function fit_bootstrap_data_CoMix2(M_lis; rep = 10)
+#
+# Repeats run in chunks of `chunk` rather than all at once. @memoize on
+# logpdf(::ZeroInfDist) keys its cache on the distribution object and MCMC
+# builds a fresh one per proposal, so the cache grows without bound; cache
+# growth scales with the number of unique degrees, which grows with M. Running
+# all `rep` repeats concurrently OOM-killed the process at M=10_000 (10 repeats
+# needed ~31 GiB). Clearing the caches between chunks keeps peak memory flat:
+# measured 19.6 GiB at M=37_347 with chunk=3.
+#
+# That 19.6 GiB figure understates the requirement at rep = 100: the rep=100
+# run measured a 24.2 GiB peak at M=37_347 even with chunk=2 and
+# --heap-size-hint=18G, leaving ~2.4 GiB free on a 27 GiB box. Hence the
+# default below drops to chunk=2 at the largest M. Two further lessons from
+# that run: start the largest M in a fresh process (carrying a ~10 GiB heap
+# over from the previous M leaves too little headroom), and expect ~7.8 h for
+# M=37_347 alone. M=30_000 is treated the same way (chunk=2).
+#
+# `chunk = nothing` picks per sample size; pass an integer to override.
+# `seed`: each replicate's data are drawn after seeding with (seed, M, r), so they
+# do not depend on thread scheduling or chunking.
+function fit_bootstrap_data_CoMix2(M_lis; rep = 10, chunk = nothing, seed = 1234)
+	mkpath("../dt_intermediate_bootstrap")
 	dists_hm, dists_nhm = get_CoMix2_fitted_dists();
 	dist_LN_hm = dists_hm[2]
 	dist_PLomax_nhm = dists_nhm[3]
 	for M in M_lis
+		# 6 fits per repeat, so chunk=2 saturates 12 threads exactly at the
+		# largest M while keeping the peak well below chunk=3's.
+		chunk_M = chunk === nothing ? (M >= 30_000 ? 2 : 3) : chunk
 		res_mer = Vector{Any}(undef, rep)  # preallocate to avoid push! allocations
-		Threads.@threads for r in 1:rep
-			dds = Dict(
-				"home" => rand(dist_LN_hm, M) |> DegreeDist,
-				"non-home" => rand(dist_PLomax_nhm, M) |> DegreeDist,
-			)
-			res_mer[r] = fit_hm_nhm_dds(dds)
+		for lo in 1:chunk_M:rep
+			hi = min(lo + chunk_M - 1, rep)
+			Threads.@threads for r in lo:hi
+				Random.seed!(hash((seed, M, r)))
+				dds = Dict(
+					"home" => rand(dist_LN_hm, M) |> DegreeDist,
+					"non-home" => rand(dist_PLomax_nhm, M) |> DegreeDist,
+				)
+				res_mer[r] = fit_hm_nhm_dds(dds)
+			end
+			Memoization.empty_all_caches!()
+			GC.gc()
 		end
-		path = "../dt_intermediate_bootstrap/CoMix2_$(M)samples_$(rep)repeat.jld2"
-		jldsave(path, result = res_mer)
+		jldsave(bootstrap_path(M, rep), result = res_mer)
 	end
 end
 
@@ -96,7 +132,17 @@ function parse_bootstrap_estimated_data(paths, strat, M_lis)
 	df_sum
 end
 
-function plot_illustrative_dist_comparison()
+# x position on a log10 scale, with 0 placed one decade to the left of 1.
+log10_pos_with_zero(k::Integer) = k == 0 ? -1.0 : log10(k)
+
+function plot_ccdf_with_zero!(pl::Plots.Plot, d::UnivariateDistribution; kwds...)
+	k = [0, (1:9)..., (10:10:90)..., (100:100:900)..., (1000:1000:9000)..., 10_000]
+	ccdf.(d, k[end:-1:begin]) # To avoid the repetition errors. Create cache.
+	plot!(pl, log10_pos_with_zero.(k), log10.(ccdf.(d, k)); kwds...)
+end
+
+function plot_illustrative_dist_comparison(; seed = 1234)
+	Random.seed!(seed)
 	# Base distributions inferred from the fitted distributions.
 	d_negbin = NegBin(4.0, 0.169)
 	@show mean100(d_negbin)
@@ -130,14 +176,15 @@ function plot_illustrative_dist_comparison()
 	plot_pdf!(pl1, d_lomax; conv_log10 = false, label = "Poisson-Lomax")
 	annotate!(pl1, pos, text("A", :left, 18, "Helvetica"))
 
-	xtk = ([1, 10, 100, 1000], [L"1", L"10", L"10^{2}", L"10^{3}"])
+	xtk = ([-1, 0, 1, 2, 3], [L"0", L"1", L"10", L"10^{2}", L"10^{3}"])
 	ytk = ([-5, -4, -3, -2, -1, 0],
 		[L"10^{-5}", L"10^{-4}", L"10^{-3}", L"10^{-2}", L"10^{-1}", L"10^{0}"])
-	pl2 = plot(xlim = [1, 5_000], ylim = [-5, 0], ylabel = "CCDF",
-		xlabel = "Number of contacts per day", xticks = xtk, yticks = ytk)
-	plot_ccdf!(pl2, d_negbin; conv_log10 = false, label = "Negative binomial")
-	plot_ccdf!(pl2, d_lognormal; conv_log10 = false, label = "Poisson-lognormal")
-	plot_ccdf!(pl2, d_lomax; conv_log10 = false, label = "Poisson-Lomax")
+	pl2 = plot(xlim = [-1, log10(5_000)], ylim = [-5, 0], ylabel = "CCDF",
+		xlabel = "Number of contacts per day", xticks = xtk, yticks = ytk,
+		legend = :bottomleft)
+	plot_ccdf_with_zero!(pl2, d_negbin; label = "Negative binomial")
+	plot_ccdf_with_zero!(pl2, d_lognormal; label = "Poisson-lognormal")
+	plot_ccdf_with_zero!(pl2, d_lomax; label = "Poisson-Lomax")
 	annotate!(pl2, pos, text("B", :left, 18, "Helvetica"))
 
 	pl3 = plot(ylim = [0, 20], ylabel = "Sample means of 1000 simulated contacts")
@@ -322,74 +369,150 @@ function plot_conv_fit()
 	dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
 	model_names = get_model_names()
 
-	chn_conv = load("../dt_intermediate/CoMix2_convoluted_chns.jld2")["result"]
 	res = load("../dt_intermediate/CoMix2_chns.jld2")["result"]
 	chns_hm = res["chns_home"]
 	chns_nhm = res["chns_non-home"]
 	dists_hm = [get_ZeroInfDist(chns_hm[m], m) for m in model_names]
 	dists_nhm = [get_ZeroInfDist(chns_nhm[m], m) for m in model_names]
-	conv_dist = get_ZeroInfConvDist(chn_conv, dd_hm);
+	# Panels E and F show the no-fit convolution; run `run_conv_nofit_summary()`
+	# first if the cached summary is missing.
+	df_grid = load(conv_nofit_summary_path())["result"]["df_grid"]
 
-	# TODO: replace it
-	# m = model_names[3]
-	#chn = load("../dt_intermediate/CoMix2_chns_all.jld2")["result"]["chns_all"][m]
-	#dist_all = get_ZeroInfDist(chn, m)
-	chn = load("../dt_intermediate/CoMix2_chns_all.jld2")["result"]
-	dist_all = get_ZeroInfDist(chn, model_names[3])
+	dists_all = [get_CoMix2_all_dist(m) for m in model_names]
 
-	pl1 = plot_hm_nhm(dd_hm, dd_nhm, dists_hm, dists_nhm, plot_pdf!; ylim = [-5, 0], xlim = [0, 50])
-	pl2 = plot_hm_nhm(dd_hm, dd_nhm, dists_hm, dists_nhm, plot_ccdf!; ylim = [-5, 0])
+	default_plot_setting()
+	# Best models, as used for the convolution in `fit_convoluted_dist`.
+	i_best_hm, i_best_nhm = 2, 3
 	xlab = "Number of contacts per day"
-	plot!(pl1, xlabel = xlab, ylabel = "Probability mass function",
-		left_margin = 5Plots.mm)
-	plot!(pl2, xlabel = xlab, ylabel = "CCDF")
-	plot(pl1, pl2, size = (800, 400), bottom_margin = 5Plots.mm)
+	kwds_font = (labelfontsize = 13, legendfontsize = 11)
+	kwds_pdf = (ylim = [-5, 0], xlim = [0, 50], xlabel = xlab,
+		ylabel = "Probability mass function", kwds_font...)
+	kwds_ccdf = (ylim = [-5, 0], xlabel = xlab, ylabel = "CCDF", kwds_font...)
+	pls = [
+		plot_setting(dd_hm, dists_hm, i_best_hm, plot_pdf!; kwds_pdf...),
+		plot_setting(dd_hm, dists_hm, i_best_hm, plot_ccdf!; kwds_ccdf...),
+		plot_setting(dd_nhm, dists_nhm, i_best_nhm, plot_pdf!; kwds_pdf...),
+		plot_setting(dd_nhm, dists_nhm, i_best_nhm, plot_ccdf!; kwds_ccdf...),
+		plot_conv(dd_all, dists_all, df_grid, plot_pdf!; kwds_pdf...),
+		plot_conv(dd_all, dists_all, df_grid, plot_ccdf!; kwds_ccdf...),
+	]
+	# Panel letters as left-aligned titles and settings as centred plot titles,
+	# since annotations placed outside the axes are clipped when each panel is
+	# saved on its own.
+	letters = ["A", "B", "C", "D", "E", "F"]
+	settings = ["Home", "Home", "Non-home", "Non-home", "All", "All"]
+	fs_title = 15
+	for (pl, letter, setting) in zip(pls, letters, settings)
+		# A white (invisible) title reserves the space above the axes (a blank " " title
+		# makes GR warn "invalid bitmap size" with Helvetica); the letter and the
+		# setting are annotated on the same line there so they share size and height.
+		plot!(pl, title = letter, titlefontsize = fs_title, titlefontcolor = :white)
+		annotate!(pl, (0.0, 1.06), text(letter, :left, fs_title, "Helvetica"))
+		annotate!(pl, (0.5, 1.06), text(setting, :center, fs_title, "Helvetica"))
+		add_long_legend!(pl; x0 = 0.55, fontsize = kwds_font.legendfontsize)
+	end
+	return merge_panels(pls, 3, 2)
+end
 
-	pl3 = plot_conv(dd_all, dist_all, conv_dist, plot_pdf!; ylim = [-5, 0], xlim = [0, 50])
-	pl4 = plot_conv(dd_all, dist_all, conv_dist, plot_ccdf!; ylim = [-5, 0])
-	plot!(pl3, xlabel = xlab, ylabel = "Probability mass function",
-		left_margin = 5Plots.mm,
-	)
-	plot!(pl4, xlabel = xlab, ylabel = "CCDF")
+"""Replace the built-in legend with one drawn inside the axes, whose line
+samples are long enough to show several dashes.
 
-	pos = (-0.2, 1.0)
-	annotate!(pl1, pos, text("A", :left, 18, "Helvetica"))
-	annotate!(pl2, pos, text("B", :left, 18, "Helvetica"))
-	annotate!(pl3, pos, text("C", :left, 18, "Helvetica"))
-	annotate!(pl4, pos, text("D", :left, 18, "Helvetica"))
-	layout = @layout [a b; c d]
-	pl = plot(pl1, pl2, pl3, pl4, layout = layout, size = (800, 800),
-		dpi = 300, fig = :png, top_margin = 5Plots.mm)
+Note:
+The GR backend fixes the legend line sample at `3 * width / 45` of the panel
+(`span` in Plots' `gr.jl`), which fits only about one and a half dashes. Each
+labelled series' line and marker style is read back from the panel and redrawn
+as a segment of `len` (fraction of the axis width) at the top-right.
+
+Args:
+- `x0`, `y0`: left end of the first sample, as fractions of the axes.
+- `dy`: vertical step between entries, as a fraction of the axes.
+"""
+function add_long_legend!(pl::Plots.Plot; x0 = 0.55, y0 = 0.93, dy = 0.065,
+	len = 0.063, fontsize = 11)
+	sp = pl[1]
+	xl, yl = Plots.xlims(sp), Plots.ylims(sp)
+	is_logx = sp[:xaxis][:scale] == :log10
+	to_x(f) = is_logx == true ?
+		10^(log10(xl[1]) + f * (log10(xl[2]) - log10(xl[1]))) :
+		xl[1] + f * (xl[2] - xl[1])
+	to_y(f) = yl[1] + f * (yl[2] - yl[1])
+
+	entries = [s for s in pl.series_list if s[:label] != ""]
+	plot!(pl, legend = false)
+	for (i, s) in enumerate(entries)
+		y = to_y(y0 - (i - 1) * dy)
+		plot!(pl, [to_x(x0), to_x(x0 + len)], [y, y]; label = "",
+			color = s[:linecolor], ls = s[:linestyle], lw = s[:linewidth])
+		if s[:markershape] != :none
+			scatter!(pl, [to_x(x0 + len / 2)], [y]; label = "",
+				markershape = s[:markershape], color = s[:markercolor],
+				markersize = 1.5 * s[:markersize], markerstrokewidth = 0)
+		end
+		annotate!(pl, to_x(x0 + len + 0.02), y,
+			text(s[:label], :left, fontsize, "Helvetica"))
+	end
 	return pl
 end
 
-function plot_hm_nhm(dd_hm::DegreeDist, dd_nhm::DegreeDist, dists_hm, dists_nhm, plot_func!;
-	kwds...,
-)
+"""Save each panel as its own PNG at the default single-panel size, then tile
+the images into an `nrow` x `ncol` grid.
+
+Note:
+Rendering the panels as one multi-panel `plot` shrinks the legend line samples
+until the dashed styles are hard to tell apart, so each panel is drawn on its
+own and only the images are merged. Returns an image matrix; save it with
+`Images.save`.
+"""
+function merge_panels(pls::Vector, nrow::Int64, ncol::Int64; dpi = 300,
+	margin = 5Plots.mm)
+	dir = mktempdir()
+	imgs = map(enumerate(pls)) do (i, pl)
+		path = joinpath(dir, "panel_$i.png")
+		savefig(plot(pl; dpi = dpi, margin = margin), path)
+		load(path)
+	end
+	rows = [hcat(imgs[(r-1)*ncol+1:r*ncol]...) for r in 1:nrow]
+	return vcat(rows...)
+end
+
+"""One setting (home or non-home): the observed degree distribution and the
+three fitted zero-inflated Poisson mixtures, with "(best)" marking the best model.
+"""
+function plot_setting(dd::DegreeDist, dists, i_best::Int64, plot_func!; kwds...)
 	pl = plot(; kwds...)
 	colors = [7, 6, 13]
-	color = 2
 	kwds_obs = (markersize = 2.5, markerstrokewidth = 0.2)
 	kwds_fit = (lw = 1.5, ls = :dash)
-	plot_func!(pl, dd_hm, color = color, label = "Home (observed)"; kwds_obs...)
-	plot_func!(pl, dists_hm[2], color = color, ls = :dash, label = "Home, Best fitted"; kwds_fit...)
-	color = 1
-	plot_func!(pl, dd_nhm, color = color, label = "Non-home (observed)"; kwds_obs...)
-	plot_func!(pl, dists_nhm[1], color = colors[1], label = "Non-home, ZInf-NB"; kwds_fit...)
-	plot_func!(pl, dists_nhm[2], color = colors[2], label = "Non-home, ZInf-PLN"; kwds_fit...)
-	plot_func!(pl, dists_nhm[3], color = colors[3], label = "Non-home, ZInf-PLomax"; kwds_fit...)
+	plot_func!(pl, dd, color = :black, label = "Observed"; kwds_obs...)
+	for (i, (m, dist)) in enumerate(zip(get_model_names(), dists))
+		label = model_abbr[m] * (i == i_best ? " (best)" : "")
+		plot_func!(pl, dist, color = colors[i], label = label; kwds_fit...)
+	end
 	return pl
 end
 
-function plot_conv(dd_all, dist_all, conv_dist, plot_func!; kwds...)
+"""
+Args:
+- `df_grid`: `out["df_grid"]` from `summarise_conv_nofit`. The convoluted curve
+  is the no-fit one (each posterior draw of the home parameters convoluted with
+  a draw of the non-home parameters, then the pointwise median), not the
+  refitted `model_ZeroInfConvDist`.
+"""
+function plot_conv(dd_all, dists_all, df_grid::DataFrame,
+	plot_func!; kwds...)
+	colors = [7, 6, 13]
 	kwds_obs = (markersize = 2.5, markerstrokewidth = 0.0)
 	kwds_fit = (lw = 1.5, ls = :dash)
 
 	pl = plot(; kwds...)
-	plot_func!(pl, dd_all, label = "All (observed)"; kwds_obs...)
-	plot_func!(pl, dist_all, label = "Best 2-parameter dist"; color = 13, kwds_fit...)
-	plot_func!(pl, conv_dist, label = "Convoluted"; color = :red, kwds_fit...)
-	#plot_func!(pl, conv_dist_refit, label="Convoluted (no-fit)"; kwds_fit...)
+	plot_func!(pl, dd_all, color = :black, label = "Observed"; kwds_obs...)
+	for (i, (m, dist)) in enumerate(zip(get_model_names(), dists_all))
+		plot_func!(pl, dist, color = colors[i], label = model_abbr[m]; kwds_fit...)
+	end
+	# Solid, so it is not confused with the dashed ZInf-NB curve
+	plot_conv_nofit_curve!(pl, df_grid, plot_func!; band = false,
+		color = colorant"#E69F00", ls = :solid, lw = 2, label = "Convolution")
+	return pl
 end
 
 function fit_CoMix2_all()
@@ -406,6 +529,392 @@ function fit_CoMix2_all()
 	return res
 end
 
+######################################################
+##### Convolution without refitting ##################
+######################################################
+
+conv_nofit_summary_path() = "../dt_intermediate/CoMix2_conv_nofit_summary.jld2"
+
+"""The k grid used by `plot_pdf!`/`plot_ccdf!` in `distributions/plot.jl`.
+
+Note:
+Returned by a function rather than stored in a `const`, because the notebook
+cells re-`include` this file and redefining a `const` array warns.
+"""
+function conv_k_grid(; include_zero = true)
+	k = [(1:9)..., (10:10:90)..., (100:100:900)..., (1000:1000:9000)..., 10_000]
+	return include_zero == true ? [0, k...] : k
+end
+
+# log10 that drops non-positive values instead of returning -Inf, which would
+# otherwise stretch a filled band down to the axis floor.
+safe_log10(y::Real) = y > 0 ? log10(y) : NaN
+
+"""Probability mass vector of a `ZeroInfDist` on `0:K`; `pmf[k+1]` is P(X=k).
+
+Note:
+- `logpdf(::PoissonMixture, k)` is called deliberately. `pdf(::PoissonMixture, k)`
+  and `logpdf(::ZeroInfDist, k)` are `@memoize`d, and caching K+1 values for
+  every posterior draw would grow the never-evicted caches to ~10^7 entries.
+- `quadgk` can return a tiny negative or a non-finite value at extreme k; both
+  are flattened to 0 so that the reverse cumsum stays monotone.
+"""
+function zeroinf_pmf_vector(d::ZeroInfDist, K::Int64)::Vector{Float64}
+	pmf = exp.(logpdf.(Ref(d.d), 0:K))
+	pmf = [isfinite(p) && p > 0.0 ? p : 0.0 for p in pmf]
+	pmf .*= (1 - d.π0)
+	pmf[1] += d.π0
+	return pmf
+end
+
+"""Convolve a home and a non-home probability mass vector.
+
+Args:
+- `pmf_hm`, `pmf_nhm`: probability mass vectors indexed as `0:K`.
+- `k_h_max`: maximum home degree. Only the first `k_h_max + 1` home entries are
+  used, reproducing exactly the truncation of
+  `pdf(::ZeroInfConvolutedDist, k)` in `distributions/zeroinf.jl`.
+"""
+function convolute_pmf_vectors(pmf_hm::Vector{Float64}, pmf_nhm::Vector{Float64},
+	k_h_max::Int64)::Vector{Float64}
+	K = length(pmf_nhm) - 1
+	i_max = minimum((k_h_max, K, length(pmf_hm) - 1))
+	pmf = zeros(Float64, K + 1)
+	for i in 0:i_max
+		p_h = pmf_hm[i+1]
+		if p_h == 0.0
+			continue
+		end
+		@inbounds @simd for k in i:K
+			pmf[k+1] += p_h * pmf_nhm[k-i+1]
+		end
+	end
+	return pmf
+end
+
+"""Convoluted ("all contacts") probability mass vector on `0:K` for one
+posterior draw.
+
+Note:
+`K = 20_000` matches `ccdf(::ZeroInfConvolutedDist, k; k_max = 20_000)`, so the
+no-fit and the refitted curves are truncated identically.
+"""
+function conv_pmf_one_draw(d_hm::ZeroInfDist, d_nhm::ZeroInfDist, k_h_max::Int64;
+	K::Int64 = 20_000)::Vector{Float64}
+	pmf_hm = zeroinf_pmf_vector(d_hm, k_h_max)
+	pmf_nhm = zeroinf_pmf_vector(d_nhm, K)
+	return convolute_pmf_vectors(pmf_hm, pmf_nhm, k_h_max)
+end
+
+# Same, for an existing ZeroInfConvolutedDist (e.g. the refitted median-parameter
+# distribution), so that both routes go through identical arithmetic.
+conv_pmf_one_draw(conv_d::ZeroInfConvolutedDist; K::Int64 = 20_000) =
+	conv_pmf_one_draw(conv_d.d_hm, conv_d.d_nhm, conv_d.k_h_max; K = K)
+
+"""Zero-truncated CCDF of a convoluted probability mass vector, on `0:K`.
+
+Note:
+`obtain_ccdf` returns P(X >= k), matching `ccdf(::ZeroInfConvolutedDist, k)`,
+and dividing by `1 - pmf[1]` matches `ZeroTruncConvolutedDist`, which is what
+both `plot_ccdf!(pl, ::ZeroInfConvolutedDist)` and `plot_ccdf!(pl, ::DegreeDist)`
+(zero class dropped) display.
+"""
+zerotrunc_ccdf_from_pmf(pmf::Vector{Float64}) = obtain_ccdf(pmf) ./ (1 - pmf[1])
+
+"""One posterior draw: the convoluted pmf and zero-truncated CCDF restricted to
+the plot grid `ks`, the analytic mean, and two truncation diagnostics.
+"""
+function conv_nofit_one_draw(d_hm::ZeroInfDist, d_nhm::ZeroInfDist,
+	k_h_max::Int64, ks::Vector{Int64}; K::Int64 = 20_000)
+	pmf = conv_pmf_one_draw(d_hm, d_nhm, k_h_max; K = K)
+	ccdf_ = zerotrunc_ccdf_from_pmf(pmf)
+	return (
+		pmf = pmf[ks .+ 1],
+		ccdf = ccdf_[ks .+ 1],
+		mean = mean(d_hm) + mean(d_nhm), # Independence: the means add.
+		mean_trunc = sum((0:K) .* pmf),  # Diagnostic only, biased low.
+		mass = sum(pmf),                 # < 1 by the truncated Lomax tail.
+	)
+end
+
+"""Posterior quantiles of the three values of a column set, ignoring
+non-finite draws.
+"""
+function quantile_over_draws(M::Matrix{Float64}, qs = [0.025, 0.5, 0.975])
+	out = Vector{Vector{Float64}}(undef, size(M, 2))
+	for c in 1:size(M, 2)
+		v = filter(isfinite, M[:, c])
+		out[c] = length(v) == 0 ? fill(NaN, length(qs)) : quantile(v, qs)
+	end
+	return out
+end
+
+"""Posterior of the convoluted ("all contacts") degree distribution *without*
+refitting.
+
+Every posterior draw of the home parameters is paired with a draw of the
+non-home parameters and the two zero-inflated pmfs are convoluted, giving a
+posterior set of "all contacts" distributions. The point estimate is the
+pointwise median across that set.
+
+Args:
+- `chn_hm`, `chn_nhm`: marginal chains, e.g. `res["chns_home"][model_names[2]]`.
+- `dd_hm`: home degree distribution; `maximum(dd_hm)` gives `k_h_max`.
+- `key_hm`, `key_nhm`: model names required by `get_vec_ZeroInfDist_from_chn`.
+- `K`: pmf truncation; 20_000 matches `ccdf(::ZeroInfConvolutedDist)`.
+- `thin`: use every `thin`-th draw (`thin = 50` for a quick smoke test).
+- `threaded`: safe as written, because the inner loop only touches the
+  non-memoized `logpdf(::PoissonMixture, ::Int64)`. Never reintroduce
+  `pdf(::PoissonMixture, k)` or `pdf(::ZeroInfConvolutedDist, k)` there:
+  Memoization.jl writes into a shared, never-evicted Dict.
+
+Returns a `Dict` suitable for `jldsave`.
+"""
+function summarise_conv_nofit(chn_hm::Chains, chn_nhm::Chains, dd_hm::DegreeDist;
+	key_hm::String = get_model_names()[2],
+	key_nhm::String = get_model_names()[3],
+	K::Int64 = 20_000, thin::Int64 = 1, threaded::Bool = true)::Dict
+
+	for (lbl, chn) in (("home", chn_hm), ("non-home", chn_nhm))
+		if size(chn, 3) != 1
+			println("$(lbl) chain holds $(size(chn, 3)) chains; ",
+				"get_vec_ZeroInfDist_from_chn reads chain 1 only.")
+		end
+	end
+	dists_hm = get_vec_ZeroInfDist_from_chn(chn_hm, key_hm)
+	dists_nhm = get_vec_ZeroInfDist_from_chn(chn_nhm, key_nhm)
+	n_draw = minimum((length(dists_hm), length(dists_nhm)))
+	if length(dists_hm) != length(dists_nhm)
+		println("Chain lengths differ ($(length(dists_hm)) vs ",
+			"$(length(dists_nhm))): the first $(n_draw) draws are paired.")
+	end
+
+	# The two chains were fitted independently, so pairing draws index-wise is a
+	# legitimate sample from the product posterior, and it is reproducible.
+	inds = collect(1:thin:n_draw)
+	k_h_max = maximum(dd_hm)
+	ks = conv_k_grid(; include_zero = true)
+	n_s = length(inds)
+	rows = Vector{Any}(undef, n_s) # Preallocated: required by Threads.@threads.
+
+	if threaded == true
+		Threads.@threads for j in 1:n_s
+			rows[j] = conv_nofit_one_draw(dists_hm[inds[j]], dists_nhm[inds[j]],
+				k_h_max, ks; K = K)
+		end
+	else
+		for j in 1:n_s
+			rows[j] = conv_nofit_one_draw(dists_hm[inds[j]], dists_nhm[inds[j]],
+				k_h_max, ks; K = K)
+		end
+	end
+
+	mean_set = [r.mean for r in rows]
+	mean_trunc_set = [r.mean_trunc for r in rows]
+	mass_set = [r.mass for r in rows]
+
+	df_grid = DataFrame(:k => ks)
+	for (nm, M) in (("pmf", reduce(vcat, [r.pmf' for r in rows])),
+		("ccdf", reduce(vcat, [r.ccdf' for r in rows])))
+		qs = quantile_over_draws(M)
+		df_grid[!, Symbol("$(nm)_l")] = getindex.(qs, 1)
+		df_grid[!, Symbol("$(nm)_med")] = getindex.(qs, 2)
+		df_grid[!, Symbol("$(nm)_u")] = getindex.(qs, 3)
+	end
+
+	# mean(::ZeroInfDist) is NaN when a PoissonLomax draw has α <= 1, so NaN
+	# draws are dropped as in `summarise_res_one_strat`.
+	cond = isnan.(mean_set)
+	if all(cond) == true
+		println("All NaN: no draw has a finite mean.")
+		mean_med, mean_l, mean_u = NaN, NaN, NaN
+	else
+		if any(cond) == true
+			println("NaN presence in the posterior means: ",
+				"$(sum(cond))/$(n_s) draws (PoissonLomax α <= 1)")
+		end
+		mean_med = median(mean_set[.!cond])
+		mean_l, mean_u = quantile(mean_set[.!cond], [0.025, 0.975])
+	end
+	df_mean = DataFrame(tp = "Convoluted (no-fit)",
+		mean = mean_med, mean_l = mean_l, mean_u = mean_u,
+		mean_trunc = median(mean_trunc_set),
+		pc_nan = sum(cond) / n_s * 100,
+		mass_med = median(mass_set), mass_min = minimum(mass_set),
+		n_draw = n_s)
+
+	return Dict(
+		"df_grid" => df_grid, "df_mean" => df_mean,
+		"mean_set" => mean_set, "mean_trunc_set" => mean_trunc_set,
+		"mass_set" => mass_set,
+		"K" => K, "k_h_max" => k_h_max, "thin" => thin,
+		"key_hm" => key_hm, "key_nhm" => key_nhm)
+end
+
+"""Load the marginal CoMix2 chains, build the no-fit convolution posterior and
+cache the summary.
+"""
+function run_conv_nofit_summary(; K::Int64 = 20_000, thin::Int64 = 1,
+	threaded::Bool = true, save::Bool = true)::Dict
+	dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
+	model_names = get_model_names()
+	res = load("../dt_intermediate/CoMix2_chns.jld2")["result"]
+	chn_hm = res["chns_home"][model_names[2]]
+	chn_nhm = res["chns_non-home"][model_names[3]]
+
+	out = summarise_conv_nofit(chn_hm, chn_nhm, dd_hm;
+		key_hm = model_names[2], key_nhm = model_names[3],
+		K = K, thin = thin, threaded = threaded)
+	out["mean_obs_all"] = mean(dd_all)
+	out["mean_obs_hm_plus_nhm"] = mean(dd_hm) + mean(dd_nhm)
+	if save == true
+		jldsave(conv_nofit_summary_path(); result = out)
+		println("Saved: ", conv_nofit_summary_path())
+	end
+	return out
+end
+
+"""Best 2-parameter marginal fit to the "all contacts" degree distribution.
+
+Note:
+Two files coexist. The newer `CoMix2_all_chns.jld2` (key `res`, written by
+`fit_CoMix2_all`) holds all three chains; the older `CoMix2_chns_all.jld2`
+(key `result`) holds a bare `Chains` for one model and is what `plot_conv_fit`
+reads.
+"""
+function get_CoMix2_all_dist(model_name::String = get_model_names()[3])
+	path_new = "../dt_intermediate/CoMix2_all_chns.jld2"
+	if isfile(path_new) == true
+		chn = load(path_new)["res"]["chns_all"][model_name]
+	else
+		chn = load("../dt_intermediate/CoMix2_chns_all.jld2")["result"]
+	end
+	return get_ZeroInfDist(chn, model_name)
+end
+
+"""Add the no-fit convolution posterior to an existing panel: the pointwise
+median, and optionally the 95% credible band.
+
+Args:
+- `df_grid`: `out["df_grid"]` from `summarise_conv_nofit`.
+- `plot_func!`: `plot_pdf!` or `plot_ccdf!`. Used only to pick the pmf or the
+  CCDF columns and the k range, not to draw.
+
+Note:
+The pmf panel uses the zero-inflated pmf, because `plot_pdf!(::DegreeDist)`
+normalises including the zero class, while the CCDF panel uses the
+zero-truncated CCDF and skips k = 0, because `plot_ccdf!(::DegreeDist)` drops
+the zero class and the x axis is on a log10 scale.
+"""
+function plot_conv_nofit_curve!(pl::Plots.Plot, df_grid::DataFrame, plot_func!;
+	band = true, color = :red, ls = :dash, lw = 1.5,
+	label = "Convoluted (no-fit)", label_band = "", kwds...)
+	is_ccdf = nameof(plot_func!) == :plot_ccdf!
+	col = is_ccdf == true ? "ccdf" : "pmf"
+	df = is_ccdf == true ? @subset(df_grid, :k .>= 1) : df_grid
+
+	k = df[:, :k]
+	if band == true
+		plot!(pl, k, safe_log10.(df[:, Symbol("$(col)_l")]);
+			fillrange = safe_log10.(df[:, Symbol("$(col)_u")]),
+			fillalpha = 0.3, lw = 0, color = :gray, label = label_band)
+	end
+	plot!(pl, k, safe_log10.(df[:, Symbol("$(col)_med")]);
+		color = color, lw = lw, ls = ls, label = label, kwds...)
+	return pl
+end
+
+"""One panel overlaying the no-fit convolution posterior on the observed
+"all contacts" degree distribution.
+
+Args:
+- `df_grid`: `out["df_grid"]` from `summarise_conv_nofit`.
+- `plot_func!`: `plot_pdf!` or `plot_ccdf!`, as in `plot_conv`.
+
+Note:
+The pmf panel uses the zero-inflated pmf, because `plot_pdf!(::DegreeDist)`
+normalises including the zero class, while the CCDF panel uses the
+zero-truncated CCDF and skips k = 0, because `plot_ccdf!(::DegreeDist)` drops
+the zero class and the x axis is on a log10 scale.
+"""
+function plot_conv_nofit(dd_all::DegreeDist, df_grid::DataFrame,
+	dist_all, conv_dist::ZeroInfConvolutedDist, plot_func!; kwds...)
+	kwds_obs = (markersize = 2.5, markerstrokewidth = 0.0)
+	kwds_fit = (lw = 1.5, ls = :dash)
+
+	pl = plot(; kwds...)
+	plot_func!(pl, dd_all, label = "All (observed)"; kwds_obs...)
+	plot_func!(pl, dist_all, label = "Best 2-parameter dist"; color = 13, kwds_fit...)
+	# Drawn before the refitted curve, and in black rather than the observed
+	# data's blue, so that the two convolutions remain distinguishable where
+	# they coincide.
+	plot_conv_nofit_curve!(pl, df_grid, plot_func!; band = true,
+		color = :black, ls = :solid, lw = 2.0,
+		label = "Convoluted (no-fit)",
+		label_band = "Convoluted (no-fit), 95% CrI")
+	plot_func!(pl, conv_dist, label = "Convoluted (refitted)"; color = :red, kwds_fit...)
+	return pl
+end
+
+"""Two-panel figure (pmf and CCDF) for the no-fit convolution.
+
+Args:
+- `out`: returned by `run_conv_nofit_summary`, or loaded from
+  `conv_nofit_summary_path()`.
+"""
+function plot_conv_nofit_panels(out::Dict)
+	dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
+	model_names = get_model_names()
+	chn_conv = load("../dt_intermediate/CoMix2_convoluted_chns.jld2")["result"]
+	conv_dist = get_ZeroInfConvDist(chn_conv, dd_hm)
+	dist_all = get_CoMix2_all_dist(model_names[3])
+
+	xlab = "Number of contacts per day"
+	pl1 = plot_conv_nofit(dd_all, out["df_grid"], dist_all, conv_dist, plot_pdf!;
+		ylim = [-5, 0], xlim = [0, 50])
+	pl2 = plot_conv_nofit(dd_all, out["df_grid"], dist_all, conv_dist, plot_ccdf!;
+		ylim = [-5, 0], legend = :bottomleft)
+	plot!(pl1, xlabel = xlab, ylabel = "Probability mass function",
+		left_margin = 5Plots.mm)
+	plot!(pl2, xlabel = xlab, ylabel = "CCDF")
+
+	pos = (-0.2, 1.0)
+	annotate!(pl1, pos, text("A", :left, 18, "Helvetica"))
+	annotate!(pl2, pos, text("B", :left, 18, "Helvetica"))
+	return plot(pl1, pl2, layout = (1, 2), size = (900, 400), dpi = 300,
+		fig = :png, bottom_margin = 5Plots.mm, top_margin = 5Plots.mm)
+end
+
+"""Numeric comparison of the means: observed, no-fit convolution, refitted
+convolution and the best 2-parameter fit to the "all contacts" data.
+
+Note:
+There is no `mean(::ZeroInfConvolutedDist)` method, so the component means of
+the refitted convolution are added explicitly.
+"""
+function compare_conv_nofit_means(out::Dict)::DataFrame
+	dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
+	chn_conv = load("../dt_intermediate/CoMix2_convoluted_chns.jld2")["result"]
+	conv_dist = get_ZeroInfConvDist(chn_conv, dd_hm)
+	dist_all = get_CoMix2_all_dist()
+	r = out["df_mean"][1, :]
+
+	println("Truncation at K = $(out["K"]): median pmf mass = ",
+		r.mass_med, ", minimum = ", r.mass_min)
+	println("Median truncated mean (diagnostic, biased low) = ", r.mean_trunc)
+	println("Draws with a non-finite mean: ", r.pc_nan, "%")
+
+	df = DataFrame(
+		tp = ["All (observed)", "Home + non-home (observed)",
+			"Convoluted (no-fit), median", "Convoluted (refitted), median parms",
+			"Best 2-parameter dist"],
+		mean = [mean(dd_all), mean(dd_hm) + mean(dd_nhm), r.mean,
+			mean(conv_dist.d_hm) + mean(conv_dist.d_nhm), mean(dist_all)],
+		mean_l = [NaN, NaN, r.mean_l, NaN, NaN],
+		mean_u = [NaN, NaN, r.mean_u, NaN, NaN])
+	return df
+end
+
 ###############################
 ##### Sample size effect ######
 ###############################
@@ -414,30 +923,60 @@ end
 Note:
 See `create_summary_stat_one_data` for a similar function.
 """
-function create_summary_stat_bootstrap()
+function create_summary_stat_bootstrap(; sample_sizes = nothing)
 	paths = glob("../dt_intermediate_bootstrap/*.jld2")
 
-	df_all = DataFrame()
+	# Keep one file per sample size: the one with the most repeats. Older
+	# low-repeat runs are left on disk, and processing both would emit two rows
+	# for the same (sample_size, iteration), which flag_minimum_IC then joins
+	# into a cross product.
+	best = Dict{Int, Tuple{Int, String}}()
 	for path in paths
-		println("Processing: ", path)
 		m = match(r"comix2_(\d+)samples_(\d+)repeat", path)
 		if m === nothing
 			continue
 		end
 		sample_size = parse(Int, m.captures[1])
 		n_repeat = parse(Int, m.captures[2])
-
-		# Load the bootstrap results
-		res_mer = load(path)["result"]
-		# Process each bootstrap iteration
-		for (i, res) in enumerate(res_mer)
-			for strat in ["home", "non-home"]
-				df_tmp = summarise_res_one_strat(res, strat, "CoMix2_bootstrap")
-				df_tmp[!, :sample_size] .= sample_size
-				df_tmp[!, :iteration] .= i
-				df_all = vcat(df_all, df_tmp)
-			end
+		if !haskey(best, sample_size) || n_repeat > best[sample_size][1]
+			best[sample_size] = (n_repeat, path)
 		end
+	end
+
+	df_all = DataFrame()
+	# `sample_sizes` restricts the summary to those sample sizes, e.g. to skip
+	# M=37_347 files left on disk from earlier runs.
+	ss_use = isnothing(sample_sizes) ? sort(collect(keys(best))) : sort(sample_sizes)
+	for sample_size in ss_use
+		haskey(best, sample_size) || error("No bootstrap file for M=$(sample_size)")
+		n_repeat, path = best[sample_size]
+		df_all = vcat(df_all, summarise_bootstrap_file(path, sample_size))
+	end
+	return df_all
+end
+
+"""
+Summarise one bootstrap file (`bootstrap_path(M, rep)`). `iters` selects a
+subset of repeats so that a large file can be split across processes.
+
+The memoized `logpdf` caches are keyed on distribution objects, which are
+rebuilt for every repeat, so they are never reused across repeats. Clearing them
+after each repeat keeps memory flat without changing the results; without it a
+100-repeat summary grew past 20 GiB.
+"""
+function summarise_bootstrap_file(path, sample_size; iters = nothing)
+	res_mer = load(path)["result"]
+	iters = isnothing(iters) ? eachindex(res_mer) : iters
+	df_all = DataFrame()
+	for i in iters
+		for strat in ["home", "non-home"]
+			df_tmp = summarise_res_one_strat(res_mer[i], strat, "CoMix2_bootstrap")
+			df_tmp[!, :sample_size] .= sample_size
+			df_tmp[!, :iteration] .= i
+			df_all = vcat(df_all, df_tmp)
+		end
+		Memoization.empty_all_caches!()
+		println("M=$(sample_size): repeat $(i) done"); flush(stdout)
 	end
 	return df_all
 end
@@ -540,8 +1079,11 @@ function plot_sample_size_and_best_model(df_pred, df_mer_nh, df_pred_boot, df_bo
 		colour = colors_reshape, label = "",
 		markerstrokewidth = 0.4)
 
+	# Ticks at the simulated sample sizes, with thousands separators.
+	ss = sort(unique(df_boot[:, :n_sample]))
+	fmt_ss(n) = replace(string(Int(n)), r"(?<=\d)(?=(\d{3})+$)" => ",")
 	pl2 = plot(xlabel = "sample size", ylabel = "WAIC weight",
-		xticks = xticks_, legend = nothing)
+		xticks = (log10.(ss), fmt_ss.(ss)), xlim = xlims(pl1), legend = nothing)
 	for i in 1:3
 		model_name = model_names[i]
 		plot!(pl2, df_pred_boot[:, :logX], df_pred_boot[:, Symbol("y$(i)")],
@@ -719,104 +1261,6 @@ function plot_child_panels(df_dds, df_ana, res_EVI)
 	return plot(pl1, pl_bar, pl_EVI, layout = layout)
 end
 
-######################################
-###### Setting specific analysis #####
-######################################
-
-function read_comix2_setting_strat()
-	# Read cleaned data
-	df_master = read_survey_master_data();
-	key = "CoMix2"
-	r_survey = @subset(df_master, :key .== key)[1, :];
-
-	df, df_part = read_raw_sc_data(r_survey);
-	@transform!(df_part, :country = map(x -> x[1:2], :part_id));
-	df_part = filter_adult_cate(df_part; col = :part_age)
-	df = innerjoin(df, df_part, on = :part_id)
-
-	# Read main dds.
-	df_dd_main, df_part = read_comix2_dds()
-	n_part = nrow(df_part)
-
-	# Prepare setting specific ones
-	cnt_setting = ["cnt_work", "cnt_school", "cnt_transport", "cnt_leisure"]
-	df_dd = DataFrame()
-	for cnt_s in cnt_setting
-		cond = df[:, cnt_s] .== true
-		df_set = @pipe df[cond, :] |>
-					   groupby(_, :part_id) |>
-					   combine(_, nrow => :cnt)[:, :cnt] |>
-					   DegreeDist(_, n_part) |> dd_to_df(_, cnt_s)
-		df_dd = vcat(df_dd, df_set)
-	end
-	# add cnt other.
-	df_tmp = @subset(df, @byrow (:cnt_home == false) & (:cnt_work == false) & (:cnt_school == false))
-	df_set = @pipe df_tmp |>
-				   groupby(_, :part_id) |>
-				   combine(_, nrow => :cnt)[:, :cnt] |>
-				   DegreeDist(_, n_part) |> dd_to_df(_, "cnt_other")
-	df_dd = vcat(df_dd, df_set)
-
-	df_nhm = @pipe @subset(df_dd_main, :strat .== "non-home") |> @select(_, Not(:key))
-	df_dd = vcat(df_dd, df_nhm);
-	return df_dd
-end
-
-function fit_settings(df_dd)
-	lis = []
-	dds = Dict(
-		"work" => @subset(df_dd, :strat .== "cnt_work") |> DegreeDist,
-		"school" => @subset(df_dd, :strat .== "cnt_school") |> DegreeDist,
-		"transport" => @subset(df_dd, :strat .== "cnt_transport") |> DegreeDist,
-		"leisure" => @subset(df_dd, :strat .== "cnt_leisure") |> DegreeDist,
-		"other" => @subset(df_dd, :strat .== "cnt_other") |> DegreeDist,
-	)
-	cnt_setting_short = keys(dds) |> collect
-	res = Dict("chns_$(s)" => Dict() for s in cnt_setting_short)
-	res["dds"] = dds
-	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
-		model_ZeroInfPoissonLomax]
-	for k in cnt_setting_short
-		Threads.@threads for model_func in models
-			dd = dds[k]
-			model = model_func(dd)
-			med, chn = get_median_parms_from_model(model)
-			chn = fit_model_with_forward_mode(model, 1000; iparms = med, progress = false)
-			res["chns_$k"][get_dist_name_from_model(model_func)] = chn
-		end
-	end
-	jldsave("../dt_intermediate/CoMix2_cnt_strat.jld2", result = res)
-end
-
-function get_df_res_setting()
-	res = load("../dt_intermediate/CoMix2_cnt_strat.jld2")["result"]
-	cnt_setting_short = keys(res["dds"]) |> collect
-
-	df_sum = DataFrame()
-	for strat in cnt_setting_short
-		df_tmp = summarise_res_one_strat(res, strat, "CoMix2")
-		df_sum = vcat(df_sum, df_tmp)
-	end
-	df_res = flag_minimum_IC(df_sum, :waic);
-	return df_res
-end
-
-function plot_WAIC_setting(df_dd, df_res)
-	df_dd_tmp = @transform(df_dd, :key = :strat)
-	df_dd_tmp[:, :strat] .= "all"
-	df_n_obs = @pipe groupby(df_dd_tmp, [:key]) |> combine(_, :y => sum => :n_part)
-	df_n_obs[:, :strat] .= "all"
-	df_res_tmp = @transform(df_res, :key = :strat);
-
-	labels_ = ["ZInf-NB", "ZInf-PLN", "ZInf-PLomax"]
-	plot_stacked_bar(df_tab_cum, model_names;
-		labels = labels_,
-		legend_columns = 3,
-		legend = (0, -0.15), #-0.22),
-		bottom_margin = 15Plots.mm,
-	)
-end
-
 function prepare_block_degree_dist(df::DataFrame, df_part::DataFrame)::Dict
 	block_configs = [
 		(label = "Child-Child", part_cond = :<, cnt_cond = :<, key = "CoMix2 Child-Child"),
@@ -860,6 +1304,11 @@ function prepare_block_degree_dist(df::DataFrame, df_part::DataFrame)::Dict
 	return block_results
 end
 
+# Path of the age-block fits. Shared by the writer and readers below: these had
+# drifted, with the readers looking for a "CoMix2_" prefix the writer never
+# produced, which left the age-block cells unable to load their own output.
+block_chns_path(label) = "../dt_intermediate/$(label)_chns.jld2"
+
 function fit_block_dds_models(block_res::Dict)
 	labels = keys(block_res) |> collect
 	for lab in labels
@@ -869,7 +1318,7 @@ function fit_block_dds_models(block_res::Dict)
 			"non-home" => @subset(blk.df_dds, :strat .== "non-home") |> DegreeDist,
 		)
 		res = fit_hm_nhm_dds(dds)
-		jldsave("../dt_intermediate/$(lab)_chns.jld2", result = res)
+		jldsave(block_chns_path(lab), result = res)
 		println("Finished fitting: $lab → $(lab)_chns.jld2")
 	end
 end
@@ -899,7 +1348,7 @@ function extract_alpha_values_from_block(block_res::Dict)::DataFrame
 	labels = keys(block_res) |> collect
 	df_alpha = DataFrame(block = String[], strat = String[], alpha = Float64[])
 	for label in labels
-		path = "../dt_intermediate/CoMix2_$(label)_chns.jld2"
+		path = block_chns_path(label)
 		res = load(path)["result"]["chns_non-home"]["ZeroInfPoissonLomax"]
 		d_nhome = get_ZeroInfDist(res, "ZeroInfPoissonLomax")
 		push!(df_alpha, (block = label, strat = "non-home", alpha = d_nhome.d.α))
@@ -911,7 +1360,7 @@ function extract_summary_stat(block_res::Dict)
 	block_df_ana = DataFrame()
 	labels = keys(block_res) |> collect
 	for label in labels
-		path = "../dt_intermediate/CoMix2_$(label)_chns.jld2"
+		path = block_chns_path(label)
 		res = load(path)["result"]
 		df_res = vcat(
 			summarise_res_one_strat(res, "home", "CoMix2_$(label)"),

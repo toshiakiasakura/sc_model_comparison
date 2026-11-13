@@ -228,7 +228,7 @@ function plot_validation_PLN(df_res_PLN, μ_true, σ_true)
 	df_p2 = unstack(df_res_PLN, :iter, :model, :param2)
 	p1_max = (df_p1[:, :PLN_hierarchical] |> maximum) + 0.5
 	p2_max = (df_p2[:, :PLN_hierarchical] |> maximum) + 0.5
-	pl1 = plot(xlabel = "", ylabel = "Estimates from numerical",
+	pl1 = plot(xlabel = "", ylabel = "Estimate from numerical integration",
 		xlim = [0, p1_max], ylim = [0, p1_max])
 	pl2 = plot(xlabel = "",
 		xlim = [0, p2_max], ylim = [0, p2_max])
@@ -254,9 +254,9 @@ function plot_validation_PLomax(df_res_PLomax, α_true, β_true)
 	df_p2 = unstack(df_res_PLomax, :iter, :model, :param2)
 	p1_max = (df_p1[:, :PLomax_hierarchical] |> maximum) + 1
 	p2_max = (df_p2[:, :PLomax_hierarchical] |> maximum) + 1
-	pl1 = plot(xlabel = "Estimates from hierarchical", ylabel = "Estimates from numerical",
+	pl1 = plot(xlabel = "Estimate from hierarchical model", ylabel = "Estimate from numerical integration",
 		xlim = [0, p1_max], ylim = [0, p1_max])
-	pl2 = plot(xlabel = "Estimates from hierarchical",
+	pl2 = plot(xlabel = "Estimate from hierarchical model",
 		xlim = [0, p2_max], ylim = [0, p2_max])
 
 	kwds_scatter = (markerstrokewidth = 0.5, legendfontsize = 8)
