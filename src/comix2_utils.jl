@@ -25,7 +25,8 @@ function get_ZInf_means(strat::String)
 	return ms
 end
 
-function simulate_and_take_sample_mean(strat)
+function simulate_and_take_sample_mean(strat; seed = 1234)
+	Random.seed!(seed)
 	dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
 	dists_hm, dists_nhm = get_CoMix2_fitted_dists();
 
@@ -74,7 +75,9 @@ bootstrap_path(M, rep) =
 # M=37_347 alone. M=30_000 is treated the same way (chunk=2).
 #
 # `chunk = nothing` picks per sample size; pass an integer to override.
-function fit_bootstrap_data_CoMix2(M_lis; rep = 10, chunk = nothing)
+# `seed`: each replicate's data are drawn after seeding with (seed, M, r), so they
+# do not depend on thread scheduling or chunking.
+function fit_bootstrap_data_CoMix2(M_lis; rep = 10, chunk = nothing, seed = 1234)
 	mkpath("../dt_intermediate_bootstrap")
 	dists_hm, dists_nhm = get_CoMix2_fitted_dists();
 	dist_LN_hm = dists_hm[2]
@@ -87,6 +90,7 @@ function fit_bootstrap_data_CoMix2(M_lis; rep = 10, chunk = nothing)
 		for lo in 1:chunk_M:rep
 			hi = min(lo + chunk_M - 1, rep)
 			Threads.@threads for r in lo:hi
+				Random.seed!(hash((seed, M, r)))
 				dds = Dict(
 					"home" => rand(dist_LN_hm, M) |> DegreeDist,
 					"non-home" => rand(dist_PLomax_nhm, M) |> DegreeDist,
@@ -137,7 +141,8 @@ function plot_ccdf_with_zero!(pl::Plots.Plot, d::UnivariateDistribution; kwds...
 	plot!(pl, log10_pos_with_zero.(k), log10.(ccdf.(d, k)); kwds...)
 end
 
-function plot_illustrative_dist_comparison()
+function plot_illustrative_dist_comparison(; seed = 1234)
+	Random.seed!(seed)
 	# Base distributions inferred from the fitted distributions.
 	d_negbin = NegBin(4.0, 0.169)
 	@show mean100(d_negbin)
@@ -591,11 +596,11 @@ end
 posterior draw.
 
 Note:
-`K = 10_000` matches `ccdf(::ZeroInfConvolutedDist, k; k_max = 10_000)`, so the
+`K = 20_000` matches `ccdf(::ZeroInfConvolutedDist, k; k_max = 20_000)`, so the
 no-fit and the refitted curves are truncated identically.
 """
 function conv_pmf_one_draw(d_hm::ZeroInfDist, d_nhm::ZeroInfDist, k_h_max::Int64;
-	K::Int64 = 10_000)::Vector{Float64}
+	K::Int64 = 20_000)::Vector{Float64}
 	pmf_hm = zeroinf_pmf_vector(d_hm, k_h_max)
 	pmf_nhm = zeroinf_pmf_vector(d_nhm, K)
 	return convolute_pmf_vectors(pmf_hm, pmf_nhm, k_h_max)
@@ -603,7 +608,7 @@ end
 
 # Same, for an existing ZeroInfConvolutedDist (e.g. the refitted median-parameter
 # distribution), so that both routes go through identical arithmetic.
-conv_pmf_one_draw(conv_d::ZeroInfConvolutedDist; K::Int64 = 10_000) =
+conv_pmf_one_draw(conv_d::ZeroInfConvolutedDist; K::Int64 = 20_000) =
 	conv_pmf_one_draw(conv_d.d_hm, conv_d.d_nhm, conv_d.k_h_max; K = K)
 
 """Zero-truncated CCDF of a convoluted probability mass vector, on `0:K`.
@@ -620,7 +625,7 @@ zerotrunc_ccdf_from_pmf(pmf::Vector{Float64}) = obtain_ccdf(pmf) ./ (1 - pmf[1])
 the plot grid `ks`, the analytic mean, and two truncation diagnostics.
 """
 function conv_nofit_one_draw(d_hm::ZeroInfDist, d_nhm::ZeroInfDist,
-	k_h_max::Int64, ks::Vector{Int64}; K::Int64 = 10_000)
+	k_h_max::Int64, ks::Vector{Int64}; K::Int64 = 20_000)
 	pmf = conv_pmf_one_draw(d_hm, d_nhm, k_h_max; K = K)
 	ccdf_ = zerotrunc_ccdf_from_pmf(pmf)
 	return (
@@ -656,7 +661,7 @@ Args:
 - `chn_hm`, `chn_nhm`: marginal chains, e.g. `res["chns_home"][model_names[2]]`.
 - `dd_hm`: home degree distribution; `maximum(dd_hm)` gives `k_h_max`.
 - `key_hm`, `key_nhm`: model names required by `get_vec_ZeroInfDist_from_chn`.
-- `K`: pmf truncation; 10_000 matches `ccdf(::ZeroInfConvolutedDist)`.
+- `K`: pmf truncation; 20_000 matches `ccdf(::ZeroInfConvolutedDist)`.
 - `thin`: use every `thin`-th draw (`thin = 50` for a quick smoke test).
 - `threaded`: safe as written, because the inner loop only touches the
   non-memoized `logpdf(::PoissonMixture, ::Int64)`. Never reintroduce
@@ -668,7 +673,7 @@ Returns a `Dict` suitable for `jldsave`.
 function summarise_conv_nofit(chn_hm::Chains, chn_nhm::Chains, dd_hm::DegreeDist;
 	key_hm::String = get_model_names()[2],
 	key_nhm::String = get_model_names()[3],
-	K::Int64 = 10_000, thin::Int64 = 1, threaded::Bool = true)::Dict
+	K::Int64 = 20_000, thin::Int64 = 1, threaded::Bool = true)::Dict
 
 	for (lbl, chn) in (("home", chn_hm), ("non-home", chn_nhm))
 		if size(chn, 3) != 1
@@ -749,7 +754,7 @@ end
 """Load the marginal CoMix2 chains, build the no-fit convolution posterior and
 cache the summary.
 """
-function run_conv_nofit_summary(; K::Int64 = 10_000, thin::Int64 = 1,
+function run_conv_nofit_summary(; K::Int64 = 20_000, thin::Int64 = 1,
 	threaded::Bool = true, save::Bool = true)::Dict
 	dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
 	model_names = get_model_names()

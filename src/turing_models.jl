@@ -1,8 +1,9 @@
 ###################################
 ###### ZeroInf fitting models #####
 ###################################
-function fit_model_with_forward_mode(model, n_sample; iparms = Dict(), progress = true)
-	Random.seed!(1236)
+function fit_model_with_forward_mode(model, n_sample; iparms = Dict(), progress = true,
+	seed = 1236)
+	Random.seed!(seed)
 	sampler = NUTS()
 	@time chn = sample(model, sampler, n_sample;
 		progress = progress, initial_params = NamedTuple(iparms))

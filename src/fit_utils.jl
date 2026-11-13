@@ -52,7 +52,7 @@ function summarise_res_one_strat(res::Dict, strat, key)
 		r = DataFrame(key = key, strat = strat, model = model_name,
 			n_sample = n_sample,
 			mean_raw = mean_raw, mean = mean_, mean_l = mean_l, mean_u = mean_u,
-			waic = waic_,
+			waic = waic_, converged = is_chains_converged(chn),
 		)
 
 		df_tmp = vcat(df_tmp, r)
@@ -176,8 +176,10 @@ function fit_GP_to_q(dd::DegreeDist, q::Float64)::DataFrameRow
 	end
 end
 
-function EVI_estimate_for_qs(dd::DegreeDist;
-	qs = [0.95, 0.97, 0.99, 0.995, 0.999])::DataFrame
+# Thresholds (quantiles) used for the EVI; 0.98 is the main analysis.
+const EVI_QS = [0.95, 0.97, 0.98]
+
+function EVI_estimate_for_qs(dd::DegreeDist; qs = EVI_QS)::DataFrame
 	res = DataFrame()
 	for q in qs
 		r = fit_GP_to_q(dd, q)
@@ -187,12 +189,11 @@ function EVI_estimate_for_qs(dd::DegreeDist;
 end
 
 function collect_estimates_across_studies(df_dd::DataFrame, keys_;
-	strat = "non-home", kwds...)
-	qs = get(kwds, :qs, [0.95, 0.97, 0.99, 0.995, 0.999])
+	strat = "non-home", qs = EVI_QS)
 	res_sum = DataFrame()
 	for k in keys_
 		dd = @subset(df_dd, :key .== k, :strat .== strat) |> DegreeDist
-		res = EVI_estimate_for_qs(dd; kwds...)
+		res = EVI_estimate_for_qs(dd; qs = qs)
 		res[!, :key] .= k
 		res_sum = vcat(res_sum, res)
 	end
@@ -369,11 +370,16 @@ function create_stacked_bar_weights(df_ana::DataFrame, models, df_n_obs::DataFra
 	df_tab_cum
 end
 
-function plot_bar_waic_pretty(df_obs::DataFrame, df_res::DataFrame, df_EVI::DataFrame)
-	df_ana = prep_fmnl_vars(df_res)
-	# Match the row order of the bar panels (`create_stacked_bar_weights` sorts by :all).
+"""Sort `df_ana` in the row order of the WAIC bar panels
+(`create_stacked_bar_weights` sorts by the number of "all" answers in `df_obs`).
+"""
+function sort_ana_by_n_all(df_ana::DataFrame, df_obs::DataFrame)::DataFrame
 	df_n_all = @pipe unstack(df_obs, :key, :strat, :n_answer) |> _[:, [:key, :all]]
-	df_ana = @pipe leftjoin(df_ana, df_n_all, on = :key) |> sort(_, :all)
+	return @pipe leftjoin(df_ana, df_n_all, on = :key) |> sort(_, :all)
+end
+
+function plot_bar_waic_pretty(df_obs::DataFrame, df_res::DataFrame, df_EVI::DataFrame)
+	df_ana = sort_ana_by_n_all(prep_fmnl_vars(df_res), df_obs)
 
 	ytk = ["" for _ in 1:nrow(df_ana)];  #df_ana[:, :key];
 	pls = plot_bar_waic(df_obs, df_res, ytk = ytk, df_EVI = df_EVI)
@@ -612,17 +618,22 @@ end
 """
 Args:
 - df_dds: Merged dds DataFrame.
+- refit_stale: refit (and overwrite) saved fits whose degree distributions differ
+	from `df_dds` (see `is_fit_stale`). Otherwise existing files are skipped.
 """
-function fit_surveys(df_dds::DataFrame; dir_ = "../dt_intermediate")
+function fit_surveys(df_dds::DataFrame; dir_ = "../dt_intermediate", refit_stale = false)
 	keys = df_dds.key |> unique
 	for k in keys
 		path = "$(dir_)/$(k)_chns.jld2"
+		df_tmp = @subset(df_dds, :key .== k)
 		if isfile(path) == true
-			println("Path present: ", path)
-			continue
+			if (refit_stale == false) || (is_fit_stale(path, df_tmp) == false)
+				println("Path present: ", path)
+				continue
+			end
+			println("Stale fit (data changed), refitting: ", path)
 		end
 
-		df_tmp = @subset(df_dds, :key .== k)
 		dds = Dict(
 			"home" => @subset(df_tmp, :strat .== "home") |> DegreeDist,
 			"non-home" => @subset(df_tmp, :strat .== "non-home") |> DegreeDist,
@@ -651,6 +662,55 @@ function fit_hm_nhm_dds(dds::Dict)
 		res["chns_$k"][get_dist_name_from_model(model_func)] = chn
 	end
 	return res
+end
+
+"""True when the home or non-home degree distribution stored in a fit file
+differs from the one in `df_tmp` (rows of master_dds for one key).
+"""
+function is_fit_stale(path::String, df_tmp::DataFrame)::Bool
+	dds = load(path)["result"]["dds"]
+	for strat in ["home", "non-home"]
+		dd_new = @subset(df_tmp, :strat .== strat) |> DegreeDist
+		dd_old = dds[strat]
+		i_new, i_old = sortperm(dd_new.x), sortperm(dd_old.x)
+		same = (dd_new.x[i_new] == dd_old.x[i_old]) && (dd_new.y[i_new] == dd_old.y[i_old])
+		same || return true
+	end
+	return false
+end
+
+"""Refit chains of a saved fit that fail `is_chains_converged`, with more draws
+(`n_samples`, tried in order until the chain converges). The file is overwritten
+when any chain is refitted.
+
+Returns: (key, strat, model) of chains still unconverged after the longest run.
+"""
+function refit_unconverged!(key::String; dir_ = "../dt_intermediate",
+	n_samples = [4000, 8000])
+	path = "$(dir_)/$(key)_chns.jld2"
+	res = load(path)["result"]
+	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
+		model_ZeroInfPoissonLomax]
+	updated = false
+	failing = []
+	for strat in ["home", "non-home"], model_func in models
+		name = get_dist_name_from_model(model_func)
+		is_chains_converged(res["chns_$strat"][name]) && continue
+		model = model_func(res["dds"][strat])
+		med, _ = get_median_parms_from_model(model)
+		converged = false
+		for n in n_samples
+			println("Refitting unconverged chain: $key, $strat, $name with $n draws")
+			chn = fit_model_with_forward_mode(model, n; iparms = med, progress = false)
+			res["chns_$strat"][name] = chn
+			updated = true
+			converged = is_chains_converged(chn)
+			converged && break
+		end
+		converged || push!(failing, (key, strat, name))
+	end
+	updated && jldsave(path, result = res)
+	return failing
 end
 
 """This function returns a median value of each model parameter

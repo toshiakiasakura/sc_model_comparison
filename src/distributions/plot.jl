@@ -5,11 +5,6 @@ function plot_pdf(d::UnivariateDistribution; kwds...)
 	plot!(pl, k, log10.(pdf.(d, k)); kwds...)
 end
 
-function plot_pdf!(pl::Plots.Plot, d::UnivariateDistribution; kwds...)
-	k = [(1:9)..., (10:10:90)..., (100:100:900)..., (1000:1000:9000)..., 10000]
-	plot!(pl, k, log10.(pdf.(d, k)); kwds...)
-end
-
 function plot_pdf_raw!(pl::Plots.Plot, d::UnivariateDistribution; kwds...)
 	k = [(1:20)...]
 	#pl = plot(xlabel="k", ylabel="pdf(k)")
