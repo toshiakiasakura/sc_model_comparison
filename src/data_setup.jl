@@ -189,6 +189,7 @@ function read_dd_single_survey(df_master::DataFrame, key::String)
 end
 
 function read_dd_two_day_survey(df_master::DataFrame, key::String)
+	key == "Beraud_2015" && return read_Beraud_2015_dds() # two waves x two days
 	r_survey = @subset(df_master, :key .== key)[1, :]
 	df, df_part = read_raw_sc_data(r_survey);
 	df, df_part = filter_adult_cont_and_innerjoin(df, df_part);
@@ -196,7 +197,7 @@ function read_dd_two_day_survey(df_master::DataFrame, key::String)
 
 	if key in ["Melegaro_2017"]
 		df, df_part = create_part_id_d_studyDay(df, df_part, r_survey);
-	elseif key in ["Hens_2009", "Beraud_2015"]
+	elseif key in ["Hens_2009"]
 		df, df_part = create_part_id_d_middle_number(df, df_part);
 	else
 		error("Key not recognised for two-day survey: ", key)
@@ -205,6 +206,66 @@ function read_dd_two_day_survey(df_master::DataFrame, key::String)
 
 	df_dd, df_part = create_df_dd(df, df_part, key)
 	return (df_dd, df_part)
+end
+
+#########################
+##### Beraud_2015    #####
+#########################
+
+"""Beraud_2015 has two survey waves with two consecutive diary days each,
+and 278 participants answered both waves. `cont_id` is `part_wave_day_n`,
+so a participant-day is identified by part_id, wave and studyDay,
+and participant-days are taken from the sday file.
+
+Supplementary professional contacts (SPC): participants with more than 20
+daily professional contacts did not record them in the diary but gave
+the number (`work_contacts_nr`). Following Béraud et al. (2015),
+SPC are added to non-home contacts on weekdays only. 999 is treated as missing.
+"""
+function read_Beraud_2015_dds()
+	key = "Beraud_2015"
+	df_master = read_survey_master_data()
+	r_survey = @subset(df_master, :key .== key)[1, :]
+	df, df_part = read_raw_sc_data(r_survey)
+	df, df_part = filter_adult_cont_and_innerjoin(df, df_part)
+	standardise_cnt_home_values!(df)
+
+	parts = split.(df[:, :cont_id], '_')
+	df[!, :part_id_d] = [join(p[1:3], "_") for p in parts]
+	path_sday = replace(r_survey.file_contact_common, "contact_common" => "sday")
+	df_sday = CSV.read(string(DIR_SURVEY, path_sday), DataFrame)
+	@transform!(df_sday, :part_id_d = string.(:part_id, "_", :wave, "_", :studyDay))
+	df_part = innerjoin(df_part,
+		@select(df_sday, :part_id, :part_id_d, :wave, :year, :month, :day),
+		on = :part_id)
+	df, df_part = remove_cnt_home_na(df, df_part)
+
+	df[:, :key] .= key
+	df_deg = degree_dist_for_all_home_non_home(df)
+	df_deg = add_professional_counts_to_Beraud_2015(df_deg, df_part, r_survey)
+	df_dd = add_zero_counts_to_df_deg(df_deg, df_part)
+	df_dd[:, :key] .= key
+	df_part[:, :key] .= key
+	return (df_dd, df_part)
+end
+
+function add_professional_counts_to_Beraud_2015(df_deg::DataFrame, df_part::DataFrame, r_survey)
+	path = replace(r_survey.file_contact_common, "contact_common" => "participant_extra")
+	df_extra = CSV.read(string(DIR_SURVEY, path), DataFrame; missingstring = ["", "NA"])
+	df_extra = @subset(df_extra,
+		coalesce.(:more20ContactPro .== 1, false),
+		coalesce.(:work_contacts_nr .!= 999, false))
+	df_spc = innerjoin(df_part, @select(df_extra, :part_id, :wave, :spc = :work_contacts_nr),
+		on = [:part_id, :wave])
+	df_spc = @subset(df_spc, dayofweek.(Date.(:year, :month, :day)) .<= 5) # Mon-Fri
+	println("Number of participant-days with SPC: ", nrow(df_spc))
+
+	df_add = vcat([DataFrame(part_id_d = df_spc[:, :part_id_d], spc = Int.(df_spc[:, :spc]), strat = st)
+		for st in ["all", "non-home"]]...)
+	df_deg = outerjoin(df_deg, df_add, on = [:part_id_d, :strat])
+	@transform!(df_deg, :cnt = coalesce.(:cnt, 0) .+ coalesce.(:spc, 0))
+	df_deg[!, :key] .= r_survey.key
+	return @select(df_deg, Not(:spc))
 end
 
 #################################
