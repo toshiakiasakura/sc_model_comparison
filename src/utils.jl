@@ -26,21 +26,4 @@ const setting_pretty = Dict(
 	"non-home" => "Non-home"
 )
 
-function value_counts(df::DataFrame, by::Vector; cname = :nrow)::DataFrame
-	return @pipe groupby(df, by) |>
-				 combine(_, nrow => cname)
-end
-value_counts(df::DataFrame, by::Symbol; cname = :nrow)::DataFrame =
-	value_counts(df, [by]; cname = cname)
-
-vec_vec_to_matrix(v::Vector) = mapreduce(permutedims, vcat, v)
-
-function convert_date_to_year_month(date::Date)::String
-	return string(Dates.year(date)) * "_" * lpad(Dates.month(date), 2, "0")
-end
-
-function convert_date_to_quarter(date::Date)::String
-	return string(Dates.year(date)) * "_" * string(Dates.quarterofyear(date))
-end
-
 boldstring(s::AbstractString) = map(c -> 'a' ≤ c ≤ 'z' ? c + ('𝐚'-'a') : 'A' ≤ c ≤ 'Z' ? c + ('𝐀'-'A') : c, s)

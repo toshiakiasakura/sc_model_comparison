@@ -63,11 +63,6 @@ function obtain_ccdf(dd::DegreeDist)::Vector{Float64}
 	return y_ccdf
 end
 
-"""
-See also `turing_utils.jl` which contains
-- `plot_single_setting`
-- `plot_multiple_settings`
-"""
 function plot_ccdf!(pl::Plots.Plot, dd::DegreeDist; ytk_digit = 6, marker = :circle, kwds...)
 	if dd.include_zero == true
 		dd = deepcopy(dd)
@@ -84,16 +79,6 @@ function plot_ccdf!(pl::Plots.Plot, dd::DegreeDist; ytk_digit = 6, marker = :cir
 end
 plot_ccdf!(pl::Plots.Plot, x::Vector{Int64}; kwds...) = plot_ccdf!(pl, DegreeDist(x); kwds...)
 
-function plot_ccdf(dd::DegreeDist; kwds...)::Plots.Plot
-	y_ccdf = obtain_ccdf(dd)
-	pl = plot(; xaxis = :log10, xlabel = "log10(k)", ylabel = "log10(ccdf(k))",
-		xlim = [1, 10000],
-	)
-	scatter!(pl, dd.x, log10.(y_ccdf); kwds...)
-	return pl
-end
-plot_ccdf(x::Vector{Int64}; kwds...)::Plots.Plot = plot_ccdf(DegreeDist(x); kwds...)
-
 function plot_pdf!(pl::Plots.Plot, dd::DegreeDist; conv_log10 = true, ytk_digit = 6, kwds...)
 	y_pdf = dd.y / sum(dd.y)
 	y_pdf = conv_log10 == true ? log10.(y_pdf) : y_pdf
@@ -108,72 +93,3 @@ function plot_pdf!(pl::Plots.Plot, dd::DegreeDist; conv_log10 = true, ytk_digit 
 	plot!(pl, dd.x, y_pdf; marker = :circle, yticks=ytk, kwds...)
 end
 plot_pdf!(pl::Plots.Plot, x::Vector{Int64}; kwds...) = plot_pdf!(pl, DegreeDist(x); kwds...)
-
-function plot_pdf(dd::DegreeDist; kwds...)
-	pl = plot(xlabel = "k", ylabel = "pdf", xlim = [0, 20])
-	plot_pdf!(pl, dd; kwds...)
-	return pl
-end
-plot_pdf(x::Vector{Int64}; kwds...) = plot_pdf(DegreeDist(x); kwds...)
-
-"""
-Args:
-- df_dd: DegreeDist type of dataframe.
-"""
-function plot_single_survey(df_dd::DataFrame)
-	pl1 = plot_pdf_single_survey(df_dd)
-	pl2 = plot_ccdf_single_survey(df_dd)
-	plot(pl1, pl2; size = (800, 400))
-end
-
-function plot_pdf_single_survey!(pl::Plots.Plot, df_dd::DataFrame)
-	for strat in ["all", "home", "non-home"]
-		dd = @subset(df_dd, :strat .== strat) |> DegreeDist
-		plot_pdf!(pl, dd, label = strat, markersize = 2.5, markerstrokewidth = 0.0)
-	end
-	pl
-end
-
-function plot_pdf_single_survey(df_dd::DataFrame)
-	pl = plot(; xlim = [0, 50], ylim = [-4, 0])
-	plot_pdf_single_survey!(pl, df_dd)
-end
-
-function plot_ccdf_single_survey!(pl::Plots.Plot, df_dd::DataFrame)
-	for strat in ["all", "home", "non-home"]
-		dd = @subset(df_dd, :strat .== strat) |> DegreeDist
-		plot_ccdf!(pl, dd, label = strat, markersize = 2.5, markerstrokewidth = 0.0)
-	end
-	pl
-end
-
-function plot_ccdf_single_survey(df_dd::DataFrame)
-	pl = plot(; xaxis = :log10, ylim = [-4, 0], xlim = [1, 10_000])
-	plot_ccdf_single_survey!(pl, df_dd)
-end
-
-function plot_pdf_across_survey(df_dd::DataFrame; col = :key)
-	#pl = plot(; xlim = [0, 50], ylim = [0, 0.3])
-	pl = plot(; xlim = [0, 50], ylim = [-5, 0])
-	for gdf in groupby(df_dd, col)
-		dd = DegreeDist(gdf |> DataFrame)
-		plot_pdf!(
-			pl,
-			dd,
-			label = unique(gdf[:, col])[1],
-			markersize = 2.5,
-			markerstrokewidth = 0.0,
-			#conv_log10 = false
-		)
-	end
-	pl
-end
-
-function plot_ccdf_across_survey(df_dd::DataFrame; col = :key, kwds...)
-	pl = plot(; xaxis = :log10, ylim = [-5, 0], xlim = [1, 10_000], kwds...)
-	for gdf in groupby(df_dd, col)
-		dd = DegreeDist(gdf |> DataFrame)
-		plot_ccdf!(pl, dd, label = unique(gdf[:, col])[1], markersize = 2.5, markerstrokewidth = 0.0)
-	end
-	pl
-end

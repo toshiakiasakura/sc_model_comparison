@@ -100,7 +100,7 @@ The analysis pipeline consists of Jupyter notebooks in `src/` that must be run s
 
 4. **Additional CoMix Analysis** (`src/4j_comix2_additional.ipynb`):
    - CoMix-specific bootstrap resampling and uncertainty quantification
-   - Convolution of home and non-home distributions, truncated at K = 20,000
+   - Convolution of home and non-home distributions, truncated at K = 200,000
    - Outputs to `dt_intermediate_bootstrap/`
    - Simulations and bootstrap data are seeded (`seed` keyword, default 1234)
    - The bootstrap fits are commented out in the notebook. They take several hours

@@ -12,7 +12,7 @@ function read_raw_sc_data(r_survey::DataFrameRow)
 	return (df, df_part)
 end
 
-function filter_adult_cont_and_innerjoin(df::DataFrame, df_part::DataFrame; col = :part_age)
+function filter_adult_cont_and_innerjoin(df::DataFrame, df_part::DataFrame)
 	if isa(df_part[1, :part_age], AbstractString) == true
 		df_part = @subset(df_part, :part_age .!= "NA")
 		df_part[!, :part_age] .= parse.(Int, df_part[:, :part_age])
@@ -321,7 +321,8 @@ end
 
 """
 Note:
-mode_survey = 1 is online, mode_survey = 2 is paper.
+mode_survey = 1 is paper, mode_survey = 2 is online (paper respondents report
+more contacts, as in Leung et al. 2017).
 """
 function read_Leung_2017_paper_online()
 	key = "Leung_2017"
@@ -620,7 +621,6 @@ function stacked_bar_cate(df_dds)
 			:mode == "I" ? "Paper or Interview" : "NaN"
 	)
 	tab = @transform(tab, :cate = string.(:mode_pri, :group_c_pri))
-	sort(tab, :n_part_cate);
 
 	tab_plot = @pipe groupby(tab, [:n_part_cate, :cate]) |> combine(_, nrow => :n_cnt)
 	tab_plot = vcat(tab_plot,

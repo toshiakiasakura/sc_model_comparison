@@ -1,8 +1,17 @@
 ##### Poisson Mixture distributions #####
+"""Upper truncation of the model CCDFs and of the convoluted pmf.
+
+Note:
+P(X >= k) is summed up to `CCDF_K_MAX`, so the mass above it is lost. For a Lomax
+tail of index α the relative deficit at k is about (k / CCDF_K_MAX)^α: with the
+CoMix2 non-home fit (α ≈ 1.24) it is 2.4% at k = 10^4 (-0.011 in log10), which is
+invisible on the CCDF panels, against 42% with the earlier 20_000.
+Do not exceed ~5e5: `quadgk` in `logpdf(::PoissonLomax, k)` misses the peak of
+the integrand at k = 10^6.
+"""
+const CCDF_K_MAX = 200_000
+
 abstract type PoissonMixture <: DiscreteUnivariateDistribution end
-Base.length(p::PoissonMixture)=1
-Base.iterate(p::PoissonMixture) = (p, nothing)
-Base.iterate(p::PoissonMixture, nothing) = nothing
 
 Base.@kwdef struct NegBin <: PoissonMixture
 	m::Real
@@ -19,26 +28,32 @@ Base.@kwdef struct PoissonLomax <: PoissonMixture
 	θ::Real # scale
 end
 
-# Memoized because logpdf of a PoissonMixture is a numerical integral, and the
-# ccdf below evaluates every k in the tail.
+# Memoized because logpdf of a PoissonMixture is a numerical integral.
 @memoize Distributions.pdf(d::PoissonMixture, k::Int64) = exp(logpdf(d, k))
 
-# Summed iteratively from k_max downward. The previous recursive form used one
-# stack frame per integer and overflowed the stack for heavy-tailed fits; the
-# accumulation order here is unchanged, so the result is identical.
-@memoize function Distributions.ccdf(
-    d::PoissonMixture,
-    k::Int64;
-    k_max=20_000
-)
-    if k > k_max
-        error("Increase k_max")
-    end
-	s = pdf(d, k_max)
-	for j in (k_max-1):-1:k
-		s += pdf(d, j)
+"""Tail sums `s[k+1] = Σ_{j=k}^{k_max} P(X = j)` for k in 0:k_max.
+
+Note:
+Accumulated from k_max downward, the same order as the earlier loop over the
+memoized `pdf`, so the values are identical. One vector per distribution is
+cached instead of k_max + 1 memoized `pdf` entries (~1.6 MB against ~30 MB at
+k_max = 200_000). `logpdf` is called directly so the `pdf` cache is not filled.
+"""
+@memoize function tail_sums(d::PoissonMixture, k_max::Int64)::Vector{Float64}
+	# An explicit loop: `cumsum` on floats sums pairwise, which differs in the last bit.
+	s = Vector{Float64}(undef, k_max + 1)
+	s[k_max+1] = exp(logpdf(d, k_max))
+	for j in (k_max-1):-1:0
+		s[j+1] = s[j+2] + exp(logpdf(d, j))
 	end
 	return s
+end
+
+function Distributions.ccdf(d::PoissonMixture, k::Int64; k_max = CCDF_K_MAX)
+	if k > k_max
+		error("Increase k_max")
+	end
+	return tail_sums(d, k_max)[k+1]
 end
 
 mean100(d::PoissonMixture) = sum(k * pdf(d, k) for k in 0:100)
@@ -150,28 +165,3 @@ function Distributions.logpdf(d::PoissonLomax, k::Int64)
 	return log(int)
 end
 Distributions.cdf(d::PoissonLomax, k::Int64)::Real = sum(pdf(d, i) for i in 0:k)
-
-
-#####################################
-###### Mixture distributions ########
-#####################################
-struct Lomax <: ContinuousUnivariateDistribution
-	α::Real # shape
-	θ::Real # scale
-end
-Distributions.rand(d::Lomax) = (1 / rand() ^ (1/d.α) - 1) * d.θ
-Distributions.rand(rng::AbstractRNG, d::Lomax) = rand(rng)
-Distributions.minimum(d::Lomax) = 0.0
-Distributions.maximum(d::Lomax) = Inf
-
-function Distributions.logpdf(d::Lomax, x::Real)::Real
-	@unpack α, θ = d
-	if x < 0
-		return -Inf
-	else
-		return log(α) - log(θ) - (α+1)*log(1+x/θ)
-	end
-end
-Distributions.pdf(d::Lomax, x::Real) = exp(logpdf(d, x))
-Distributions.ccdf(d::Lomax, x::Real) = (1 + x/d.θ)^(-d.α)
-Distributions.cdf(d::Lomax, x::Real) = 1 - ccdf(d, x)

@@ -1,5 +1,4 @@
 using CategoricalArrays
-#using ColorSchemes
 using CSV
 using DataFrames
 using DataFramesMeta
@@ -10,21 +9,17 @@ using GLM
 using Images
 using JLD2
 using LaTeXStrings
-using LinearAlgebra
 using LogExpFunctions
 using Memoization
 using Parameters
 using Plots
 using Pipe
-using Pkg
-using Printf
 using QuadGK
 using Random
 using RCall
 using SpecialFunctions
 using StatsBase
 using StatsPlots
-using StringEncodings
 using Test
 using XLSX
 

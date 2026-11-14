@@ -45,21 +45,14 @@ Distributions.logpdf(d::ZeroInfConvolutedDist, k::Int64) = log(pdf(d, k))
 	return p
 end
 
+# See `CCDF_K_MAX` for the truncation.
 function Distributions.ccdf(
     d::ZeroInfConvolutedDist,
     k::Int64;
-    k_max=20_000
+    k_max = CCDF_K_MAX
 )
     if k > k_max
         error("Increase k_max")
     end
     return sum(pdf(d, i) for i in k:k_max)
 end
-
-Base.@kwdef struct ZeroTruncConvolutedDist <: DiscreteUnivariateDistribution
-	conv_d::ZeroInfConvolutedDist
-	p0::Real = pdf(conv_d, 0)
-end
-Distributions.pdf(d::ZeroTruncConvolutedDist, k::Int64) = pdf(d.conv_d, k) / (1 - d.p0)
-Distributions.logpdf(d::ZeroTruncConvolutedDist, k::Int64) = log(pdf(d,k))
-Distributions.ccdf(d::ZeroTruncConvolutedDist, k::Int64) = ccdf(d.conv_d, k) / (1 - d.p0)

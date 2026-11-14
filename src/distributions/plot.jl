@@ -1,19 +1,6 @@
 ##### Plot functions #####
-function plot_pdf(d::UnivariateDistribution; kwds...)
-	k = [(1:9)..., (10:10:90)..., (100:100:900)..., (1000:1000:9000)..., 10000]
-	pl = plot(xaxis = :log10, xlabel = "log10(k)", ylabel = "log10(pdf(k))", yaxis = [-30, 0])
-	plot!(pl, k, log10.(pdf.(d, k)); kwds...)
-end
-
-function plot_pdf_raw!(pl::Plots.Plot, d::UnivariateDistribution; kwds...)
-	k = [(1:20)...]
-	#pl = plot(xlabel="k", ylabel="pdf(k)")
-	plot!(pl, k, pdf.(d, k); kwds...)
-end
-
 function plot_ccdf!(pl::Plots.Plot, d::UnivariateDistribution; kwds...)
 	k = [(1:9)..., (10:10:90)..., (100:100:900)..., (1000:1000:9000)..., 10_000]
-	[ccdf.(d, k[end:-1:begin])] # To avoid the repetition errors. Create cache.
 	plot!(pl, k, log10.(ccdf.(d, k)); xaxis = :log10, kwds...)
 end
 

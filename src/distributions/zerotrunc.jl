@@ -1,7 +1,4 @@
 abstract type ZeroTruncPoissonMixture <: DiscreteUnivariateDistribution end
-Base.length(p::ZeroTruncPoissonMixture)=1
-Base.iterate(p::ZeroTruncPoissonMixture) = (p, nothing)
-Base.iterate(p::ZeroTruncPoissonMixture, nothing) = nothing
 
 """
 Example:

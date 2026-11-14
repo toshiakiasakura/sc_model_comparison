@@ -38,7 +38,7 @@ function summarise_res_one_strat(res::Dict, strat, key)
 		mean_ = mean(dist)
 		mean_set = mean.(dists)
 		cond = isnan.(mean_set)
-		if (any(cond) == true) & (all(cond) == true)
+		if all(cond) == true
 			println("All NaN: $key, strat: $strat, model: $model_name")
 			mean_l = NaN
 			mean_u = NaN
@@ -116,12 +116,11 @@ function flag_minimum_IC(df_res::DataFrame, ic::Symbol)::DataFrame
 	return df_new
 end
 
-function get_model_names()
-	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
-		model_ZeroInfPoissonLomax]
-	model_names = get_dist_name_from_model.(models);
-	return model_names
-end
+"""The three competing Turing models, in the order used throughout (NB, PLN, PLomax)."""
+get_models() = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
+	model_ZeroInfPoissonLomax]
+
+get_model_names() = get_dist_name_from_model.(get_models())
 
 #################################
 ##### EVI related functions #####
@@ -135,13 +134,6 @@ function read_EVI_summary(df_n_obs; filter_quantile = false)
 				   sort(_, :n_answer; rev = false)
 	@transform!(df_EVI, :m_l = :mean - :lower, :m_u = :upper - :mean)
 	return df_EVI
-end
-
-function plot_mean_excess_function(x_raw::Vector{Int64})
-	qs = [(0.95:0.001:0.999)...]
-	qs_v = quantile.(Ref(x_raw), qs)
-	mef = [mean(x_raw[x_raw .> q] .- q) for q in qs_v]
-	plot(qs, mef)
 end
 
 function obtain_peak_over_threshold_values(dd::DegreeDist, q_v::Float64)
@@ -672,8 +664,7 @@ function fit_surveys(df_dds::DataFrame; dir_ = "../dt_intermediate", refit_stale
 end
 
 function fit_hm_nhm_dds(dds::Dict)
-	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
-		model_ZeroInfPoissonLomax]
+	models = get_models()
 
 	res = Dict("dds" => dds, "chns_home" => Dict(), "chns_non-home" => Dict())
 	lis_k_model = [[k, model_func]
@@ -715,8 +706,7 @@ function refit_unconverged!(key::AbstractString; dir_ = "../dt_intermediate",
 	n_samples = [4000, 8000])
 	path = "$(dir_)/$(key)_chns.jld2"
 	res = load(path)["result"]
-	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
-		model_ZeroInfPoissonLomax]
+	models = get_models()
 	updated = false
 	failing = []
 	for strat in ["home", "non-home"], model_func in models
