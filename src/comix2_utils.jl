@@ -354,11 +354,9 @@ function fit_convoluted_dist(df_dds::DataFrame)
 	prior_dic = Dict()
 	prior_dic["hm_p1"] = prior_kernel(df_chn_hm[:, :μ_obs_ln])
 	prior_dic["hm_p2"] = prior_kernel(df_chn_hm[:, :log_σ_ln])
-	prior_dic["hm_p3"] = prior_kernel(log.(df_chn_hm[:, :π0]))
 	df_chn_nhm = DataFrame(chn_nhm);
 	prior_dic["nhm_p1"] = prior_kernel(df_chn_nhm[:, :log_α_lo])
 	prior_dic["nhm_p2"] = prior_kernel(df_chn_nhm[:, :log_β_lo])
-	prior_dic["nhm_p3"] = prior_kernel(log.(df_chn_nhm[:, :π0]));
 
 	model = model_ZeroInfConvDist(dd_all, dd_hm, prior_dic)
 	chn = sample(model, NUTS(), 2000; progress = true)
@@ -517,8 +515,7 @@ end
 
 function fit_CoMix2_all()
 	dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
-	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
-		model_ZeroInfPoissonLomax]
+	models = get_models()
 	res = Dict("chns_all" => Dict())
 	for model_func in models
 		model = model_func(dd_all)
@@ -596,11 +593,11 @@ end
 posterior draw.
 
 Note:
-`K = 20_000` matches `ccdf(::ZeroInfConvolutedDist, k; k_max = 20_000)`, so the
+`K = CCDF_K_MAX` matches `ccdf(::ZeroInfConvolutedDist, k)`, so the
 no-fit and the refitted curves are truncated identically.
 """
 function conv_pmf_one_draw(d_hm::ZeroInfDist, d_nhm::ZeroInfDist, k_h_max::Int64;
-	K::Int64 = 20_000)::Vector{Float64}
+	K::Int64 = CCDF_K_MAX)::Vector{Float64}
 	pmf_hm = zeroinf_pmf_vector(d_hm, k_h_max)
 	pmf_nhm = zeroinf_pmf_vector(d_nhm, K)
 	return convolute_pmf_vectors(pmf_hm, pmf_nhm, k_h_max)
@@ -608,7 +605,7 @@ end
 
 # Same, for an existing ZeroInfConvolutedDist (e.g. the refitted median-parameter
 # distribution), so that both routes go through identical arithmetic.
-conv_pmf_one_draw(conv_d::ZeroInfConvolutedDist; K::Int64 = 20_000) =
+conv_pmf_one_draw(conv_d::ZeroInfConvolutedDist; K::Int64 = CCDF_K_MAX) =
 	conv_pmf_one_draw(conv_d.d_hm, conv_d.d_nhm, conv_d.k_h_max; K = K)
 
 """Zero-truncated CCDF of a convoluted probability mass vector, on `0:K`.
@@ -625,7 +622,7 @@ zerotrunc_ccdf_from_pmf(pmf::Vector{Float64}) = obtain_ccdf(pmf) ./ (1 - pmf[1])
 the plot grid `ks`, the analytic mean, and two truncation diagnostics.
 """
 function conv_nofit_one_draw(d_hm::ZeroInfDist, d_nhm::ZeroInfDist,
-	k_h_max::Int64, ks::Vector{Int64}; K::Int64 = 20_000)
+	k_h_max::Int64, ks::Vector{Int64}; K::Int64 = CCDF_K_MAX)
 	pmf = conv_pmf_one_draw(d_hm, d_nhm, k_h_max; K = K)
 	ccdf_ = zerotrunc_ccdf_from_pmf(pmf)
 	return (
@@ -661,7 +658,7 @@ Args:
 - `chn_hm`, `chn_nhm`: marginal chains, e.g. `res["chns_home"][model_names[2]]`.
 - `dd_hm`: home degree distribution; `maximum(dd_hm)` gives `k_h_max`.
 - `key_hm`, `key_nhm`: model names required by `get_vec_ZeroInfDist_from_chn`.
-- `K`: pmf truncation; 20_000 matches `ccdf(::ZeroInfConvolutedDist)`.
+- `K`: pmf truncation; `CCDF_K_MAX` matches `ccdf(::ZeroInfConvolutedDist)`.
 - `thin`: use every `thin`-th draw (`thin = 50` for a quick smoke test).
 - `threaded`: safe as written, because the inner loop only touches the
   non-memoized `logpdf(::PoissonMixture, ::Int64)`. Never reintroduce
@@ -673,7 +670,7 @@ Returns a `Dict` suitable for `jldsave`.
 function summarise_conv_nofit(chn_hm::Chains, chn_nhm::Chains, dd_hm::DegreeDist;
 	key_hm::String = get_model_names()[2],
 	key_nhm::String = get_model_names()[3],
-	K::Int64 = 20_000, thin::Int64 = 1, threaded::Bool = true)::Dict
+	K::Int64 = CCDF_K_MAX, thin::Int64 = 1, threaded::Bool = true)::Dict
 
 	for (lbl, chn) in (("home", chn_hm), ("non-home", chn_nhm))
 		if size(chn, 3) != 1
@@ -754,7 +751,7 @@ end
 """Load the marginal CoMix2 chains, build the no-fit convolution posterior and
 cache the summary.
 """
-function run_conv_nofit_summary(; K::Int64 = 20_000, thin::Int64 = 1,
+function run_conv_nofit_summary(; K::Int64 = CCDF_K_MAX, thin::Int64 = 1,
 	threaded::Bool = true, save::Bool = true)::Dict
 	dd_all, dd_hm, dd_nhm = get_comix2_dd_all_hm_nhm()
 	model_names = get_model_names()
@@ -777,18 +774,11 @@ end
 """Best 2-parameter marginal fit to the "all contacts" degree distribution.
 
 Note:
-Two files coexist. The newer `CoMix2_all_chns.jld2` (key `res`, written by
-`fit_CoMix2_all`) holds all three chains; the older `CoMix2_chns_all.jld2`
-(key `result`) holds a bare `Chains` for one model and is what `plot_conv_fit`
-reads.
+Reads `CoMix2_all_chns.jld2` (key `res`, written by `fit_CoMix2_all`), which
+holds the chains of all three models.
 """
 function get_CoMix2_all_dist(model_name::String = get_model_names()[3])
-	path_new = "../dt_intermediate/CoMix2_all_chns.jld2"
-	if isfile(path_new) == true
-		chn = load(path_new)["res"]["chns_all"][model_name]
-	else
-		chn = load("../dt_intermediate/CoMix2_chns_all.jld2")["result"]
-	end
+	chn = load("../dt_intermediate/CoMix2_all_chns.jld2")["res"]["chns_all"][model_name]
 	return get_ZeroInfDist(chn, model_name)
 end
 

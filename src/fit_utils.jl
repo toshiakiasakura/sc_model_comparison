@@ -38,7 +38,7 @@ function summarise_res_one_strat(res::Dict, strat, key)
 		mean_ = mean(dist)
 		mean_set = mean.(dists)
 		cond = isnan.(mean_set)
-		if (any(cond) == true) & (all(cond) == true)
+		if all(cond) == true
 			println("All NaN: $key, strat: $strat, model: $model_name")
 			mean_l = NaN
 			mean_u = NaN
@@ -116,12 +116,11 @@ function flag_minimum_IC(df_res::DataFrame, ic::Symbol)::DataFrame
 	return df_new
 end
 
-function get_model_names()
-	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
-		model_ZeroInfPoissonLomax]
-	model_names = get_dist_name_from_model.(models);
-	return model_names
-end
+"""The three competing Turing models, in the order used throughout (NB, PLN, PLomax)."""
+get_models() = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
+	model_ZeroInfPoissonLomax]
+
+get_model_names() = get_dist_name_from_model.(get_models())
 
 #################################
 ##### EVI related functions #####
@@ -135,13 +134,6 @@ function read_EVI_summary(df_n_obs; filter_quantile = false)
 				   sort(_, :n_answer; rev = false)
 	@transform!(df_EVI, :m_l = :mean - :lower, :m_u = :upper - :mean)
 	return df_EVI
-end
-
-function plot_mean_excess_function(x_raw::Vector{Int64})
-	qs = [(0.95:0.001:0.999)...]
-	qs_v = quantile.(Ref(x_raw), qs)
-	mef = [mean(x_raw[x_raw .> q] .- q) for q in qs_v]
-	plot(qs, mef)
 end
 
 function obtain_peak_over_threshold_values(dd::DegreeDist, q_v::Float64)
@@ -365,17 +357,39 @@ Args:
 function create_stacked_bar_weights(df_ana::DataFrame, models, df_n_obs::DataFrame)
 	df_tab = unstack(df_ana, :key, :model, :weight_waic)
 	df_tab_cum = create_tab_cum(df_tab, models)
-	df_tab_cum = @pipe leftjoin(df_tab_cum, df_n_obs, on = :key) |>
-					   sort(_, :all; rev = false)
+	df_tab_cum = leftjoin(df_tab_cum, df_n_obs, on = :key)
+	check_keys_in_obs(df_tab_cum)
+	sort!(df_tab_cum, [Symbol("non-home"), :key])
 	df_tab_cum
 end
 
+"""Error if a survey has no observed sample size, e.g. `fit_summary.csv` still
+holds a key that is no longer in `master_dds.csv`. Otherwise it would be sorted
+last silently and mislabel the figure rows.
+"""
+function check_keys_in_obs(df::DataFrame)
+	keys_missing = df[ismissing.(df[:, :all]), :key]
+	isempty(keys_missing) ||
+		error("Surveys not in master_dds.csv (stale fit_summary.csv?): ", join(keys_missing, ", "))
+	return nothing
+end
+
+"""Reorder `df` to the row order of `keys`, so EVI rows line up with the bar rows."""
+function align_rows_by_key(df::DataFrame, keys)::DataFrame
+	keys_missing = setdiff(keys, df[:, :key])
+	isempty(keys_missing) || error("No EVI estimate for: ", join(keys_missing, ", "))
+	return df[[findfirst(==(k), df[:, :key]) for k in keys], :]
+end
+
 """Sort `df_ana` in the row order of the WAIC bar panels
-(`create_stacked_bar_weights` sorts by the number of "all" answers in `df_obs`).
+(`create_stacked_bar_weights` sorts by the number of non-home answers in `df_obs`,
+which is the fitted sample size; "all" also keeps answers with missing cnt_home).
 """
 function sort_ana_by_n_all(df_ana::DataFrame, df_obs::DataFrame)::DataFrame
-	df_n_all = @pipe unstack(df_obs, :key, :strat, :n_answer) |> _[:, [:key, :all]]
-	return @pipe leftjoin(df_ana, df_n_all, on = :key) |> sort(_, :all)
+	df_n = @pipe unstack(df_obs, :key, :strat, :n_answer) |> _[:, [:key, :all, Symbol("non-home")]]
+	df_ana = leftjoin(df_ana, df_n, on = :key)
+	check_keys_in_obs(df_ana)
+	return sort(df_ana, [Symbol("non-home"), :key])
 end
 
 function plot_bar_waic_pretty(df_obs::DataFrame, df_res::DataFrame, df_EVI::DataFrame)
@@ -389,18 +403,16 @@ function plot_bar_waic_pretty(df_obs::DataFrame, df_res::DataFrame, df_EVI::Data
 	x_base = -37.0
 	dx = -36
 	dy = 1.5
-	cutoff = replace.(df_ana[:, :cutoff_less90], "c-Yes" => "≤90", "c-No" => "91+")
-	table_styl_annotate!(pls[1], cutoff, "Cap of\nanswers", x_base; dy = dy)
 	s_mode = replace.(df_ana[:, :mode], "P" => "Paper", "I" => "Interview", "O" => "Online")
-	table_styl_annotate!(pls[1], s_mode, "Survey\nmode", x_base + dx; dy = dy)
+	table_styl_annotate!(pls[1], s_mode, "Survey\nmode", x_base; dy = dy)
 	grp_cate = replace.(df_ana[:, :group_c], "G-No" => "No", "G-Yes" => "Yes")
-	table_styl_annotate!(pls[1], grp_cate, "Group\ncontacts", x_base + 2*dx; dy = dy)
-	table_styl_annotate!(pls[1], df_ana[:, :n_sample], "Sample\nsize", x_base + 3*dx; dy = dy)
+	table_styl_annotate!(pls[1], grp_cate, "Group\ncontacts", x_base + dx; dy = dy)
+	table_styl_annotate!(pls[1], df_ana[:, :n_sample], "Sample\nsize", x_base + 2*dx; dy = dy)
 	df_tmp = copy(df_ana)
-	table_styl_annotate!(pls[1], df_tmp[:, :key], "Study", x_base + 4*dx - 33)
-	plot!(pls[1], left_margin = 86Plots.mm)
+	table_styl_annotate!(pls[1], df_tmp[:, :key], "Study", x_base + 3*dx - 33)
+	plot!(pls[1], left_margin = 72Plots.mm)
 
-	annotate!(pls[1], x_base*5 - 20, nrow(df_ana) + 3.0, text("A", :black, :left, :center, 18, "Helvetica"))
+	annotate!(pls[1], x_base*4 - 20, nrow(df_ana) + 3.0, text("A", :black, :left, :center, 18, "Helvetica"))
 	annotate!(pls[1], (0.1, 1.1), text("B", :black, :left, :center, 18, "Helvetica"))
 	annotate!(pls[3], (0.1, 1.1), text("C", :black, :left, :center, 18, "Helvetica"))
 	layout = @layout [a b c d]
@@ -448,8 +460,8 @@ function plot_bar_waic(df_obs, df_res; ytk = nothing, df_EVI = nothing)
 		return plot(pl1, pl2, layout = layout, right_margin = 10Plots.mm, size = (800, 600))
 	else
 		df_EVI[:, :empty] .= ""
-		df_EVI_hm = @subset(df_EVI, :strat .== "home")
-		df_EVI_nhm = @subset(df_EVI, :strat .== "non-home")
+		df_EVI_hm = align_rows_by_key(@subset(df_EVI, :strat .== "home"), df_tab_cum_hm[:, :key])
+		df_EVI_nhm = align_rows_by_key(@subset(df_EVI, :strat .== "non-home"), df_tab_cum_nhm[:, :key])
 
 		pl3 = plot_EVI_across_surveys(df_EVI_hm; col_ytick = "empty", title = "") #"Home contacts")
 		pl4 = plot_EVI_across_surveys(df_EVI_nhm; col_ytick = "empty", title = "") #"Non-home contacts")
@@ -457,16 +469,17 @@ function plot_bar_waic(df_obs, df_res; ytk = nothing, df_EVI = nothing)
 		# Home (pl1, pl3) is placed first, non-home (pl2, pl4) second.
 		# Study names for the non-home bar panel, drawn as left-aligned annotations
 		# (tick labels are right-aligned in Plots.jl). Tick marks are kept with empty labels.
-		x_lab = -72.0
+		x_lab = -70.0
 		for (i, key) in enumerate(df_tab_cum_nhm[:, :key])
 			annotate!(pl2, x_lab, i, text(key, :black, :left, :vcenter, 8, "Helvetica"))
 		end
-		plot!(pl2, left_margin = 18.0Plots.mm)
+		plot!(pl2, left_margin = 19.0Plots.mm)
 		plot!(pl1, legend = (0.6, -0.15), bottom_margin = 15Plots.mm)
 
 		adj_m = -9.0Plots.mm
-		plot!(pl3, left_margin = adj_m)
-		plot!(pl4, left_margin = adj_m)
+		# Extra room so the EVI axis's first tick label clears the bar axis's "100"
+		plot!(pl3, left_margin = adj_m + 4.0Plots.mm)
+		plot!(pl4, left_margin = adj_m + 4.0Plots.mm)
 
 		return [pl1, pl3, pl2, pl4]
 	end
@@ -651,8 +664,7 @@ function fit_surveys(df_dds::DataFrame; dir_ = "../dt_intermediate", refit_stale
 end
 
 function fit_hm_nhm_dds(dds::Dict)
-	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
-		model_ZeroInfPoissonLomax]
+	models = get_models()
 
 	res = Dict("dds" => dds, "chns_home" => Dict(), "chns_non-home" => Dict())
 	lis_k_model = [[k, model_func]
@@ -694,8 +706,7 @@ function refit_unconverged!(key::AbstractString; dir_ = "../dt_intermediate",
 	n_samples = [4000, 8000])
 	path = "$(dir_)/$(key)_chns.jld2"
 	res = load(path)["result"]
-	models = [model_ZeroInfNegativeBinomial, model_ZeroInfPoissonLogNormal,
-		model_ZeroInfPoissonLomax]
+	models = get_models()
 	updated = false
 	failing = []
 	for strat in ["home", "non-home"], model_func in models
